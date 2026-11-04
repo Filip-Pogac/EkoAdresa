@@ -199,7 +199,7 @@ Between thresholds the value is linearly interpolated. The formula is publicly d
 
 ### Phase 1 — Project setup (5 Nov, in parallel with Phase 0)
 
-- [ ] Create the monorepo structure:
+- [x] Create the monorepo structure:
   ```text
   ekoadresa/
   ├── backend/        # FastAPI
@@ -210,10 +210,10 @@ Between thresholds the value is linearly interpolated. The formula is publicly d
   ├── docs/           # submission documentation
   └── docker-compose.yml
   ```
-- [ ] Add `LICENSE` (MIT), `README.md` with run instructions, `.gitignore`, `.env.example`
-- [ ] Set up FastAPI with a `GET /api/health` endpoint that returns `{"status":"ok"}`
-- [ ] Set up Vite + React + TypeScript + Tailwind + MapLibre with a map centred on Zagreb
-- [ ] Set up GitHub Actions: `ruff` + `pytest` for the backend, `eslint` + `tsc --noEmit` for the frontend
+- [x] Add `LICENSE` (MIT), `README.md` with run instructions, `.gitignore`, `.env.example`
+- [x] Set up FastAPI with a `GET /api/health` endpoint that returns `{"status":"ok"}`
+- [x] Set up Vite + React + TypeScript + Tailwind + MapLibre with a map centred on Zagreb
+- [x] Set up GitHub Actions: `ruff` + `pytest` for the backend, `eslint` + `tsc --noEmit` for the frontend — *+ gitleaks; same commands pass locally (Python 3.11, frozen lockfile); first run on GitHub pending push*
 - [ ] Set up `docker-compose up` that starts the backend and frontend
 
 ### Phase 2 — Data preparation (6 Nov)
