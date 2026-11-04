@@ -222,7 +222,7 @@ Between thresholds the value is linearly interpolated. The formula is publicly d
 - [x] `scripts/fetch_transit.py`: downloads ZET stops into `data/transit.geojson` — *1 888 bus + 260 tram platforms, 2026-11-04*
 - [x] `scripts/fetch_air.py`: downloads stations and measurements, computes daily averages per station into `data/air_stations.geojson` and `data/air_history.parquet` — *6 stations, 4 790 daily values Jan–Aug 2023 (files are already daily, no averaging needed), 2026-11-04*
 - [x] `backend/services/wms.py`: generic function `get_feature_info(service_url, layer, lat, lon)` with reprojection to HTRS96/TM (EPSG:3765) when the service requires it — *`get_feature_info` (noise) + `get_map_pixel` (flood workaround), 4 retries. No reprojection needed: both WMS accept CRS:84; EPSG:3765 is only needed for the air WFS (Phase 3, `air.py`)*
-- [ ] Cache WMS responses in SQLite keyed by `(layer, lat rounded to 4 decimals, lon rounded to 4 decimals)`
+- [x] Cache WMS responses in SQLite keyed by `(layer, lat rounded to 4 decimals, lon rounded to 4 decimals)` — *`backend/app/cache.py`, 30-day TTL, serves the last cached value (`stale=True`, with `fetched_at`) when the service fails*
 - [ ] Unit tests: the 3 test points from Phase 0 return the expected values for flooding and noise
 - [ ] `scripts/build_heatmap.py`: computes EkoSkor for a 250 × 250 m grid over Zagreb into `data/heatmap.geojson` (run overnight if it takes long)
 
