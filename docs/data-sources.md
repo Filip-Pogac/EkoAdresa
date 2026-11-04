@@ -214,6 +214,15 @@ Each station has a matching measurement dataset "Podaci o kvaliteti zraka u Grad
 - **One point per platform/direction** (names end in "- jug", "- istok"…). For "stops within 300 m" decide whether to count platforms or group by name without the direction suffix. `TODO(decide)` in Phase 3.
 - **GTFS:** no GTFS package on data.zagreb.hr (`q=gtfs` → 0).
 
+#### Transform (`scripts/fetch_transit.py`)
+
+- **Fetched:** 2026-11-04 → **1 888 bus + 260 tram = 2 148 platforms**, all kept as published (no merging or dedupe; platform-vs-stop counting is decided in Phase 3).
+- Fields kept: `name` (`Naziv_stajališta`, whitespace normalised), `direction` (`Opis`), `lines` (`Linije` split on commas), `id` = `zg-zet/<type>/<OBJECTID>`.
+- Data quirks, kept as-is: 1 bus platform has no name (`OBJECTID` 1910, "Smjer Črnomerec", line 117) → `name: null`; 1 bus record has no lines (`OBJECTID` 1859, Dubrava exit-only point); 3 tram records have no lines; 2 bus records at the Mihaljevac terminal share one coordinate. The bus dataset also covers stops outside the City limits (ZET serves neighbouring municipalities).
+- Check against the Phase 0 table: same counts within 300 m / 500 m for all three reference points.
+
+**Output:** `data/transit.geojson` (EPSG:4326), `properties.type` = `bus_stop` | `tram_stop`, `source_id` = `zg-zet`. The script is byte-for-byte idempotent.
+
 | Point | bus ≤300 m / ≤500 m / nearest | tram ≤300 m / ≤500 m / nearest |
 |---|---|---|
 | Savica | 2 / 7 / 57 m | 0 / 0 / 598 m |
