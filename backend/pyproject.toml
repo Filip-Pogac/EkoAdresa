@@ -10,6 +10,8 @@ dependencies = [
     "pandas>=2.2",
     "pillow>=11",
     "pyarrow>=18",
+    "pyproj>=3.6",
+    "shapely>=2",
     "uvicorn[standard]>=0.32",
 ]
 
