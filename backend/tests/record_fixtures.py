@@ -12,17 +12,8 @@ from pathlib import Path
 
 import httpx2 as httpx
 
-from app.services import wms
-from tests.reference_points import (
-    FIXTURES_DIR_NAME,
-    FLOOD_SCENARIOS,
-    HV_POPLAVE_URL,
-    NOISE_LAYERS,
-    NOISE_PROPERTIES,
-    POINTS,
-    ZG_BUKA_URL,
-    flood_layer,
-)
+from app.services import flood, noise, wms
+from tests.reference_points import FIXTURES_DIR_NAME, POINTS
 
 OUT_DIR = Path(__file__).parent / "fixtures" / FIXTURES_DIR_NAME
 
@@ -38,14 +29,19 @@ async def main() -> None:
 
     async with httpx.AsyncClient(timeout=30, event_hooks={"response": [keep_body]}) as client:
         for name, (lat, lon) in POINTS.items():
-            for scenario in FLOOD_SCENARIOS:
+            for zone, scenario in flood.SCENARIOS.items():
                 colour = await wms.get_map_pixel(
-                    client, HV_POPLAVE_URL, flood_layer(scenario), lat, lon
+                    client, flood.HV_POPLAVE_URL, flood.layer_name(zone), lat, lon
                 )
                 (OUT_DIR / f"flood_{name}_{scenario}.png").write_bytes(last_ok[-1])
                 print(f"{name} flood {scenario}: {colour}")
             features = await wms.get_feature_info(
-                client, ZG_BUKA_URL, NOISE_LAYERS, lat, lon, property_names=NOISE_PROPERTIES
+                client,
+                noise.ZG_BUKA_URL,
+                noise.LAYERS,
+                lat,
+                lon,
+                property_names=noise.PROPERTY_NAMES,
             )
             (OUT_DIR / f"noise_{name}.json").write_bytes(last_ok[-1])
             print(f"{name} noise: {[(f['id'], f['properties']['razina']) for f in features]}")

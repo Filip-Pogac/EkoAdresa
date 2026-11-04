@@ -5,8 +5,8 @@ The mock transport serves the fixture for the point at the centre of the request
 so a wrong coordinate or axis order fails the test instead of silently reading another
 point. Expected values are the Phase 0 results in docs/data-sources.md.
 
-Phase 2 checks the raw WMS answers (pixel colour, noise bands). Phase 3 adds the
-interpretation (flood zone, dB values, status) in flood.py / noise.py on the same fixtures.
+Checks both the raw WMS answers (pixel colour, noise bands) and their interpretation
+(flood zone, loudest Lden) in flood.py / noise.py.
 """
 
 from pathlib import Path
@@ -14,25 +14,17 @@ from pathlib import Path
 import httpx2 as httpx
 import pytest
 
-from app.services import wms
-from tests.reference_points import (
-    FIXTURES_DIR_NAME,
-    FLOOD_SCENARIOS,
-    HV_POPLAVE_URL,
-    NOISE_LAYERS,
-    NOISE_PROPERTIES,
-    POINTS,
-    ZG_BUKA_URL,
-    flood_layer,
-)
+from app.services import flood, noise, wms
+from tests.reference_points import FIXTURES_DIR_NAME, POINTS
 
 FIXTURES = Path(__file__).parent / "fixtures" / FIXTURES_DIR_NAME
 
-EXPECTED_FLOOD = {  # scenario -> legend colour at the point, None = outside that zone
-    "savica": {"velika": None, "srednja": None, "mala": "#73B2FF"},  # low prob., 1.5-2.5 m
-    "jelacic": {"velika": None, "srednja": None, "mala": None},
-    "sljeme": {"velika": None, "srednja": None, "mala": None},
+EXPECTED_FLOOD = {  # zone -> legend colour at the point, None = outside that zone
+    "savica": {"high": None, "medium": None, "low": "#73B2FF"},  # 1.5-2.5 m depth class
+    "jelacic": {"high": None, "medium": None, "low": None},
+    "sljeme": {"high": None, "medium": None, "low": None},
 }
+EXPECTED_ZONE = {"savica": "low", "jelacic": "none", "sljeme": "none"}
 EXPECTED_NOISE = {  # layer -> razina (lower bound of the 5 dB band)
     "savica": {"Cestovni_promet_Lden": 70, "Cestovni_promet_Lnight": 60},
     "jelacic": {
@@ -42,6 +34,7 @@ EXPECTED_NOISE = {  # layer -> razina (lower bound of the 5 dB band)
     },
     "sljeme": {},
 }
+EXPECTED_LOUDEST_LDEN = {"savica": 70, "jelacic": 70, "sljeme": None}  # jelacic: tram
 
 
 @pytest.fixture
@@ -62,12 +55,12 @@ def replay(request: httpx.Request) -> httpx.Response:
     q = request.url.params
     point = point_at_bbox_centre(q["BBOX"])
     if q["REQUEST"] == "GetMap":
-        assert str(request.url).startswith(HV_POPLAVE_URL)
+        assert str(request.url).startswith(flood.HV_POPLAVE_URL)
         scenario = q["LAYERS"].split("-")[-2]  # hr.fd.opasnost-od-poplave-<scenario>-vjerojatnost
         body = (FIXTURES / f"flood_{point}_{scenario}.png").read_bytes()
         return httpx.Response(200, content=body, headers={"content-type": "image/png"})
     if q["REQUEST"] == "GetFeatureInfo":
-        assert str(request.url).startswith(ZG_BUKA_URL)
+        assert str(request.url).startswith(noise.ZG_BUKA_URL)
         body = (FIXTURES / f"noise_{point}.json").read_bytes()
         return httpx.Response(200, content=body, headers={"content-type": "application/json"})
     raise AssertionError(f"unexpected request {request.url}")
@@ -81,23 +74,25 @@ async def client():  # noqa: ANN201
 
 @pytest.mark.anyio
 @pytest.mark.parametrize("point", POINTS)
-async def test_flood_pixel_at_reference_point(client: httpx.AsyncClient, point: str) -> None:
+async def test_flood_at_reference_point(client: httpx.AsyncClient, point: str) -> None:
     lat, lon = POINTS[point]
-    result = {
-        s: await wms.get_map_pixel(client, HV_POPLAVE_URL, flood_layer(s), lat, lon)
-        for s in FLOOD_SCENARIOS
+    colours = {
+        zone: await wms.get_map_pixel(
+            client, flood.HV_POPLAVE_URL, flood.layer_name(zone), lat, lon
+        )
+        for zone in flood.SCENARIOS
     }
-    assert result == EXPECTED_FLOOD[point]
+    assert colours == EXPECTED_FLOOD[point]
+    assert flood.zone_from_colours(colours) == EXPECTED_ZONE[point]
 
 
 @pytest.mark.anyio
 @pytest.mark.parametrize("point", POINTS)
-async def test_noise_bands_at_reference_point(client: httpx.AsyncClient, point: str) -> None:
+async def test_noise_at_reference_point(client: httpx.AsyncClient, point: str) -> None:
     lat, lon = POINTS[point]
     features = await wms.get_feature_info(
-        client, ZG_BUKA_URL, NOISE_LAYERS, lat, lon, property_names=NOISE_PROPERTIES
+        client, noise.ZG_BUKA_URL, noise.LAYERS, lat, lon, property_names=noise.PROPERTY_NAMES
     )
-    result = {
-        f["id"].split(".")[0].removeprefix("SKB_R4_"): f["properties"]["razina"] for f in features
-    }
-    assert result == EXPECTED_NOISE[point]
+    bands = noise.bands_from_features(features)
+    assert bands == EXPECTED_NOISE[point]
+    assert noise.loudest(bands) == EXPECTED_LOUDEST_LDEN[point]
