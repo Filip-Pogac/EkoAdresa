@@ -31,6 +31,10 @@ If a layer is unavailable (service down, no data), it is left out and the remain
 
 The heatmap uses the same formula on a 250 × 250 m grid (EPSG:3765, HTRS96/TM) clipped to the City of Zagreb, evaluated at each cell centre. See `scripts/build_heatmap.py`.
 
+- **Build of 2026-11-05:** 10 260 cells, 641 km². EkoSkor min 12, median 63, max 89 (10th–90th percentile 38–74). Noise available in all cells.
+- **A cell is one sample point.** Each cell shows the value at its centre, up to ~175 m from any address in it. Example: the cell containing Trg bana Jelačića has its centre 63 m south of the square, inside a building block with no mapped noise band, so the cell scores noise 100 while the square itself (tram, 70–74 dB) scores 0. The address card is always computed at the exact address.
+- **Waste rarely scores.** No cell reaches 100 and only 1 136 cells reach 50: there are 10 fixed yards for the whole City, and OSM green-island coverage is sparse. This is what the thresholds give with the current data; flagged for review of the threshold or the green-island source.
+
 ## Limitations
 
 - Distances are straight-line, not walking routes.

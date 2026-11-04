@@ -17,6 +17,7 @@ Licences are quoted exactly as stated by the publisher; "none stated" means the 
 | `zg-reciklaza` | Geoportal Reciklažna dvorišta grada Zagreba | Grad Zagreb | data.zagreb.hr `reciklazna-dvorista-grada-zagreba1` (ArcGIS Hub export) | GeoJSON / CSV / KML / SHP / GDB | Otvorena dozvola (OD) | resources 2022-12-01 |
 | `zg-zeleni-otoci` | Lokacije zelenih otoka | Grad Zagreb | data.zagreb.hr `lokacije-zelenih-otoka` | CSV (cp1250) / XLSX, **no coordinates** | Otvorena dozvola (OD) | resources 2016-10/11 |
 | `osm-reciklaza` | Recycling containers (green islands), Grad Zagreb | OpenStreetMap contributors | Overpass API `https://overpass-api.de/api/interpreter` (query below) | JSON | ODbL 1.0, "© OpenStreetMap contributors" | OSM data as of 2026-11-04T22:00:29Z |
+| `osm-granice` | Administrative boundary of Grad Zagreb (relation 226224, ISO 3166-2 HR-21) | OpenStreetMap contributors | Overpass API, query in `scripts/build_heatmap.py` | JSON | ODbL 1.0, "© OpenStreetMap contributors" | fetched 2026-11-05 |
 | `zg-zet` (bus) | Geoportal Autobusna stajališta ZET | Grad Zagreb | data.zagreb.hr `autobusna-stajalista-zet` | GeoJSON | Otvorena dozvola (OD) | 2026-10-30 (refreshed every 90 days) |
 | `zg-zet` (tram) | Geoportal Tramvajska stajališta ZET | Grad Zagreb | data.zagreb.hr `geoportal-tramvajska-stajalista-zet` (ArcGIS Hub export) | GeoJSON / CSV / KML / SHP / GDB | Otvorena dozvola (OD) | resources 2022-12-08 |
 
@@ -66,6 +67,11 @@ Responses differ between points as required. Depth-class interpretation is taken
 - Mitigation: 4 attempts with 0.2 / 0.4 / 0.8 s backoff in `wms.py`, SQLite cache, pre-warmed demo addresses.
 - `wms.py` reproduces the Phase 0 results for all three points (flood and noise).
 
+#### Heatmap tiles (2026-11-05, `scripts/build_heatmap.py`)
+
+- For the City heatmap the flood layers are fetched as square `GetMap` tiles at the same ~7 m/px scale as the point lookup, and each grid cell reads the pixel at its centre. Inside/outside agreed with the point lookup at all 6 test points (colours can differ slightly at polygon edges because of anti-aliasing; only inside/outside is used).
+- **1000 px tiles** (7 km) were cut off mid-transfer (`incomplete chunked read`) about 2 of 3 times where there is much flood data; **500 px tiles** (3.5 km) worked. 72 tiles × 3 scenarios = 216 requests. Even then the server returned bursts of 502 / truncated bodies, so the script retries each tile in up to 5 rounds with 10–80 s pauses and caches tiles in `data/raw/heatmap/`.
+
 ### `zg-buka` — Strateška karta buke Grada Zagreba (Grad Zagreb)
 
 - **Checked:** 2026-11-04
@@ -86,6 +92,7 @@ Responses differ between points as required. Depth-class interpretation is taken
 - Without `BUFFER=0` the server's pixel tolerance can return two adjacent bands at a band edge (seen at Savica: 65 and 70) → always send `BUFFER=0` and a small box.
 - The map gives **one value per source** (road, tram, rail, industry), not a combined total.
 - **Response size (2026-11-05):** by default each feature includes the full band polygon: **1.1 MB / 1.4 s** for the 8 layers at Savica. The GeoServer vendor parameter `propertyName=(razina)(razina)…` (one list per layer) returns only `razina` and no geometry: **394 B / 0.3 s**, same values. `wms.get_feature_info(..., property_names=["razina"])` sends it.
+- **Coverage (2026-11-05):** `EX_GeographicBoundingBox` of `SKB_R4_Cestovni_promet_Lden` is 15.770–16.229 °E, 45.622–45.968 °N, i.e. the whole City of Zagreb (the tram layer covers only the tram network area). This supports reading "no features" inside the City as "below the lowest mapped band (< 50 dB)" rather than "outside the map"; still `TODO(verify)` against the noise map report.
 
 | Point (EPSG:4326) | Result (`razina`, dB band lower bound) |
 |---|---|

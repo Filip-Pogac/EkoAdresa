@@ -14,6 +14,8 @@ INDICATORS = ("Lden", "Lnight")
 LAYERS = [f"SKB_R4_{source}_{indicator}" for source in SOURCES for indicator in INDICATORS]
 PROPERTY_NAMES = ["razina"]  # no geometry: 394 B instead of 1.1 MB per query
 LAYER_PREFIX = "SKB_R4_"
+# app.cache namespace for the GetFeatureInfo features of LAYERS with PROPERTY_NAMES
+CACHE_NAMESPACE = "zg-buka:SKB_R4:razina"
 
 
 def bands_from_features(features: list[dict]) -> dict[str, int]:
