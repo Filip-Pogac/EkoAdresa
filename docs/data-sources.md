@@ -85,6 +85,7 @@ Responses differ between points as required. Depth-class interpretation is taken
 - Each feature has attribute `razina` = **lower bound of a 5 dB band**. Legend (`GetLegendGraphic&format=application/json`, same for Lden and Lnight): `<55` → 50–54 dB · `55–59` · `60–64` · `65–69` · `70–74` · `≥75`.
 - Without `BUFFER=0` the server's pixel tolerance can return two adjacent bands at a band edge (seen at Savica: 65 and 70) → always send `BUFFER=0` and a small box.
 - The map gives **one value per source** (road, tram, rail, industry), not a combined total.
+- **Response size (2026-11-05):** by default each feature includes the full band polygon: **1.1 MB / 1.4 s** for the 8 layers at Savica. The GeoServer vendor parameter `propertyName=(razina)(razina)…` (one list per layer) returns only `razina` and no geometry: **394 B / 0.3 s**, same values. `wms.get_feature_info(..., property_names=["razina"])` sends it.
 
 | Point (EPSG:4326) | Result (`razina`, dB band lower bound) |
 |---|---|

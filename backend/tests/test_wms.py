@@ -66,6 +66,14 @@ async def test_get_feature_info_params_and_features() -> None:
 
 
 @pytest.mark.anyio
+async def test_property_names_one_list_per_layer() -> None:
+    seen: list[httpx.Request] = []
+    async with client_with([httpx.Response(200, json={"features": []})], seen) as c:
+        await wms.get_feature_info(c, URL, ["a", "b"], LAT, LON, property_names=["razina"])
+    assert seen[0].url.params["propertyName"] == "(razina)(razina)"
+
+
+@pytest.mark.anyio
 async def test_get_feature_info_empty() -> None:
     async with client_with([httpx.Response(200, json={"features": []})], []) as c:
         assert await wms.get_feature_info(c, URL, ["a"], LAT, LON) == []

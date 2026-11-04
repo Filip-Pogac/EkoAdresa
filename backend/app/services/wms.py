@@ -94,11 +94,16 @@ async def get_feature_info(
     lat: float,
     lon: float,
     feature_count: int = 20,
+    property_names: list[str] | None = None,
 ) -> list[dict]:
     """Return the GeoJSON features of `layers` at the point (may be empty).
 
     BUFFER=0 and a ~20 m box: without them the server's pixel tolerance can return two
     adjacent bands at a band edge (seen at Savica in Phase 0).
+
+    `property_names` uses the GeoServer vendor parameter `propertyName` to return only those
+    attributes and no geometry. For zg-buka at Savica this cuts the response from 1.1 MB /
+    1.4 s to 394 B / 0.3 s (2026-11-05), because the noise bands are huge polygons.
     """
     d_deg = 0.0001
     params = _common_params(
@@ -112,6 +117,9 @@ async def get_feature_info(
         "FEATURE_COUNT": feature_count,
         "BUFFER": 0,
     }
+    if property_names:
+        # one parenthesised list per layer, in LAYERS order
+        params["propertyName"] = f"({','.join(property_names)})" * len(layers)
     return await _get(client, service_url, params, _parse_features)
 
 
