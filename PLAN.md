@@ -214,7 +214,7 @@ Between thresholds the value is linearly interpolated. The formula is publicly d
 - [x] Set up FastAPI with a `GET /api/health` endpoint that returns `{"status":"ok"}`
 - [x] Set up Vite + React + TypeScript + Tailwind + MapLibre with a map centred on Zagreb
 - [x] Set up GitHub Actions: `ruff` + `pytest` for the backend, `eslint` + `tsc --noEmit` for the frontend — *+ gitleaks; same commands pass locally (Python 3.11, frozen lockfile); first run on GitHub pending push*
-- [ ] Set up `docker-compose up` that starts the backend and frontend
+- [x] Set up `docker-compose up` that starts the backend and frontend
 
 ### Phase 2 — Data preparation (6 Nov)
 
