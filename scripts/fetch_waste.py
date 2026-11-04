@@ -189,7 +189,8 @@ def main() -> None:
         },
         "features": features,
     }
-    OUT_PATH.write_text(json.dumps(collection, ensure_ascii=False, indent=1), encoding="utf-8")
+    text = json.dumps(collection, ensure_ascii=False, indent=1)
+    OUT_PATH.write_text(text, encoding="utf-8", newline="\n")
     fixed = sum(1 for f in yards if f["properties"]["kind"] == "fixed")
     log.info(
         "wrote %s: %d yards (%d fixed, %d mobile), %d green islands",
