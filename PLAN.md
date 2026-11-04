@@ -183,17 +183,17 @@ Between thresholds the value is linearly interpolated. The formula is publicly d
 
 **Goal:** confirm that every planned source actually returns data for a single point in Zagreb.
 
-- [ ] Call `GetCapabilities` on `servisi.voda.hr/poplave_opasnosti/wms` and record the layer names for all three scenarios
-- [ ] Run `GetFeatureInfo` for 3 test points (Savica by the Sava, Trg bana Jelačića, Sljeme) and check that the responses differ
-- [ ] Find the actual WMS URL of the City of Zagreb strategic noise map (via the CSW record on `geoportal.nipp.hr`)
-- [ ] Run `GetFeatureInfo` for noise at the same 3 points; if it returns only an image, record the RGB → dB legend
-- [ ] Download the „Geoportal Kvaliteta zraka” CSV and the list of monitoring stations with coordinates
-- [ ] Download the monthly measurement files for at least one station (e.g. Đorđićeva 2023) and record the columns and units
-- [ ] Determine whether a public source of current (hourly) air quality values exists; if not, use the latest available data and label it clearly
-- [ ] Download the City of Zagreb recycling yards dataset (data.gov.hr / data.zagreb.hr)
-- [ ] Download the ZET stops dataset from data.zagreb.hr
-- [ ] For each dataset, record in `docs/data-sources.md`: name, publisher, URL, format, licence, last update date
-- [ ] **Go / no-go decision by 16:00:** mark each layer as `OK`, `OK with workaround` or `dropped`
+- [x] Call `GetCapabilities` on `servisi.voda.hr/poplave_opasnosti/wms` and record the layer names for all three scenarios
+- [x] Run `GetFeatureInfo` for 3 test points (Savica by the Sava, Trg bana Jelačića, Sljeme) and check that the responses differ — *GFI refused (`LayerNotQueryable`); decided to use `GetMap` centre-pixel read against the legend instead (see `docs/data-sources.md`). Savica = low, Jelačić = none, Sljeme = none.*
+- [x] Find the actual WMS URL of the City of Zagreb strategic noise map (via the CSW record on `geoportal.nipp.hr`)
+- [x] Run `GetFeatureInfo` for noise at the same 3 points; if it returns only an image, record the RGB → dB legend
+- [x] Download the „Geoportal Kvaliteta zraka” CSV and the list of monitoring stations with coordinates
+- [x] Download the monthly measurement files for at least one station (e.g. Đorđićeva 2023) and record the columns and units
+- [x] Determine whether a public source of current (hourly) air quality values exists; if not, use the latest available data and label it clearly
+- [x] Download the City of Zagreb recycling yards dataset (data.gov.hr / data.zagreb.hr)
+- [x] Download the ZET stops dataset from data.zagreb.hr
+- [x] For each dataset, record in `docs/data-sources.md`: name, publisher, URL, format, licence, last update date
+- [x] **Go / no-go decision by 16:00:** mark each layer as `OK`, `OK with workaround` or `dropped` — *approved 2026-11-04: flood + waste OK with workaround, noise, air, mobility OK*
 
 **Output:** `docs/data-sources.md` + notebook `notebooks/00_validacija.ipynb` with the query results.
 
