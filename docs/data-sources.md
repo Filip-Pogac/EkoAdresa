@@ -60,6 +60,12 @@ Legend for each layer: `https://servisi.voda.hr/poplave_opasnosti/ows?service=WM
 
 Responses differ between points as required. Depth-class interpretation is taken from the legend titles; flagged for a human to confirm.
 
+#### Reliability re-test (2026-11-04, `backend/app/services/wms.py`)
+
+- `GetMap` returned **HTTP 502 for 4 of 40** sequential requests at Savica, but **0 of 40** at Trg bana Jelačića and 0 of 40 at Sljeme. Failures seem to happen only when the server has flood polygons to draw, i.e. exactly for the addresses that matter. Up to 3 consecutive failures seen. Not caused by our concurrency (also happens one request at a time).
+- Mitigation: 4 attempts with 0.2 / 0.4 / 0.8 s backoff in `wms.py`, SQLite cache, pre-warmed demo addresses.
+- `wms.py` reproduces the Phase 0 results for all three points (flood and noise).
+
 ### `zg-buka` — Strateška karta buke Grada Zagreba (Grad Zagreb)
 
 - **Checked:** 2026-11-04
