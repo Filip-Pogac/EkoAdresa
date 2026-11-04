@@ -134,6 +134,20 @@ Each station has a matching measurement dataset "Podaci o kvaliteti zraka u Grad
   - Trailer row: a single number in the PM10 column, most likely the number of days PM10 > 50 µg/m³ in the month (Feb: 9 = 9 computed; Apr–Aug: 0 = 0). Jan (1 vs 2) and Mar (0 vs 1) differ by one, probably due to rounding (Mar max = 50.1). Ignored when parsing.
 - **Planned use:** NO2, O3, PM10 (and PM2.5 where measured) daily values → `data/air_history.parquet`; "latest" = last day with data, always shown with its date (2023).
 
+#### Transform (`scripts/fetch_air.py`)
+
+- **Fetched:** 2026-11-04. Resource URLs come from CKAN `package_show` for the six packages (all `open-license` on data.zagreb.hr, resources modified 2023-10-09/11). 48 XLSX files, 8 per station.
+- data.zagreb.hr returned **HTTP 502 for 2 of 48 files** on the first attempt (`ksaverska20236.xlsx`, `siget20233.xlsx`); both succeeded on retry → the script retries and only accepts files that start with the ZIP signature. Downloaded XLSX are cached in `data/raw/air/` and reused (2023 data does not change); delete that folder to force a re-download.
+- Columns are matched **by name**, because order and set differ per station. Header whitespace is collapsed (`Ozon  [µg/m3]` has two spaces). Kept: `NO2`, `Ozon` → `o3`, `PM10`, `PM2,5` → `pm2_5`, all µg/m³ (unit checked when parsing). Metals, BaP, SO2, CO, benzene are not used.
+- The files already contain **one value per day**, so no averaging is done. Empty cells are dropped (not zero-filled). No zero or negative values in the four kept pollutants.
+- Coverage per station: Đorđićeva, Peščenica, Prilaz baruna Filipovića = NO2, O3, PM10 · Ksaver, Siget = NO2, O3, PM10, PM2.5 · Susedgrad = NO2, PM10, PM2.5 (no O3). All 2023-01-01 → 2023-08-31.
+- File-name prefix → station: `djordjiceva` Đorđićeva ulica · `ksaverska` Ksaverska cesta · `pescenica` Peščenica · `prilaz-baruna-filipovica` Prilaz baruna Filipovića · `siget` Siget · `susedgrad` Susedgrad (matched on `naziv` in `zg-zrak-postaje`).
+
+**Output:**
+- `data/air_history.parquet`: 4 790 rows, long format `station_id`, `date`, `pollutant` (`no2`/`o3`/`pm10`/`pm2_5`), `value_ug_m3`, `source_id` = `zg-zrak-mjerenja`.
+- `data/air_stations.geojson` (EPSG:4326): 6 stations with type, location, operator, `history_pollutants`, `history_from`/`history_to`; `source_id` = `zg-zrak-postaje`, `history_source_id` = `zg-zrak-mjerenja`. The national `rh-zrak-indeks` stations are **not** in this snapshot; they are queried live (WFS) in Phase 3.
+- Both files are byte-for-byte idempotent.
+
 ### `rh-zrak-indeks` — Indeks kvalitete zraka u Republici Hrvatskoj (INSPIRE)
 
 - **Checked:** 2026-11-04 ~21:10 UTC

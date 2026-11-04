@@ -220,7 +220,7 @@ Between thresholds the value is linearly interpolated. The formula is publicly d
 
 - [x] `scripts/fetch_waste.py`: downloads recycling yards and green islands, normalises into `data/waste.geojson` (EPSG:4326) — *20 yards (10 fixed, 10 mobile) + 628 OSM green islands, 2026-11-04*
 - [x] `scripts/fetch_transit.py`: downloads ZET stops into `data/transit.geojson` — *1 888 bus + 260 tram platforms, 2026-11-04*
-- [ ] `scripts/fetch_air.py`: downloads stations and measurements, computes daily averages per station into `data/air_stations.geojson` and `data/air_history.parquet`
+- [x] `scripts/fetch_air.py`: downloads stations and measurements, computes daily averages per station into `data/air_stations.geojson` and `data/air_history.parquet` — *6 stations, 4 790 daily values Jan–Aug 2023 (files are already daily, no averaging needed), 2026-11-04*
 - [ ] `backend/services/wms.py`: generic function `get_feature_info(service_url, layer, lat, lon)` with reprojection to HTRS96/TM (EPSG:3765) when the service requires it
 - [ ] Cache WMS responses in SQLite keyed by `(layer, lat rounded to 4 decimals, lon rounded to 4 decimals)`
 - [ ] Unit tests: the 3 test points from Phase 0 return the expected values for flooding and noise

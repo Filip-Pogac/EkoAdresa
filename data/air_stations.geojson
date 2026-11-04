@@ -1,0 +1,193 @@
+{
+ "type": "FeatureCollection",
+ "metadata": {
+  "crs": "EPSG:4326",
+  "sources": {
+   "zg-zrak-postaje": {
+    "url": "https://opendata.arcgis.com/api/v3/datasets/ed9898e63ec94770a8fb37713c36f8ca_0/downloads/data?format=geojson&spatialRefId=4326&where=1%3D1"
+   },
+   "zg-zrak-mjerenja": {
+    "packages": [
+     "podaci-o-kvaliteti-zraka-u-gradu-zagrebu-dordiceva-2023",
+     "podaci-o-kvaliteti-zraka-u-gradu-zagrebu-ksaver-2023",
+     "podaci-o-kvaliteti-zraka-u-gradu-zagrebu-pescenica-2023",
+     "podaci-o-kvaliteti-zraka-u-gradu-zagrebu-prilaz-baruna-filipovica-2023",
+     "podaci-o-kvaliteti-zraka-u-gradu-zagrebu-siget-2023",
+     "podaci-o-kvaliteti-zraka-u-gradu-zagrebu-susedgrad-2023"
+    ]
+   }
+  }
+ },
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     15.979451,
+     45.810768
+    ]
+   },
+   "properties": {
+    "id": "djordjiceva",
+    "name": "Đorđićeva ulica",
+    "station_type": "Prometna",
+    "location": "Stanica za hitnu pomoć",
+    "measured_substances": "NO2, ozon, čestice PM10 i metali Pb, Mn, Cd, As, Ni, Cu, Fe, Zn u njima, ukupna taložna tvar (UTT) i metali As, Pb, Cd, Ni i Tl u njoj",
+    "operator": "Institut za medicinska istraživanja i medicinu rada (IMI), Ksaverska cesta 2, Zagreb",
+    "info_url": "https://eko.zagreb.hr/podaci-o-mjernim-postajama/244",
+    "history_pollutants": [
+     "no2",
+     "o3",
+     "pm10"
+    ],
+    "history_from": "2023-01-01",
+    "history_to": "2023-08-31",
+    "source_id": "zg-zrak-postaje",
+    "history_source_id": "zg-zrak-mjerenja"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     15.978689,
+     45.834609
+    ]
+   },
+   "properties": {
+    "id": "ksaverska",
+    "name": "Ksaverska cesta",
+    "station_type": "Pozadinska",
+    "location": "Institut za medicinska istraživanja i medicinu rada",
+    "measured_substances": "SO2, crni ugljik, NO2, ozon, CO, čestice PM10 i metali Pb, Cd, Mn, As, Ni, Cu, Fe, Zn u njima, policiklički aromatski ugljikovodici (PAU) u česticama PM10 - benzo(a)piren (BaP), čestice PM2,5, ukupna taložna tvar (UTT) i metali As, Pb, Cd, Ni i Tl u njoj, benzen",
+    "operator": "Institut za medicinska istraživanja i medicinu rada (IMI), Ksaverska cesta 2, Zagreb",
+    "info_url": "https://eko.zagreb.hr/podaci-o-mjernim-postajama/244",
+    "history_pollutants": [
+     "no2",
+     "o3",
+     "pm10",
+     "pm2_5"
+    ],
+    "history_from": "2023-01-01",
+    "history_to": "2023-08-31",
+    "source_id": "zg-zrak-postaje",
+    "history_source_id": "zg-zrak-mjerenja"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     16.028237,
+     45.804253
+    ]
+   },
+   "properties": {
+    "id": "pescenica",
+    "name": "Peščenica",
+    "station_type": "Industrijska",
+    "location": "Tehnička škola \"Ruđer Bošković\", Getaldićeva ulica",
+    "measured_substances": "NO2, ozon, čestice PM10, ukupna taložna tvar (UTT) i metali As, Pb, Cd, Ni i Tl u njoj",
+    "operator": "Institut za medicinska istraživanja i medicinu rada (IMI), Ksaverska cesta 2, Zagreb",
+    "info_url": "https://eko.zagreb.hr/podaci-o-mjernim-postajama/244",
+    "history_pollutants": [
+     "no2",
+     "o3",
+     "pm10"
+    ],
+    "history_from": "2023-01-01",
+    "history_to": "2023-08-31",
+    "source_id": "zg-zrak-postaje",
+    "history_source_id": "zg-zrak-mjerenja"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     15.94454,
+     45.811347
+    ]
+   },
+   "properties": {
+    "id": "prilaz-baruna-filipovica",
+    "name": "Prilaz baruna Filipovića",
+    "station_type": "Prometna",
+    "location": "Dom zdravlja Črnomerec",
+    "measured_substances": "NO2, ozon, čestice PM10, ukupna taložna tvar (UTT) i metali As, Pb, Cd, Ni i Tl u njoj",
+    "operator": "Institut za medicinska istraživanja i medicinu rada (IMI), Ksaverska cesta 2, Zagreb",
+    "info_url": "https://eko.zagreb.hr/podaci-o-mjernim-postajama/244",
+    "history_pollutants": [
+     "no2",
+     "o3",
+     "pm10"
+    ],
+    "history_from": "2023-01-01",
+    "history_to": "2023-08-31",
+    "source_id": "zg-zrak-postaje",
+    "history_source_id": "zg-zrak-mjerenja"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     15.979219,
+     45.773398
+    ]
+   },
+   "properties": {
+    "id": "siget",
+    "name": "Siget",
+    "station_type": "Prometna",
+    "location": "Dom zdravlja",
+    "measured_substances": "NO2, ozon, čestice PM10 i metali Pb, Mn, Cd, As, Ni, Cu, Fe, Zn u njima, benzo(a)piren (BaP) u PM10, čestice PM2,5, ukupna taložna tvar (UTT) i metali As, Pb, Cd, Ni i Tl u njoj",
+    "operator": "Institut za medicinska istraživanja i medicinu rada (IMI), Ksaverska cesta 2, Zagreb",
+    "info_url": "https://eko.zagreb.hr/podaci-o-mjernim-postajama/244",
+    "history_pollutants": [
+     "no2",
+     "o3",
+     "pm10",
+     "pm2_5"
+    ],
+    "history_from": "2023-01-01",
+    "history_to": "2023-08-31",
+    "source_id": "zg-zrak-postaje",
+    "history_source_id": "zg-zrak-mjerenja"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     15.868868,
+     45.811576
+    ]
+   },
+   "properties": {
+    "id": "susedgrad",
+    "name": "Susedgrad",
+    "station_type": "Industrijska",
+    "location": "rasadnik Zrinjevac",
+    "measured_substances": "NO2, čestice PM2,5, čestice PM10 i metali Pb, Mn, Cd, As, Ni, Cu, Fe, Zn u njima, ukupna taložna tvar (UTT) i metali As, Pb, Cd, Ni i Tl u njoj",
+    "operator": "Institut za medicinska istraživanja i medicinu rada (IMI), Ksaverska cesta 2, Zagreb",
+    "info_url": "https://eko.zagreb.hr/podaci-o-mjernim-postajama/244",
+    "history_pollutants": [
+     "no2",
+     "pm10",
+     "pm2_5"
+    ],
+    "history_from": "2023-01-01",
+    "history_to": "2023-08-31",
+    "source_id": "zg-zrak-postaje",
+    "history_source_id": "zg-zrak-mjerenja"
+   }
+  }
+ ]
+}
