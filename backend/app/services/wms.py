@@ -137,13 +137,29 @@ async def get_map_pixel(
     Defaults give a ~707 m box at ~7 m/px (~1:25 000). The hv-poplave layers draw nothing
     when zoomed in past 1:20 000, so do not shrink the box without re-checking that.
     """
-    params = _common_params("GetMap", [layer], _bbox_around(lat, lon, half_m), px)
+    png = await get_map_png(client, service_url, layer, _bbox_around(lat, lon, half_m), px)
+    image = Image.open(io.BytesIO(png)).convert("RGBA")
+    r, g, b, a = image.getpixel((px // 2, px // 2))  # type: ignore[misc]
+    return None if a == 0 else f"#{r:02X}{g:02X}{b:02X}"
+
+
+async def get_map_png(
+    client: httpx.AsyncClient,
+    service_url: str,
+    layer: str,
+    bbox: tuple[float, float, float, float],
+    px: int,
+) -> bytes:
+    """Square transparent PNG of `layer` for bbox (min_lon, min_lat, max_lon, max_lat).
+
+    The body is fully decoded before it is returned, so a truncated PNG is retried.
+    """
+    params = _common_params("GetMap", [layer], bbox, px)
     params |= {"FORMAT": "image/png", "TRANSPARENT": "TRUE"}
 
-    def centre_pixel(resp: httpx.Response) -> str | None:
+    def checked_png(resp: httpx.Response) -> bytes:
         # UnidentifiedImageError and truncated-PNG errors are OSError subclasses -> retried
-        image = Image.open(io.BytesIO(resp.content)).convert("RGBA")
-        r, g, b, a = image.getpixel((px // 2, px // 2))  # type: ignore[misc]
-        return None if a == 0 else f"#{r:02X}{g:02X}{b:02X}"
+        Image.open(io.BytesIO(resp.content)).load()
+        return resp.content
 
-    return await _get(client, service_url, params, centre_pixel)
+    return await _get(client, service_url, params, checked_png)
