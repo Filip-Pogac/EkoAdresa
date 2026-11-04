@@ -16,6 +16,7 @@ Licences are quoted exactly as stated by the publisher; "none stated" means the 
 | `rh-zrak-indeks` | Indeks kvalitete zraka u Republici Hrvatskoj – INSPIRE | data.gov.hr lists Državna geodetska uprava; service on servisi.azo.hr `TODO(verify)` | `https://servisi.azo.hr/inspire/geos1/hh/wfs` | OGC WFS 2.0.0, INSPIRE HH GML | none stated | same-day values (2026-11-04 06:00Z seen at 21:10Z) |
 | `zg-reciklaza` | Geoportal Reciklažna dvorišta grada Zagreba | Grad Zagreb | data.zagreb.hr `reciklazna-dvorista-grada-zagreba1` (ArcGIS Hub export) | GeoJSON / CSV / KML / SHP / GDB | Otvorena dozvola (OD) | resources 2022-12-01 |
 | `zg-zeleni-otoci` | Lokacije zelenih otoka | Grad Zagreb | data.zagreb.hr `lokacije-zelenih-otoka` | CSV (cp1250) / XLSX, **no coordinates** | Otvorena dozvola (OD) | resources 2016-10/11 |
+| `osm-reciklaza` | Recycling containers (green islands), Grad Zagreb | OpenStreetMap contributors | Overpass API `https://overpass-api.de/api/interpreter` (query below) | JSON | ODbL 1.0, "© OpenStreetMap contributors" | OSM data as of 2026-11-04T22:00:29Z |
 | `zg-zet` (bus) | Geoportal Autobusna stajališta ZET | Grad Zagreb | data.zagreb.hr `autobusna-stajalista-zet` | GeoJSON | Otvorena dozvola (OD) | 2026-10-30 (refreshed every 90 days) |
 | `zg-zet` (tram) | Geoportal Tramvajska stajališta ZET | Grad Zagreb | data.zagreb.hr `geoportal-tramvajska-stajalista-zet` (ArcGIS Hub export) | GeoJSON / CSV / KML / SHP / GDB | Otvorena dozvola (OD) | resources 2022-12-08 |
 
@@ -176,7 +177,28 @@ Each station has a matching measurement dataset "Podaci o kvaliteti zraka u Grad
   1. Geocode the ~297 descriptions with Nominatim (≈ 5 min at 1 req/s), keep only street-number-level hits, and mark the precision. Lower precision and 2016 data.
   2. Use OpenStreetMap recycling containers (`amenity=recycling` + `recycling_type=container`) via Overpass: exact points, ODbL, but not a public-sector dataset.
   3. Combine: OSM for the distance, the City list as the official reference in docs.
-- **Decision (2026-11-04): option 3.** Green-island distance comes from OpenStreetMap (`amenity=recycling` + `recycling_type=container`, Zagreb, via Overpass; licence ODbL 1.0, attribution "© OpenStreetMap contributors"), registered as a separate source `osm-reciklaza`. The City list `zg-zeleni-otoci` stays the official reference in the documentation. The UI states that green-island locations come from OSM. Exact Overpass query and fetch date are recorded when `scripts/fetch_waste.py` is written (Phase 2).
+- **Decision (2026-11-04): option 3.** Green-island distance comes from OpenStreetMap (`amenity=recycling` + `recycling_type=container`, Zagreb, via Overpass; licence ODbL 1.0, attribution "© OpenStreetMap contributors"), registered as a separate source `osm-reciklaza`. The City list `zg-zeleni-otoci` stays the official reference in the documentation. The UI states that green-island locations come from OSM. Exact Overpass query and fetch date are recorded below.
+
+#### `osm-reciklaza` — fetch record (`scripts/fetch_waste.py`)
+
+- **Fetched:** 2026-11-04, OSM data as of `2026-11-04T22:00:29Z` (`osm3s.timestamp_osm_base`)
+- **Endpoint:** `https://overpass-api.de/api/interpreter` (fallback `https://maps.mail.ru/osm/tools/overpass/api/interpreter`). The main endpoint returned HTTP 502 "at capacity" twice before succeeding → the script retries with backoff.
+- **Query:**
+  ```
+  [out:json][timeout:90];
+  area["ISO3166-2"="HR-21"]["admin_level"]->.zg;
+  nwr["amenity"="recycling"]["recycling_type"="container"](area.zg);
+  out center tags;
+  ```
+- **Transform:** 716 elements (712 nodes, 4 ways → centre point). Kept only containers with at least one `recycling:paper*`, `recycling:plastic*` or `recycling:glass*` = `yes` → **628 green islands**. Dropped 88 that take only garden waste, clothes, scrap metal etc. (not a *zeleni otok*). OSM coverage is volunteer-mapped and may be incomplete; not validated against the City list.
+
+#### `zg-reciklaza` — transform (`scripts/fetch_waste.py`)
+
+- **Fetched:** 2026-11-04 → 20 yards: **10 fixed, 10 mobile** (`kind` from `VRSTA`). Whitespace normalised in all text fields.
+- Accepted-waste flags `DA`/`NE` → `accepts` list. `OTPAD_MU` kept under its original name, meaning `TODO(verify)`.
+- Mobile yards (`MRD …`) operate only on certain days; whether they count as "yard within 1 km" for EkoSkor is `TODO(decide)` in Phase 3.
+
+**Output:** `data/waste.geojson` (EPSG:4326), one FeatureCollection, `properties.type` = `recycling_yard` | `green_island`, every feature carries `source_id`. Raw downloads in `data/raw/` (not committed).
 
 ### `zg-zet` — ZET bus and tram stops (Grad Zagreb)
 
