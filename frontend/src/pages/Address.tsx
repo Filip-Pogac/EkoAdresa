@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { Link, useSearchParams } from 'react-router';
+import { Link, useNavigate, useSearchParams } from 'react-router';
 import { ApiError } from '../api/client';
 import { AddressCard, AddressCardSkeleton } from '../components/card/AddressCard';
 import { ErrorState } from '../components/common/ErrorState';
@@ -7,7 +7,7 @@ import { Skeleton } from '../components/common/Skeleton';
 import { AddressSearch } from '../components/search/AddressSearch';
 import { useProfile } from '../hooks/useProfile';
 import { hr } from '../i18n/hr';
-import { comparePath, parseAddressParams } from '../routes';
+import { addressPath, comparePath, parseAddressParams } from '../routes';
 
 // MapLibre is the biggest dependency: loaded only when a map is shown, so the home page
 // stays light and the card can render before the map (Lighthouse, CLAUDE.md §2.6)
@@ -51,6 +51,7 @@ function ProfilePanel({ lat, lon }: { lat: number; lon: number }) {
 export function Address() {
   const [params] = useSearchParams();
   const place = parseAddressParams(params);
+  const navigate = useNavigate();
   if (!place)
     return (
       <main className="mx-auto w-full max-w-2xl px-4 py-10">
@@ -75,7 +76,10 @@ export function Address() {
       <div className="flex flex-1 flex-col gap-4 lg:flex-row lg:items-start">
         <div className="flex lg:sticky lg:top-4 lg:flex-1">
           <Suspense fallback={<Skeleton label={hr.map.loading} className="h-80 w-full" />}>
-            <AddressMap point={{ lat: place.lat, lon: place.lon }} />
+            <AddressMap
+              point={{ lat: place.lat, lon: place.lon }}
+              onPick={(lat, lon) => navigate(addressPath(lat, lon))}
+            />
           </Suspense>
         </div>
         <div className="lg:w-[28rem] lg:shrink-0">

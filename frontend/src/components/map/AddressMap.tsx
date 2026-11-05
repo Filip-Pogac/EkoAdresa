@@ -36,6 +36,8 @@ const OVERLAY_SOURCE_IDS = new Set<string>([
   'stops',
 ]);
 
+const POINT_LAYER_IDS: OverlayId[] = ['air_stations', 'recycling_yards', 'green_islands', 'stops'];
+
 /** MapLibre turns array properties into JSON strings. */
 function stringList(value: unknown): string[] {
   if (Array.isArray(value)) return value.map(String);
@@ -75,11 +77,18 @@ function showPopup(map: maplibregl.Map, id: OverlayId, e: maplibregl.MapLayerMou
 interface AddressMapProps {
   /** Address to mark, EPSG:4326. Without it the map shows Zagreb. */
   point?: { lat: number; lon: number };
+  /** Called with a clicked point (EPSG:4326), except when a map point with a popup is hit. */
+  onPick?: (lat: number, lon: number) => void;
 }
 
-export function AddressMap({ point }: AddressMapProps) {
+export function AddressMap({ point, onPick }: AddressMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
+  // The click handler is registered once per map; it reads the latest callback from here.
+  const onPickRef = useRef(onPick);
+  useEffect(() => {
+    onPickRef.current = onPick;
+  }, [onPick]);
   const [status, setStatus] = useState<MapStatus>('loading');
   const [attempt, setAttempt] = useState(0);
   const [active, setActive] = useState<Set<OverlayId>>(new Set());
@@ -111,6 +120,16 @@ export function AddressMap({ point }: AddressMapProps) {
         type: 'line',
         source: 'radius',
         paint: { 'line-color': '#0e8c8c', 'line-width': 2, 'line-dasharray': [2, 2] },
+      });
+      map.on('click', (e) => {
+        // A click on a stop, yard, station or green island opens its popup instead
+        const pointLayers = POINT_LAYER_IDS.filter((id) => map.getLayer(id));
+        if (
+          pointLayers.length &&
+          map.queryRenderedFeatures(e.point, { layers: pointLayers }).length
+        )
+          return;
+        onPickRef.current?.(e.lngLat.lat, e.lngLat.lng);
       });
       mapRef.current = map;
       setStatus('ready');
@@ -188,7 +207,9 @@ export function AddressMap({ point }: AddressMapProps) {
             container. Its canvas is focusable and pans/zooms with arrow keys and +/-. */}
         <div
           role="region"
-          aria-label={point ? `${hr.map.label}. ${hr.map.radius}` : hr.map.label}
+          aria-label={[hr.map.label, point && hr.map.radius, onPick && hr.map.clickHint]
+            .filter(Boolean)
+            .join('. ')}
           className="absolute inset-0"
         >
           <div ref={containerRef} className="h-full w-full" />
@@ -204,6 +225,7 @@ export function AddressMap({ point }: AddressMapProps) {
       </div>
       {status !== 'error' && (
         <>
+          {onPick && <p className="text-sm text-ink-muted">{hr.map.clickHint}</p>}
           <LayerToggle active={active} failed={failed} onToggle={toggle} />
           <Legend active={active} />
         </>

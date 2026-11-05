@@ -23,7 +23,7 @@ Podaci o okolišu već postoje u javnim servisima: karte opasnosti od poplava Hr
 | | |
 |---|---|
 | **Pretraga adrese** s dovršavanjem upisa (i tipkovnicom) i tri primjera | **Kartica adrese:** EkoSkor i pet slojeva (poplave, buka, zrak, otpad, zelena mobilnost), svaki sa semaforom, tekstom i ikonom (ne samo bojom), jednom rečenicom na hrvatskom, izvorom i datumom podataka |
-| **Karta** s krugom od 500 m i slojevima koji se uključuju: poplave, buka, mjerne postaje, reciklažna dvorišta, zeleni otoci, stajališta ZET-a | **Graf mjerenja zraka** po danima uz smjernice SZO-a |
+| **Karta** s krugom od 500 m i slojevima koji se uključuju: poplave, buka, mjerne postaje, reciklažna dvorišta, zeleni otoci, stajališta ZET-a; **klik na kartu** daje EkoSkor bilo koje točke | **Graf mjerenja zraka** po danima uz smjernice SZO-a |
 | **Usporedba dviju adresa** s oznakom „Bolje" po sloju | **Za grad:** EkoSkor na mreži 250 × 250 m za cijeli Zagreb |
 | **Kako računamo?** cijela formula i pragovi, javno | **Izvori:** svi skupovi s izdavačima, licencijama i poveznicama |
 

@@ -2,7 +2,9 @@
 
 Requested features not yet in `PLAN.md`. Each one is weighed against the deadline (09.11.2026) and the scope-cut order in `CLAUDE.md` §3.12 before it is started.
 
-## 1. Click on the map → EkoSkor for that point
+## 1. Click on the map → EkoSkor for that point — DONE 2026-11-05
+
+> Implemented on the address page: a click opens `/adresa?lat=…&lon=…` ("Odabrana točka na karti"); a click on a map point with a popup does not navigate; hint under the map. Tests: `frontend/e2e/map-click.spec.ts`. Not done (optional): reverse-geocoding a label, a map on the home page.
 
 **Goal:** click anywhere on the map and get the same card as when typing an address.
 

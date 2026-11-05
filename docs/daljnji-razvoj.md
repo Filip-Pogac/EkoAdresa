@@ -4,7 +4,6 @@ Prototip pokriva Grad Zagreb i pet tema iz izazova B (zrak, otpad, zelena mobiln
 
 ## 1. Kratkoročno (dani do tjedni)
 
-- **Klik na kartu:** EkoSkor za bilo koju točku odabranu na karti, kao i za upisanu adresu. Stranica adrese to već podržava za bilo koju koordinatu; nedostaje samo klik.
 - **Pravilo pročelja i na karti grada:** kartica adrese za točke unutar zgrada uzima najglasnije pročelje, a mreža za grad još ne; potreban je ponovni izračun mreže.
 - **Bolji zeleni otoci:** gradski popis zelenih otoka (2016.) nema koordinate; geokodiranjem bi se dobio službeni izvor umjesto OpenStreetMapa.
 - **Pješačke udaljenosti** umjesto zračnih (otvoreni usmjerivač nad OpenStreetMapom).

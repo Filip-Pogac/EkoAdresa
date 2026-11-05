@@ -38,7 +38,7 @@ React 18, TypeScript (strogi način), Vite, Tailwind CSS, MapLibre GL JS, Rechar
 | Stranica | Put | Sadržaj |
 |---|---|---|
 | Početna | `/` | Pretraga adresa (dovršavanje upisa, tipkovnica) i 3 primjera |
-| Adresa | `/adresa?lat=&lon=&a=` | Karta sa slojevima, EkoSkor, 5 redaka slojeva sa semaforom, rečenicom i izvorom, graf mjerenja zraka |
+| Adresa | `/adresa?lat=&lon=&a=` | Karta sa slojevima (klik na kartu otvara profil te točke), EkoSkor, 5 redaka slojeva sa semaforom, rečenicom i izvorom, graf mjerenja zraka |
 | Usporedba | `/usporedba?a_lat=…&b_lat=…` | Dvije adrese usporedno, bolja strana označena tekstom „Bolje" i okvirom |
 | Za grad | `/grad` | EkoSkor na mreži 250 × 250 m za cijeli Zagreb |
 | Izvori | `/izvori` | Svi skupovi podataka s izdavačima, licencijama i poveznicama |
@@ -156,7 +156,7 @@ Skraćeni stvarni odgovor `/api/profile` za Trg bana Josipa Jelačića 6 (5. 11.
 
 - **Backend (pytest):** 157 testova. Tri referentne točke iz faze 0 (Savica, Trg bana Jelačića, Sljeme) na snimljenim odgovorima servisa, svi pragovi EkoSkora, nedostupan servis i istek roka, pravilo pročelja, pločice, registar izvora, privatnost zapisa.
 - **Frontend:** strogi TypeScript, ESLint, Prettier.
-- **Playwright (s kraja na kraj), na objavljenoj stranici:** glavni tok (pretraga → kartica → usporedba) i svih 5 stranica na 375, 768 i 1440 px bez vodoravnog pomicanja i bez pogrešaka u konzoli: 16/16.
+- **Playwright (s kraja na kraj), na objavljenoj stranici:** glavni tok (pretraga → kartica → usporedba), klik na kartu, i svih 5 stranica na 375, 768 i 1440 px bez vodoravnog pomicanja i bez pogrešaka u konzoli: 18/18.
 
 ## 9. Tehnički doprinosi
 

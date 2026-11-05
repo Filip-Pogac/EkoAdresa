@@ -177,6 +177,7 @@ export const hr = {
     error: 'Karta se trenutno ne može učitati. Ostali podaci i dalje rade.',
     retry: 'Pokušaj ponovno',
     radius: 'Krug od 500 m oko adrese',
+    clickHint: 'Kliknite bilo gdje na karti za EkoSkor te točke.',
     layersTitle: 'Slojevi na karti',
     overlays: {
       flood: 'Poplave',
