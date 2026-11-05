@@ -19,10 +19,11 @@ from typing import TypeVar
 import httpx2 as httpx
 from PIL import Image
 
+from app.http import USER_AGENT
+
 log = logging.getLogger(__name__)
 T = TypeVar("T")
 
-USER_AGENT = "EkoAdresa/0.1 (+https://github.com/Filip-Pogac/EkoAdresa)"
 # hv-poplave returns HTTP 502 for ~10 % of GetMap requests, but only where it has flood
 # polygons to draw (Savica 4/40 vs 0/40 at two points outside zones, 2026-11-04), sometimes
 # 3 in a row; it also once sent a truncated PNG. 4 attempts with 0.2, 0.4, 0.8 s backoff add

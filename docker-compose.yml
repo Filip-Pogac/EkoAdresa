@@ -8,6 +8,9 @@ services:
         required: false
     environment:
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173}
+    volumes:
+      # committed data snapshots (addresses, stops, yards, air, heatmap); see app/paths.py
+      - ./data:/data:ro
     healthcheck:
       test:
         [

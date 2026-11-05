@@ -1,14 +1,25 @@
 import os
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import health
+from app.routers import geocode, health
+from app.services import geocode as geocode_service
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    geocode_service.warm_up()  # ~2 s at startup instead of on the first search
+    yield
+
 
 app = FastAPI(
     title="EkoAdresa API",
     description="Okolišni profil adrese iz otvorenih podataka (Datathon 2026, izazov B).",
     version="0.1.0",
+    lifespan=lifespan,
 )
 
 cors_origins = [
@@ -22,3 +33,4 @@ app.add_middleware(
 )
 
 app.include_router(health.router)
+app.include_router(geocode.router)

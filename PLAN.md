@@ -107,7 +107,7 @@ In addition:
 | --- | --- |
 | Frontend | React 18 + Vite + TypeScript, MapLibre GL JS, Tailwind CSS, Recharts |
 | Backend | Python 3.11, FastAPI, Shapely 2, GeoPandas, httpx, pydantic |
-| Geocoding | Nominatim (OpenStreetMap), limited to 1 request/s, cached |
+| Geocoding | Local index of OpenStreetMap addresses for Zagreb (`data/addresses.parquet`), searched in the API; no external geocoder at runtime |
 | Base map | OpenStreetMap / OpenFreeMap vector tiles |
 | Storage | GeoJSON / GeoParquet files in the repository + SQLite cache for WMS responses |
 | LLM | Anthropic API (tool calling) or Ollama (OpenAI-compatible endpoint) |
@@ -121,7 +121,7 @@ flowchart LR
     U[User] --> FE[React + MapLibre]
     FE -->|GET /api/profile?address=| BE[FastAPI]
     FE -->|POST /api/chat| BE
-    BE --> GEO[Nominatim geocoding]
+    BE --> GEO[Local OSM address index]
     BE --> AGG[Profile aggregator]
     AGG --> F[Flooding: WMS GetFeatureInfo<br/>servisi.voda.hr]
     AGG --> N[Noise: WMS GetFeatureInfo / WFS]
@@ -228,7 +228,7 @@ Between thresholds the value is linearly interpolated. The formula is publicly d
 
 ### Phase 3 — Backend core (6 – 7 Nov)
 
-- [ ] `GET /api/geocode`: proxy to Nominatim with `countrycodes=hr`, a 1 request/s limit and caching
+- [x] `GET /api/geocode`: ~~proxy to Nominatim~~ local search over OSM addresses (`scripts/fetch_addresses.py` → `data/addresses.parquet`) — *Nominatim's policy forbids autocomplete; public Photon throttled us in testing. Accent-insensitive, ~3 ms per query, City of Zagreb only. 2026-11-05*
 - [ ] `services/flood.py`: returns `high | medium | low | none` for a point
 - [ ] `services/noise.py`: returns `lden_db`, `lnight_db` (or a dB range from the legend)
 - [ ] `services/air.py`: nearest station (Haversine), distance, latest available index and 30-day history
@@ -365,7 +365,7 @@ Between thresholds the value is linearly interpolated. The formula is publicly d
 | WMS services slow or down during judging | Medium | High | Aggressive caching + precomputed profiles for demo addresses; fall back to the last cached response |
 | No public real-time air quality data | High | Medium | Use the latest available historical data, clearly labelled with its date; describe integration with hourly data as further development |
 | Datasets with no stated licence | Medium | Medium | Write to the organiser at `open.data@mpudt.hr` on 5 Nov; state in the documentation that the data is publicly published on the Portal |
-| Nominatim blocks us for too many requests | Low | Medium | Cache + 500 ms debounce on the frontend; fallback: Photon (Komoot) |
+| ~~Nominatim blocks us for too many requests~~ Address not in the OSM snapshot (~36k addresses) | Medium | Low | Search falls back to the street; the map lets the user click the exact spot (Phase 5) |
 | LLM hallucinates data | Medium | High | Strict system prompt, answers only from tool results, mandatory `source_id`, test question set |
 | Not enough time due to parallel work on Challenge A | High | High | Scope-cut order: 1) city view, 2) compare, 3) air chart. Address card + AI assistant always stay |
 | Free hosting "sleeps" and the first request takes 30+ s | High | Medium | Cron ping every 10 min during the judging period (10 – 17 Nov) |

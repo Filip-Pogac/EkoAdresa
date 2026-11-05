@@ -10,7 +10,7 @@
 ### 1.1 What we are building
 The user types an address and instantly sees **what it is like to live there** environmentally. Data that already exists in public GIS services (flood maps, noise maps, air quality stations) is buried where an ordinary person never looks. EkoAdresa turns it into one clear answer: *"Is this a good place to live, and why?"* Typical moment: choosing a flat to rent or buy, a kindergarten or a school.
 
-1. **Search** — address autocomplete (Nominatim, Croatia only) plus 3 example addresses for a quick demo.
+1. **Search** — address autocomplete (local index of OpenStreetMap addresses, City of Zagreb) plus 3 example addresses for a quick demo.
 2. **Address card** — **EkoSkor 0–100** and a traffic-light row per layer, each with one plain Croatian sentence and its data source:
    - **Poplave** — inside a high / medium (100-year) / low probability flood zone, or outside all zones (Hrvatske vode).
    - **Buka** — L<sub>den</sub> and L<sub>night</sub> in dB compared with WHO guidance (strategic noise maps).
@@ -60,7 +60,7 @@ The user types an address and instantly sees **what it is like to live there** e
 | Client state | **Zustand** (selected addresses, compare mode), **TanStack Query** (API data, caching) | Small, predictable |
 | Backend | **Python 3.11 + FastAPI + pydantic** | Geo libraries live in Python; auto OpenAPI docs at `/docs` for the architecture score |
 | Geo | **Shapely 2, GeoPandas, pyproj, httpx** | Point-in-polygon, nearest-neighbour, EPSG:4326 ↔ EPSG:3765 (HTRS96/TM) |
-| Geocoding | **Nominatim (OSM)**, `countrycodes=hr`, 1 req/s, cached | Open, free; Photon as fallback |
+| Geocoding | **Local OSM address index** (`data/addresses.parquet`, built by `scripts/fetch_addresses.py`), searched in the API | No external service at runtime; Nominatim's policy forbids autocomplete and public Photon throttles |
 | Storage | **GeoJSON / GeoParquet in repo + SQLite cache** for WMS responses | No database server to run; data snapshot is reproducible |
 | AI | **LLM with tool calling behind a `LLMProvider` interface**: Anthropic API by default, **Ollama** (OpenAI-compatible) as open-source alternative | Rules favour open-source software; switching is config-only (`LLM_PROVIDER`) |
 | Hosting | **Vercel / Netlify** (frontend) + **Render / Railway** (backend) | Free tier, zero ops |
@@ -224,7 +224,7 @@ Changing a threshold or weight requires updating `test_ekoskor.py` and `docs/eko
 - Secrets only in `.env` / hosting env vars; `.env.example` committed; `gitleaks` in CI.
 - No user accounts and no stored addresses on the server; the cache key is the rounded coordinate, not the typed address.
 - No addresses or IPs in logs beyond aggregate counts.
-- Respect the Nominatim usage policy: identifying User-Agent, ≤ 1 req/s, cache everything.
+- Respect public OSM services' usage policies (Overpass, Nominatim): identifying User-Agent, low request rates, cache everything. Never use Nominatim for autocomplete.
 - Every team member turns off "use my data for training" in the AI tools they use (Claude, ChatGPT, Codex) before pasting project material.
 
 ---
