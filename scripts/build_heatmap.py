@@ -320,14 +320,13 @@ async def main() -> None:
             "waste": ekoskor.waste_score(loc["yard_m"], loc["island_m"]),
             "mobility": ekoskor.mobility_score(int(loc["stops_300m"]), int(loc["stops_500m"])),
         }
+        # Rounded sub-scores, as on the address card (app/services/profile.py)
+        shown = {k: None if v is None else round(v) for k, v in scores.items()}
         features.append(
             {
                 "type": "Feature",
                 "geometry": {"type": "Polygon", "coordinates": cell_polygon(cell["x"], cell["y"])},
-                "properties": {
-                    "ekoskor": ekoskor.ekoskor(scores),
-                    **{k: None if v is None else round(v) for k, v in scores.items()},
-                },
+                "properties": {"ekoskor": ekoskor.ekoskor(shown), **shown},
             }
         )
 

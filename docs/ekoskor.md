@@ -3,7 +3,7 @@
 > EkoSkor v1. Implemented in `backend/app/services/ekoskor.py`, tested in `backend/tests/test_ekoskor.py`.
 > Any change to a threshold or weight updates the code, the tests and this file in the same commit.
 
-EkoSkor is a number from 0 to 100. Each of five layers gets a sub-score from 0 to 100; EkoSkor is their weighted mean, **rounded half up** (42.5 → 43).
+EkoSkor is a number from 0 to 100. Each of five layers gets a sub-score from 0 to 100, rounded to a whole number as shown on the address card; EkoSkor is the weighted mean of those shown sub-scores, **rounded half up** (42.5 → 43), so anyone can recompute it from the card.
 
 ## Layers, weights and thresholds
 
