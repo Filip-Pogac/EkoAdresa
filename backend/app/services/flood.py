@@ -5,7 +5,14 @@ the pixel colour at the point is read (app.services.wms.get_map_pixel). Opaque =
 that scenario's flood extent; the colour encodes the depth class. See docs/data-sources.md.
 """
 
-from app.services.ekoskor import FloodZone
+import asyncio
+
+import httpx2 as httpx
+
+from app.cache import Cache, Cached, cached_fetch
+from app.models import FloodLayer
+from app.services import wms
+from app.services.ekoskor import FloodZone, flood_score, status
 
 HV_POPLAVE_URL = "https://servisi.voda.hr/poplave_opasnosti/wms"
 SOURCE_ID = "hv-poplave"
@@ -36,3 +43,33 @@ def zone_from_colours(colours: dict[FloodZone, str | None]) -> FloodZone:
         if colours.get(zone) is not None:
             return zone
     return "none"
+
+
+async def flood_at(client: httpx.AsyncClient, cache: Cache, lat: float, lon: float) -> FloodLayer:
+    """Flood zone at the point. The three scenarios are fetched in parallel, each cached.
+
+    Raises wms.WMSError if a scenario fails and has no cached answer to fall back to.
+    """
+
+    async def scenario(zone: FloodZone) -> Cached[str | None]:
+        layer = layer_name(zone)
+        return await cached_fetch(
+            cache,
+            f"{SOURCE_ID}:{layer}",
+            lat,
+            lon,
+            lambda: wms.get_map_pixel(client, HV_POPLAVE_URL, layer, lat, lon),
+        )
+
+    answers = dict(zip(SCENARIOS, await asyncio.gather(*map(scenario, SCENARIOS)), strict=True))
+    zone = zone_from_colours({z: a.value for z, a in answers.items()})
+    score = flood_score(zone)
+    return FloodLayer(
+        status=status(score),
+        score=round(score),
+        zone=zone,
+        depth_class=DEPTH_CLASSES.get(answers[zone].value or "") if zone != "none" else None,
+        source_id=SOURCE_ID,
+        fetched_at=min(a.fetched_at for a in answers.values()),
+        stale=any(a.stale for a in answers.values()),
+    )

@@ -14,6 +14,7 @@ from pathlib import Path
 import httpx2 as httpx
 import pytest
 
+from app.cache import Cache
 from app.services import flood, noise, wms
 from tests.reference_points import FIXTURES_DIR_NAME, POINTS
 
@@ -96,3 +97,81 @@ async def test_noise_at_reference_point(client: httpx.AsyncClient, point: str) -
     bands = noise.bands_from_features(features)
     assert bands == EXPECTED_NOISE[point]
     assert noise.loudest(bands) == EXPECTED_LOUDEST_LDEN[point]
+
+
+# --- flood_at / noise_at: the layer objects the address card shows ---------------------
+
+EXPECTED_FLOOD_LAYER = {  # (zone, depth_class, status, score)
+    "savica": ("low", "dubina 1,5–2,5 m", "yellow", 50),
+    "jelacic": ("none", None, "green", 100),
+    "sljeme": ("none", None, "green", 100),
+}
+EXPECTED_NOISE_LAYER = {  # (lden min, max, lnight min, max, loudest source, status, score)
+    "savica": (70, 74, 60, 64, "road", "red", 0),
+    "jelacic": (70, 74, 60, 64, "tram", "red", 0),
+    "sljeme": (None, 49, None, 49, None, "green", 100),  # no mapped band: below 50 dB
+}
+
+
+@pytest.fixture
+def cache(tmp_path: Path) -> Cache:
+    return Cache(tmp_path / "remote.sqlite")
+
+
+@pytest.mark.anyio
+@pytest.mark.parametrize("point", POINTS)
+async def test_flood_layer(client: httpx.AsyncClient, cache: Cache, point: str) -> None:
+    layer = await flood.flood_at(client, cache, *POINTS[point])
+    assert (layer.zone, layer.depth_class, layer.status, layer.score) == EXPECTED_FLOOD_LAYER[point]
+    assert layer.source_id == "hv-poplave"
+    assert not layer.stale
+
+
+@pytest.mark.anyio
+@pytest.mark.parametrize("point", POINTS)
+async def test_noise_layer(client: httpx.AsyncClient, cache: Cache, point: str) -> None:
+    layer = await noise.noise_at(client, cache, *POINTS[point])
+    got = (
+        layer.lden_db_min,
+        layer.lden_db_max,
+        layer.lnight_db_min,
+        layer.lnight_db_max,
+        layer.loudest_source,
+        layer.status,
+        layer.score,
+    )
+    assert got == EXPECTED_NOISE_LAYER[point]
+    assert layer.source_id == "zg-buka"
+
+
+def down(request: httpx.Request) -> httpx.Response:
+    return httpx.Response(502)
+
+
+@pytest.mark.anyio
+async def test_service_down_serves_last_cached_answer(
+    client: httpx.AsyncClient, cache: Cache, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(wms, "RETRY_DELAY_S", 0)
+    lat, lon = POINTS["savica"]
+    await flood.flood_at(client, cache, lat, lon)
+    # Age the cached answers past the TTL, then take the service down
+    for zone in flood.SCENARIOS:
+        namespace = f"{flood.SOURCE_ID}:{flood.layer_name(zone)}"
+        value, _ = cache.get(namespace, lat, lon)  # type: ignore[misc]
+        cache.set(namespace, lat, lon, value, fetched_at=0.0)  # 1970: long expired
+    async with httpx.AsyncClient(transport=httpx.MockTransport(down)) as broken:
+        layer = await flood.flood_at(broken, cache, lat, lon)
+    assert layer.stale
+    assert layer.zone == "low"
+    assert layer.fetched_at.year == 1970  # the UI shows the age of the cached answer
+
+
+@pytest.mark.anyio
+async def test_service_down_without_cache_raises(
+    cache: Cache, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(wms, "RETRY_DELAY_S", 0)
+    async with httpx.AsyncClient(transport=httpx.MockTransport(down)) as broken:
+        with pytest.raises(wms.WMSError):
+            await noise.noise_at(broken, cache, *POINTS["jelacic"])

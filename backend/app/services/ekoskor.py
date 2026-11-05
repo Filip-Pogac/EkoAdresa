@@ -87,6 +87,20 @@ def mobility_score(stops_300m: int, stops_500m: int) -> float:
     return 0.0
 
 
+# Traffic light per layer from its sub-score, in equal thirds. For the step layers this is
+# simply 100 -> green, 50 -> yellow, 0 -> red.
+STATUS_GREEN_MIN = 67
+STATUS_YELLOW_MIN = 34
+
+
+def status(score: float) -> Literal["green", "yellow", "red"]:
+    if score >= STATUS_GREEN_MIN:
+        return "green"
+    if score >= STATUS_YELLOW_MIN:
+        return "yellow"
+    return "red"
+
+
 def ekoskor(scores: dict[Layer, float | None]) -> int | None:
     """Weighted mean of the available sub-scores, rounded half up; None if < 3 layers."""
     available = {layer: s for layer, s in scores.items() if s is not None}

@@ -23,6 +23,10 @@ EkoSkor is a number from 0 to 100. Each of five layers gets a sub-score from 0 t
 - **Waste.** Straight-line distance to the nearest **fixed** recycling yard (the 10 mobile yards operate only on certain days and do not count, decision 2026-11-05) and to the nearest green island (OpenStreetMap recycling containers for paper, plastic or glass). Each distance gets its own 0–100 part, linear between "near" and "far": yard 100 at ≤ 1 km → 0 at ≥ 5 km, green island 100 at ≤ 300 m → 0 at ≥ 1,5 km. The waste score is the mean of the two parts (decision 2026-11-05; the earlier on/off rule "yard ≤ 1 km and island ≤ 300 m" scored 0 for 89 % of the City).
 - **Mobility.** Number of ZET bus and tram **platforms** (one published point per stop and direction, decision 2026-11-05) within 300 m and 500 m, straight-line. The rule table leaves "no platform within 300 m but one within 500 m" open; we score it 50, and 0 only when nothing is within 500 m.
 
+## Traffic light per layer
+
+Each layer row on the address card shows a status from its sub-score, in equal thirds: **Dobro** (green) at 67–100, **Umjereno** (yellow) at 34–66, **Loše** (red) at 0–33. For flood, noise and mobility, which only score 100, 50 or 0, this is simply 100 → green, 50 → yellow, 0 → red. The status always comes with its text label and an icon, never colour alone.
+
 ## Missing data
 
 If a layer is unavailable (service down, no data), it is left out and the remaining weights are renormalised to 100 %. With fewer than 3 layers available there is no EkoSkor.

@@ -9,6 +9,7 @@ from app.services.ekoskor import (
     flood_score,
     mobility_score,
     noise_score,
+    status,
     waste_score,
 )
 
@@ -116,3 +117,12 @@ def test_three_layers_is_enough_two_is_not() -> None:
     assert ekoskor(three) == 77  # type: ignore[arg-type]
     two = {"flood": 100.0, "noise": 100.0, "air": None, "waste": None, "mobility": None}
     assert ekoskor(two) is None  # type: ignore[arg-type]
+
+
+@pytest.mark.parametrize(
+    ("score", "expected"),
+    [(100, "green"), (67, "green"), (66.9, "yellow"), (50, "yellow"), (34, "yellow"),
+     (33.9, "red"), (0, "red")],
+)  # fmt: skip
+def test_status_in_thirds(score: float, expected: str) -> None:
+    assert status(score) == expected
