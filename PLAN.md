@@ -281,14 +281,14 @@ Between thresholds the value is linearly interpolated. The formula is publicly d
 
 ### Phase 7 — Submission documentation (8 – 9 Nov)
 
-- [ ] `README.md`: description, screenshots, demo link, local run instructions (`docker-compose up`)
-- [ ] `docs/arhitektura.md`: diagram, component description, API contract, data flow
-- [ ] `docs/data-sources.md`: table of all datasets (name, publisher, URL, licence, how it is used) — mandatory under Chapter III of the Rules
-- [ ] `docs/integracija.md`: how the solution connects to existing public systems (NIPP, INSPIRE services, e-Građani), standards (OGC WMS/WFS, GeoJSON, OpenAPI), technical, organisational and legal prerequisites for production
-- [ ] `docs/ekoskor.md`: methodology, thresholds, limitations
-- [ ] `docs/daljnji-razvoj.md`: extension to all of Croatia, bathing water quality, fire risk, air quality change alerts, API for real-estate portals
-- [ ] List of open-source tools and AI tools used, with licences (mandatory under Chapter VIII of the Rules)
-- [ ] 6–8 screenshots in `docs/screenshots/`
+- [x] `README.md`: description, screenshots, demo link, local run instructions (`docker-compose up`) — *Croatian; team names still `TODO`*
+- [x] `docs/arhitektura.md`: diagram, component description, API contract, data flow — *Croatian, mermaid diagram, API from OpenAPI with a real response*
+- [x] `docs/data-sources.md`: table of all datasets (name, publisher, URL, licence, how it is used) — mandatory under Chapter III of the Rules — *Croatian; English phase 0 log in `docs/data-sources-zapisnik.md`. Open: 3 services with no licence stated (`TODO(verify)`, ask the organiser)*
+- [x] `docs/integracija.md`: how the solution connects to existing public systems (NIPP, INSPIRE services, e-Građani), standards (OGC WMS/WFS, GeoJSON, OpenAPI), technical, organisational and legal prerequisites for production
+- [x] `docs/ekoskor.md`: methodology, thresholds, limitations — *translated to Croatian*
+- [x] `docs/daljnji-razvoj.md`: extension to all of Croatia, bathing water quality, fire risk, air quality change alerts, API for real-estate portals — *plus TODO.md items and the deferred AI assistant; unverified sources `TODO(verify)`*
+- [x] List of open-source tools and AI tools used, with licences (mandatory under Chapter VIII of the Rules) — *`docs/alati.md`; AI tool: Claude Code*
+- [x] 6–8 screenshots in `docs/screenshots/` — *9, from the live site via `frontend/scripts/screenshots.mjs`*
 
 ### Phase 8 — Video presentation (9 Nov)
 
