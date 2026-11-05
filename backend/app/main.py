@@ -5,10 +5,11 @@ from contextlib import asynccontextmanager
 import httpx2 as httpx
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 
 from app.cache import Cache
 from app.http import USER_AGENT
-from app.routers import compare, geocode, health, profile, sources
+from app.routers import compare, geocode, health, mapdata, profile, sources
 from app.services import geocode as geocode_service
 
 
@@ -31,6 +32,7 @@ app = FastAPI(
 cors_origins = [
     o.strip() for o in os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",") if o.strip()
 ]
+app.add_middleware(GZipMiddleware, minimum_size=1000)  # GeoJSON layers: ~5x smaller
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins,
@@ -43,3 +45,4 @@ app.include_router(geocode.router)
 app.include_router(profile.router)
 app.include_router(compare.router)
 app.include_router(sources.router)
+app.include_router(mapdata.router)
