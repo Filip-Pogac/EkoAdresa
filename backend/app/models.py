@@ -86,6 +86,30 @@ class LiveAirIndex(BaseModel):
     source_id: str  # rh-zrak-indeks
 
 
+class DhmzStation(BaseModel):
+    name: str  # as published by DHMZ, e.g. "Zagreb 1"
+    lat: float
+    lon: float
+    distance_m: int
+
+
+class DhmzValue(BaseModel):
+    pollutant: Pollutant
+    mean_24h_ug_m3: float  # mean of the hourly values on the page (last 24 h)
+    latest_ug_m3: float
+    latest_at_local: str  # 'YYYY-MM-DDTHH:00', local time in Croatia, as on the page
+    hours: int  # hourly values behind the mean (missing hours are skipped)
+
+
+class DhmzReading(BaseModel):
+    """Last 24 h at the nearest DHMZ state station: raw, unvalidated (extra information)."""
+
+    station: DhmzStation
+    values: list[DhmzValue]
+    validated: bool  # always False: DHMZ marks these values as raw
+    source_id: str  # dhmz-kvaliteta-zraka
+
+
 class AirLayer(LayerBase):
     station: AirStation
     pm10_mean_ug_m3: float  # basis of the score
@@ -94,6 +118,7 @@ class AirLayer(LayerBase):
     latest: list[AirValue]  # last available day per pollutant
     history: list[AirValue]  # last 30 days of available data, all pollutants
     live_index: LiveAirIndex | None  # None if the national service did not answer in time
+    dhmz: DhmzReading | None  # None if DHMZ did not answer in time; never scored
 
 
 class Place(BaseModel):

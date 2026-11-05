@@ -37,13 +37,13 @@ Ostale snimke zaslona: [docs/screenshots/](docs/screenshots/).
 
 ## Podaci
 
-10 izvora od 4 izdavača, povezanih u jedan profil adrese i jednu ocjenu:
+11 izvora od 5 izdavača, povezanih u jedan profil adrese i jednu ocjenu:
 
 | Sloj | Izvor | Izdavač | Pristup |
 |---|---|---|---|
 | Poplave | Karte opasnosti od poplava | Hrvatske vode | OGC WMS, uživo |
 | Buka | Strateška karta buke Grada Zagreba | Grad Zagreb | OGC WMS, uživo |
-| Zrak | Mjerne postaje i mjerenja kvalitete zraka 2023.; Indeks kvalitete zraka u RH (INSPIRE) | Grad Zagreb; data.gov.hr | data.zagreb.hr / data.gov.hr; OGC WFS uživo |
+| Zrak | Mjerne postaje i mjerenja kvalitete zraka 2023.; Indeks kvalitete zraka u RH (INSPIRE); mjerenja državnih postaja, zadnja 24 sata | Grad Zagreb; data.gov.hr; DHMZ | data.zagreb.hr / data.gov.hr; OGC WFS uživo; meteo.hr uživo |
 | Otpad | Reciklažna dvorišta; zeleni otoci | Grad Zagreb; OpenStreetMap | data.zagreb.hr; Overpass API |
 | Zelena mobilnost | Autobusna i tramvajska stajališta ZET | Grad Zagreb | data.zagreb.hr |
 | Adrese, granica | Adrese i granica Grada Zagreba | OpenStreetMap | Overpass API |

@@ -1,13 +1,15 @@
 """Air quality for an address (decision 2026-11-05, option a: same basis as the heatmap).
 
 - Score: mean PM10 of the nearest City of Zagreb monitoring station, Jan-Aug 2023
-  (zg-zrak-mjerenja, the latest published data), via ekoskor.air_score.
+  (zg-zrak-mjerenja, the period in the published dataset), via ekoskor.air_score.
 - Shown with it: the station (zg-zrak-postaje), latest daily values with their date, and
   the last 30 days of data for the chart.
-- Extra information: the national air quality index at the nearest national station
-  (rh-zrak-indeks, INSPIRE WFS, same-day values). Its scale is not verified yet, so it is
-  flagged `scale_verified=False` and never used for the score. If the WFS does not answer
-  within LIVE_TIMEOUT_S the layer is returned without it.
+- Extra information, never used for the score:
+  - the national air quality index at the nearest national station (rh-zrak-indeks,
+    INSPIRE WFS, same-day values; scale not verified, flagged `scale_verified=False`);
+  - the last 24 h of raw hourly PM10, PM2.5 and NO2 at the nearest DHMZ state station
+    (dhmz-kvaliteta-zraka, services/dhmz.py).
+  Each has its own short timeout; without an answer the layer is returned without it.
 
 Distances: straight line in EPSG:3765 (HTRS96/TM, metres), as in scripts/build_heatmap.py,
 so the nearest station is the same as in the heatmap.
@@ -28,6 +30,7 @@ import pandas as pd
 from app.cache import Cache, cached_fetch
 from app.models import AirLayer, AirStation, AirValue, LiveAirIndex
 from app.paths import DATA_DIR
+from app.services import dhmz
 from app.services.ekoskor import air_score, status
 from app.services.geo import from_htrs, to_htrs
 
@@ -155,6 +158,10 @@ async def air_at(client: httpx.AsyncClient, cache_: Cache, lat: float, lon: floa
     recent = rows[rows["date"] > period_to - timedelta(days=HISTORY_DAYS)]
 
     pm10_mean = data.pm10_mean[station.id]
+    # both extra sources in parallel, each with its own short timeout
+    live_index, dhmz_reading = await asyncio.gather(
+        _live_index(client, cache_, lat, lon), dhmz.dhmz_at(client, cache_, lat, lon)
+    )
     score = air_score(pm10_mean)
     return AirLayer(
         status=status(score),
@@ -174,5 +181,6 @@ async def air_at(client: httpx.AsyncClient, cache_: Cache, lat: float, lon: floa
         period_to=period_to,
         latest=_values(latest),
         history=_values(recent),
-        live_index=await _live_index(client, cache_, lat, lon),
+        live_index=live_index,
+        dhmz=dhmz_reading,
     )

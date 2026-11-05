@@ -1,0 +1,40 @@
+<script type="text/javascript">
+ 
+ google.charts.load('current', {'packages':['corechart'],'language': 'hr'});
+ google.charts.setOnLoadCallback(drawChart);
+  
+ function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+
+['Datum', 'Podaci automatskih postaja: Zagreb 1 - du\u0161ikov dioksid [\u00B5g/m\u00B3]'],
+        ]);
+
+  var date_formatter = new google.visualization.DateFormat({
+      pattern: "' 'dd. MM. u HH ' h"
+  });
+  date_formatter.format(data, 0);
+        var options = {
+  /*        title: '', */
+           legend: { position: 'bottom' },
+	    chartArea: {left:35, top:10, 'width': '100%', 'height': '85%'},
+	    hAxis: { format: "' 'dd.MM. HH' h" },
+            vAxis: {
+    	        viewWindowMode:'explicit',
+    	        viewWindow: {
+    	          max: -11998.8,
+    	          min: 1999.8            	}
+            
+            }
+	};
+	
+	
+
+  var chart = new google.visualization.LineChart(document.getElementById('257'));
+  chart.draw(data, options);
+  
+  
+  
+  
+  } 
+  
+ </script>

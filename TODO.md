@@ -27,7 +27,9 @@ Requested features not yet in `PLAN.md`. Each one is weighed against the deadlin
   - Fit with Challenge B (*Okoliš i održivi prostor*): frame it as the walkable "15-minute city", not nightlife.
 - Estimate: medium (≈ ½ day incl. pipeline, layer, card row, map layer).
 
-## 3. Air quality index from DHMZ
+## 3. Air quality index from DHMZ — DONE as extra information 2026-11-06
+
+> Verified 2026-11-06: DHMZ has no API/XML for air quality and no dataset on data.gov.hr; it publishes the last 24 h of raw, unvalidated hourly values per station as web pages (meteo.hr/kvaliteta_zraka.php), terms: free reuse with "(Izvor: DHMZ)". No index scale is published. Implemented: `backend/app/services/dhmz.py` reads PM10, PM2.5 and NO2 for the nearest of Zagreb 1-4 (cached 1 h per station, 2.5 s timeout, stale data never shown) and the air row shows the 24 h means, marked unvalidated. **Not used for the score:** 24 h of raw data cannot replace the annual-mean basis. Replacing the 2023 City data would need validated history (ministry portal iszz.azo.hr, no documented API). Source `dhmz-kvaliteta-zraka` in `sources.py` and `docs/data-sources.md`.
 
 **Goal:** use the DHMZ (Državni hidrometeorološki zavod) air quality data for the index.
 

@@ -1,6 +1,7 @@
 /** All UI strings (Croatian). Never inline strings in components. */
 import type {
   AirLayer,
+  DhmzReading,
   FloodLayer,
   MobilityLayer,
   NoiseLayer,
@@ -294,6 +295,22 @@ export const hr = {
         `Postaja ${l.station.name} (${formatDistance(l.station.distance_m)}): prosjek PM10 ${formatNumber(l.pm10_mean_ug_m3)} µg/m³ (SZO: do 15).`,
       period: (l: AirLayer) =>
         `Prosjek dnevnih mjerenja od ${formatDate(l.period_from)} do ${formatDate(l.period_to)}`,
+      /** One line for the last 24 h at the nearest DHMZ station (credit required by DHMZ). */
+      dhmz: (r: DhmzReading) => {
+        const name = { pm10: 'PM10', pm2_5: 'PM2,5', no2: 'NO₂', o3: 'O₃' } as const;
+        const who = { pm10: 45, pm2_5: 15, no2: 25, o3: null } as const; // WHO 2021, 24 h
+        const parts = r.values.map((v) => {
+          const limit = who[v.pollutant];
+          return `${name[v.pollutant]} ${formatNumber(v.mean_24h_ug_m3)} µg/m³${limit ? ` (SZO: do ${limit})` : ''}`;
+        });
+        const last = r.values[0]?.latest_at_local ?? '';
+        const [d, t] = last.split('T');
+        const [, m, day] = (d ?? '').split('-');
+        const when = d
+          ? ` Zadnje mjerenje ${Number(day)}. ${Number(m)}. u ${Number((t ?? '0').slice(0, 2))} h.`
+          : '';
+        return `Zadnja 24 sata, državna postaja ${r.station.name} (${formatDistance(r.station.distance_m)}), prosjek: ${parts.join(', ')}.${when} Nevalidirani podaci (Izvor: DHMZ).`;
+      },
       history: {
         show: 'Prikaži mjerenja po danima',
         hide: 'Sakrij mjerenja',

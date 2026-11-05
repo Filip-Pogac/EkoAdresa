@@ -9,10 +9,11 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.main import app
-from app.services import air, ekoskor, flood, profile
+from app.services import air, dhmz, ekoskor, flood, profile
 from tests import test_services
 from tests.conftest import Handler
 from tests.reference_points import POINTS
+from tests.test_dhmz import dhmz_replay
 
 WFS_FIXTURE = Path(__file__).parent / "fixtures" / "wfs" / "rh_zrak_indeks.xml"
 
@@ -20,6 +21,8 @@ WFS_FIXTURE = Path(__file__).parent / "fixtures" / "wfs" / "rh_zrak_indeks.xml"
 def recorded(request: httpx.Request) -> httpx.Response:
     if str(request.url).startswith(air.LIVE_URL):
         return httpx.Response(200, content=WFS_FIXTURE.read_bytes())
+    if str(request.url).startswith(dhmz.URL):
+        return dhmz_replay(request)
     return test_services.replay(request)  # flood + noise WMS fixtures per reference point
 
 

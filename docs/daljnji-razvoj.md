@@ -11,7 +11,7 @@ Prototip pokriva Grad Zagreb i pet tema iz izazova B (zrak, otpad, zelena mobiln
 
 ## 2. Novi podaci za postojeće teme
 
-- **Kvaliteta zraka uživo:** gradska mjerenja u skupu završavaju s kolovozom 2023. Planirano je korištenje podataka Državnog hidrometeorološkog zavoda (DHMZ) i/ili državne mreže za praćenje kvalitete zraka, s opisanom ljestvicom indeksa. Koji skup ili servis, licencija i učestalost osvježavanja: `TODO(verify)`. S aktualnim podacima EkoSkor bi se računao iz svježih vrijednosti, a ne iz 2023.
+- **Kvaliteta zraka u ocjeni:** kartica već prikazuje posljednja 24 sata s najbliže državne postaje DHMZ-a, ali kao nevalidirane podatke koji ne ulaze u EkoSkor. Za ocjenu iz aktualnih podataka potrebna je validirana povijest (npr. godišnji prosjek) iz državne baze kvalitete zraka (portal iszz.azo.hr), koja danas nema dokumentirani API (`TODO(verify)`), te objavljena ljestvica indeksa kvalitete zraka.
 - **Službeni adresni registar** Državne geodetske uprave umjesto OpenStreetMapa, za sve kućne brojeve (dostupnost kao otvoreni podatak `TODO(verify)`).
 
 ## 3. Nove teme iz izazova B

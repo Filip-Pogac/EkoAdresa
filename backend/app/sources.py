@@ -74,6 +74,23 @@ SOURCES: dict[str, Source] = {
             used_for="Trenutni indeks na najbližoj državnoj postaji (dodatna informacija)",
         ),
         Source(
+            id="dhmz-kvaliteta-zraka",
+            name="Kvaliteta zraka – podaci automatskih postaja, protekla 24 sata",
+            publisher="Državni hidrometeorološki zavod (DHMZ)",
+            access="live",
+            urls=[
+                "https://meteo.hr/kvaliteta_zraka.php?section=podaci_kz",
+                "https://meteo.hr/o_nama.php?section=naslovnica&param=uvjeti",
+            ],
+            licence=(
+                "Uvjeti korištenja DHMZ-a: podaci su slobodno dostupni za ponovnu uporabu "
+                'uz navođenje izvora „(Izvor: DHMZ)"'
+            ),
+            data_as_of="satne vrijednosti za protekla 24 sata, nevalidirane",
+            used_for="Trenutne vrijednosti PM10, PM2,5 i NO₂ na najbližoj državnoj postaji "
+            "(dodatna informacija, ne ulazi u EkoSkor)",
+        ),
+        Source(
             id="zg-reciklaza",
             name="Geoportal Reciklažna dvorišta grada Zagreba",
             publisher="Grad Zagreb",

@@ -7,8 +7,9 @@ import httpx2 as httpx
 import pytest
 
 from app.cache import Cache
-from app.services import air
+from app.services import air, dhmz
 from tests.reference_points import POINTS
+from tests.test_dhmz import dhmz_replay
 
 WFS_FIXTURE = Path(__file__).parent / "fixtures" / "wfs" / "rh_zrak_indeks.xml"
 
@@ -29,6 +30,8 @@ class FakeWfs:
         self.calls = 0
 
     def __call__(self, request: httpx.Request) -> httpx.Response:
+        if str(request.url).startswith(dhmz.URL):
+            return dhmz_replay(request)  # DHMZ pages are not WFS calls
         self.calls += 1
         assert str(request.url).startswith(air.LIVE_URL)
         body = WFS_FIXTURE.read_bytes() if self.status == 200 else b""
@@ -108,3 +111,15 @@ async def test_live_index_failure_does_not_fail_the_layer(cache: Cache) -> None:
         layer = await air.air_at(c, cache, *POINTS["savica"])
     assert layer.live_index is None
     assert layer.status in ("green", "yellow", "red")
+
+
+@pytest.mark.anyio
+async def test_dhmz_reading_is_extra_and_unscored(cache: Cache) -> None:
+    async with client(FakeWfs()) as c:
+        layer = await air.air_at(c, cache, *POINTS["jelacic"])
+    assert layer.dhmz is not None and layer.dhmz.station.name == "Zagreb 1"
+    async with client(FakeWfs()) as c:
+        without = await air.air_at(
+            c, Cache(cache.path.with_name("other.sqlite")), *POINTS["jelacic"]
+        )
+    assert layer.score == without.score  # the score comes from the 2023 City data only

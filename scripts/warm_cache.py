@@ -49,8 +49,8 @@ DEMO_QUERIES = [
     "Gajnice",
     "Kozari bok",
 ]
-# Live index for air: 1 h cache shared by all addresses, not worth seeding
-SKIP_NAMESPACE_PREFIXES = ("rh-zrak-indeks",)
+# Hourly air data (national index, DHMZ stations): would be stale in a committed seed
+SKIP_NAMESPACE_PREFIXES = ("rh-zrak-indeks", "dhmz-")
 
 log = logging.getLogger("warm_cache")
 

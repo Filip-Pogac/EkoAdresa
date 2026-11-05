@@ -1,0 +1,64 @@
+<script type="text/javascript">
+ 
+ google.charts.load('current', {'packages':['corechart'],'language': 'hr'});
+ google.charts.setOnLoadCallback(drawChart);
+  
+ function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+
+['Datum', 'Podaci automatskih postaja: Zagreb 1 - lebde\u0107e \u010Destice (<10\u00B5m) [\u00B5g/m\u00B3]'],
+[new Date(2026,10,05,0),31.84],
+[new Date(2026,10,05,1),35.92],
+[new Date(2026,10,05,2),44.45],
+[new Date(2026,10,05,3),42.03],
+[new Date(2026,10,05,4),40.74],
+[new Date(2026,10,05,5),44.93],
+[new Date(2026,10,05,6),37.61],
+[new Date(2026,10,05,7),32.52],
+[new Date(2026,10,05,8),34.47],
+[new Date(2026,10,05,9),35.56],
+[new Date(2026,10,05,10),37.12],
+[new Date(2026,10,05,11),38.82],
+[new Date(2026,10,05,12),37.21],
+[new Date(2026,10,05,13),37.85],
+[new Date(2026,10,05,14),42.61],
+[new Date(2026,10,05,15),38.82],
+[new Date(2026,10,05,16),38.65],
+[new Date(2026,10,05,17),44.68],
+[new Date(2026,10,05,18),44.19],
+[new Date(2026,10,05,19),38.85],
+[new Date(2026,10,05,20),41.52],
+[new Date(2026,10,05,21),35.64],
+[new Date(2026,10,05,22),31.13],
+[new Date(2026,10,05,23),28.51]
+        ]);
+
+  var date_formatter = new google.visualization.DateFormat({
+      pattern: "' 'dd. MM. u HH ' h"
+  });
+  date_formatter.format(data, 0);
+        var options = {
+  /*        title: '', */
+           legend: { position: 'bottom' },
+	    chartArea: {left:35, top:10, 'width': '100%', 'height': '85%'},
+	    hAxis: { format: "' 'dd.MM. HH' h" },
+            vAxis: {
+    	        viewWindowMode:'explicit',
+    	        viewWindow: {
+    	          max: 53.916,
+    	          min: -8.986            	}
+            
+            }
+	};
+	
+	
+
+  var chart = new google.visualization.LineChart(document.getElementById('258'));
+  chart.draw(data, options);
+  
+  
+  
+  
+  } 
+  
+ </script>

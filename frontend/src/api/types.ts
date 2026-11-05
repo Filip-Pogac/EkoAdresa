@@ -68,6 +68,22 @@ export interface LiveAirIndex {
   source_id: string;
 }
 
+export interface DhmzValue {
+  pollutant: Pollutant;
+  mean_24h_ug_m3: number;
+  latest_ug_m3: number;
+  latest_at_local: string; // 'YYYY-MM-DDTHH:00', local time in Croatia
+  hours: number;
+}
+
+/** Last 24 h at the nearest DHMZ state station: raw, unvalidated, never scored. */
+export interface DhmzReading {
+  station: { name: string; lat: number; lon: number; distance_m: number };
+  values: DhmzValue[];
+  validated: boolean;
+  source_id: string;
+}
+
 export interface AirLayer extends LayerBase {
   station: AirStation;
   pm10_mean_ug_m3: number;
@@ -76,6 +92,7 @@ export interface AirLayer extends LayerBase {
   latest: AirValue[];
   history: AirValue[];
   live_index: LiveAirIndex | null;
+  dhmz: DhmzReading | null; // null if DHMZ did not answer in time
 }
 
 export interface Place {
