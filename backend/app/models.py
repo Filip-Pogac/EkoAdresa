@@ -130,3 +130,32 @@ class MobilityLayer(LayerBase):
     stops_300m: int  # ZET platforms (one per stop and direction)
     stops_500m: int
     nearest_stop: Stop
+
+
+class UnavailableLayer(BaseModel):
+    """A layer that could not be computed; the rest of the profile is still returned."""
+
+    status: Literal["unavailable"]
+    reason: Literal["timeout", "error"]
+    source_id: str
+
+
+class Layers(BaseModel):
+    flood: FloodLayer | UnavailableLayer
+    noise: NoiseLayer | UnavailableLayer
+    air: AirLayer | UnavailableLayer
+    waste: WasteLayer | UnavailableLayer
+    mobility: MobilityLayer | UnavailableLayer
+
+
+class Location(BaseModel):
+    lat: float  # EPSG:4326
+    lon: float
+    address: str | None  # label passed by the client, echoed back, never stored
+
+
+class Profile(BaseModel):
+    location: Location
+    ekoskor: int | None  # None if fewer than 3 layers are available
+    layers: Layers
+    generated_at: datetime

@@ -235,9 +235,9 @@ Between thresholds the value is linearly interpolated. The formula is publicly d
 - [x] `services/waste.py`: nearest recycling yard and green island with distance in metres — *nearest fixed yard (scored), nearest mobile yard (info), nearest green island; 2026-11-05*
 - [x] `services/mobility.py`: number of stops within 300 m and 500 m, and the nearest stop — *platform counts and nearest stop with lines; matches the Phase 0 table; 2026-11-05*
 - [x] `services/ekoskor.py`: implementation of the formula from section 4.3 with unit tests for edge values — *done for the heatmap; traffic light in thirds (≥ 67 green, ≥ 34 yellow); 2026-11-05*
-- [ ] `GET /api/profile`: parallel calls to all services (`asyncio.gather`), 4 s timeout per layer; a layer that does not respond returns `status: "unavailable"` instead of an error
+- [x] `GET /api/profile`: parallel calls to all services (`asyncio.gather`), 4 s timeout per layer; a layer that does not respond returns `status: "unavailable"` instead of an error — *5 layers in parallel, 4 s each, `unavailable` with reason; outside Zagreb → 422. Live: cold 0.2–2.4 s, warm ≤ 0.08 s; 2026-11-05*
 - [ ] `GET /api/compare` and `GET /api/sources`
-- [ ] Automatic OpenAPI documentation available at `/docs`
+- [x] Automatic OpenAPI documentation available at `/docs` — *FastAPI `/docs`, Croatian summaries per endpoint*
 
 ### Phase 4 — AI assistant (7 Nov)
 
