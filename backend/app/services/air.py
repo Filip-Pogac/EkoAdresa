@@ -24,12 +24,12 @@ from functools import cache
 
 import httpx2 as httpx
 import pandas as pd
-from pyproj import Transformer
 
 from app.cache import Cache, cached_fetch
 from app.models import AirLayer, AirStation, AirValue, LiveAirIndex
 from app.paths import DATA_DIR
 from app.services.ekoskor import air_score, status
+from app.services.geo import from_htrs, to_htrs
 
 SOURCE_ID = "zg-zrak-mjerenja"
 STATIONS_SOURCE_ID = "zg-zrak-postaje"
@@ -53,8 +53,6 @@ GML_NS = {
     "gml": "http://www.opengis.net/gml/3.2",
 }
 
-to_htrs = Transformer.from_crs("EPSG:4326", "EPSG:3765", always_xy=True)  # lon/lat -> m
-from_htrs = Transformer.from_crs("EPSG:3765", "EPSG:4326", always_xy=True)
 log = logging.getLogger(__name__)
 
 
