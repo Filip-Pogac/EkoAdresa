@@ -18,6 +18,7 @@ Licences are quoted exactly as stated by the publisher; "none stated" means the 
 | `zg-zeleni-otoci` | Lokacije zelenih otoka | Grad Zagreb | data.zagreb.hr `lokacije-zelenih-otoka` | CSV (cp1250) / XLSX, **no coordinates** | Otvorena dozvola (OD) | resources 2016-10/11 |
 | `osm-reciklaza` | Recycling containers (green islands), Grad Zagreb | OpenStreetMap contributors | Overpass API `https://overpass-api.de/api/interpreter` (query below) | JSON | ODbL 1.0, "© OpenStreetMap contributors" | OSM data as of 2026-11-04T22:00:29Z |
 | `osm-granice` | Administrative boundary of Grad Zagreb (relation 226224, ISO 3166-2 HR-21) | OpenStreetMap contributors | Overpass API, query in `scripts/build_heatmap.py` | JSON | ODbL 1.0, "© OpenStreetMap contributors" | fetched 2026-11-05 |
+| `osm-adrese` | Addresses (addr:street + addr:housenumber) and named places in Grad Zagreb, for address search | OpenStreetMap contributors | Overpass API, query in `scripts/fetch_addresses.py` | JSON → Parquet | ODbL 1.0, "© OpenStreetMap contributors" | OSM data as of 2026-11-05T00:56:28Z |
 | `zg-zet` (bus) | Geoportal Autobusna stajališta ZET | Grad Zagreb | data.zagreb.hr `autobusna-stajalista-zet` | GeoJSON | Otvorena dozvola (OD) | 2026-10-30 (refreshed every 90 days) |
 | `zg-zet` (tram) | Geoportal Tramvajska stajališta ZET | Grad Zagreb | data.zagreb.hr `geoportal-tramvajska-stajalista-zet` (ArcGIS Hub export) | GeoJSON / CSV / KML / SHP / GDB | Otvorena dozvola (OD) | resources 2022-12-08 |
 
@@ -258,6 +259,15 @@ Each station has a matching measurement dataset "Podaci o kvaliteti zraka u Grad
 | Sljeme | 1 / 3 / 147 m | 0 / 0 / 4 907 m |
 
 (Platform counts, straight-line distance, equirectangular approximation.)
+
+### `osm-adrese` — address search (`scripts/fetch_addresses.py`, 2026-11-05)
+
+- **Why a local index:** the Nominatim usage policy lists autocomplete as unacceptable use (<https://operations.osmfoundation.org/policies/nominatim/>). The public Photon server (photon.komoot.io, built for autocomplete, "fair use") was tried first, but after ~40 test queries in ~10 minutes it stopped accepting connections from us. So `/api/geocode` searches a local snapshot instead: no external service at runtime.
+- **Query:** everything with `addr:street` + `addr:housenumber`, plus `place=suburb|quarter|neighbourhood|locality|hamlet|village` nodes, inside ISO 3166-2 HR-21 (exact query in the script and in `data/addresses.meta.json`).
+- **Result:** 40 565 address elements → **35 655 addresses** after dropping 4 922 duplicates (a building mapped both as node and as way), on **2 570 streets**; **392 named places**.
+- **Streets:** only ~36 % of addresses carry `addr:postcode` and ~38 % `addr:city`. Addresses with the same street name are grouped into one street when within 1 km of each other (single linkage); 87 names exist in several parts of the City (e.g. *Bistrička ulica* in Zagreb 10000 and in Sesvete 10360). Each group takes its most common postcode and city; 997 streets have no postcode at all.
+- **Coverage limit:** OSM has ~36 k addresses for the City, fewer than the real number of buildings. A house number missing from OSM falls back to the street (representative point = the address nearest the street's median position), and the user can pick the exact spot on the map (Phase 5).
+- **Better source for production:** the official address register of the State Geodetic Administration (DGU, *Registar prostornih jedinica* / INSPIRE *Addresses*) would be complete and public-sector. Availability as an open download or service: `TODO(verify)`.
 
 ## Go / no-go per layer — APPROVED 2026-11-04
 

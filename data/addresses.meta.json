@@ -1,0 +1,1 @@
+{"source_id": "osm-adrese", "osm_data_as_of": "2026-11-05T00:56:28Z", "query": "[out:json][timeout:240];area[\"ISO3166-2\"=\"HR-21\"][\"admin_level\"]->.zg;(nwr[\"addr:housenumber\"][\"addr:street\"](area.zg);node[\"place\"~\"^(suburb|quarter|neighbourhood|locality|hamlet|village)$\"][\"name\"](area.zg););out center tags;"}
