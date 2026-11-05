@@ -121,7 +121,11 @@ cd frontend && vercel deploy --prod
 
 ## Tim
 
-`TODO`: imena članova tima, mentor, visoko učilište.
+- Rene Filipović
+- Filip Pogač
+- Matej Šimek
+
+Mentor: Vinko Lešić
 
 ## Licencija
 

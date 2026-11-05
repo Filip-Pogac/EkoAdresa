@@ -281,9 +281,9 @@ Between thresholds the value is linearly interpolated. The formula is publicly d
 
 ### Phase 7 — Submission documentation (8 – 9 Nov)
 
-- [x] `README.md`: description, screenshots, demo link, local run instructions (`docker-compose up`) — *Croatian; team names still `TODO`*
+- [x] `README.md`: description, screenshots, demo link, local run instructions (`docker-compose up`) — *Croatian; team and mentor listed*
 - [x] `docs/arhitektura.md`: diagram, component description, API contract, data flow — *Croatian, mermaid diagram, API from OpenAPI with a real response*
-- [x] `docs/data-sources.md`: table of all datasets (name, publisher, URL, licence, how it is used) — mandatory under Chapter III of the Rules — *Croatian; English phase 0 log in `docs/data-sources-zapisnik.md`. Open: 3 services with no licence stated (`TODO(verify)`, ask the organiser)*
+- [x] `docs/data-sources.md`: table of all datasets (name, publisher, URL, licence, how it is used) — mandatory under Chapter III of the Rules — *Croatian; English phase 0 log in `docs/data-sources-zapisnik.md`. 3 services with no licence stated: use for the datathon confirmed by the team 2026-11-05; still flagged as a production prerequisite*
 - [x] `docs/integracija.md`: how the solution connects to existing public systems (NIPP, INSPIRE services, e-Građani), standards (OGC WMS/WFS, GeoJSON, OpenAPI), technical, organisational and legal prerequisites for production
 - [x] `docs/ekoskor.md`: methodology, thresholds, limitations — *translated to Croatian*
 - [x] `docs/daljnji-razvoj.md`: extension to all of Croatia, bathing water quality, fire risk, air quality change alerts, API for real-estate portals — *plus TODO.md items and the deferred AI assistant; unverified sources `TODO(verify)`*
