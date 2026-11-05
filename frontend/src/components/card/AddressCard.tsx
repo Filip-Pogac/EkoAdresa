@@ -31,7 +31,7 @@ export function AddressCard({ profile }: { profile: Profile }) {
 export function AddressCardSkeleton() {
   return (
     <div className="flex flex-col gap-4 rounded-lg border border-border bg-surface p-5">
-      <Skeleton label={hr.card.loading} className="mx-auto size-[168px] rounded-full" />
+      <Skeleton label={hr.card.loading} className="mx-auto size-[168px] !rounded-full" />
       {LAYER_ORDER.map((name) => (
         <div
           key={name}

@@ -1,0 +1,84 @@
+/** Map overlays: sources, styles and legend data. Colours of the WMS layers are the
+ * publishers' own legends (GetLegendGraphic JSON, fetched 2026-11-05). */
+import type * as maplibregl from 'maplibre-gl';
+import { API_URL } from '../../api/client';
+
+export type OverlayId =
+  'flood' | 'noise' | 'air_stations' | 'recycling_yards' | 'green_islands' | 'stops';
+
+export const OVERLAY_IDS: OverlayId[] = [
+  'flood',
+  'noise',
+  'air_stations',
+  'recycling_yards',
+  'green_islands',
+  'stops',
+];
+
+/** hv-poplave, scenario "mala vjerojatnost": fill colour per depth class. */
+export const FLOOD_DEPTHS = [
+  { label: '< 0,5 m', colour: '#BEE8FF' },
+  { label: '0,5–1,5 m', colour: '#73DFFF' },
+  { label: '1,5–2,5 m', colour: '#73B2FF' },
+  { label: '> 2,5 m', colour: '#7A8EF5' },
+];
+
+/** zg-buka Lden bands. */
+export const NOISE_BANDS = [
+  { label: '50–54 dB', colour: '#B8D6D1' },
+  { label: '55–59 dB', colour: '#E2F2BF' },
+  { label: '60–64 dB', colour: '#F3C683' },
+  { label: '65–69 dB', colour: '#CD463E' },
+  { label: '70–74 dB', colour: '#75085C' },
+  { label: '≥ 75 dB', colour: '#430A65' },
+];
+
+/** Point symbols. Not the traffic-light colours, which are reserved for layer status. */
+export const POINT_STYLE: Record<
+  Exclude<OverlayId, 'flood' | 'noise'>,
+  { colour: string; radius: number }
+> = {
+  air_stations: { colour: '#0E8C8C', radius: 8 },
+  recycling_yards: { colour: '#1F7A4D', radius: 7 },
+  green_islands: { colour: '#7B5EA7', radius: 4 },
+  stops: { colour: '#14211A', radius: 4 },
+};
+
+const RASTER_OPACITY = 0.6;
+/** [west, south, east, north], as backend/app/services/tiles.py */
+const ZAGREB_BOUNDS: [number, number, number, number] = [15.77, 45.62, 16.23, 45.97];
+
+/** Add the overlay's source and layer to the map (hidden until shown). Idempotent. */
+export function addOverlay(map: maplibregl.Map, id: OverlayId, attribution: string): void {
+  if (map.getSource(id)) return;
+  if (id === 'flood' || id === 'noise') {
+    map.addSource(id, {
+      type: 'raster',
+      tiles: [`${API_URL}/api/tiles/${id}/{z}/{x}/{y}.png`],
+      tileSize: 256,
+      minzoom: 10,
+      maxzoom: 18,
+      bounds: ZAGREB_BOUNDS, // the tile endpoint serves only the City of Zagreb
+      attribution,
+    });
+    // below the radius circle so the circle stays visible
+    map.addLayer(
+      { id, type: 'raster', source: id, paint: { 'raster-opacity': RASTER_OPACITY } },
+      'radius-fill',
+    );
+    return;
+  }
+  const style = POINT_STYLE[id];
+  map.addSource(id, { type: 'geojson', data: `${API_URL}/api/layers/${id}`, attribution });
+  map.addLayer({
+    id,
+    type: 'circle',
+    source: id,
+    paint: {
+      'circle-color': style.colour,
+      'circle-radius': style.radius,
+      'circle-stroke-color': '#FFFFFF',
+      'circle-stroke-width': 1.5,
+    },
+  });
+}

@@ -1,6 +1,7 @@
 import type { GeocodeResponse, Profile, Source } from './types';
 
-const API_URL = (import.meta.env.VITE_API_URL as string | undefined) ?? 'http://localhost:8000';
+export const API_URL =
+  (import.meta.env.VITE_API_URL as string | undefined) ?? 'http://localhost:8000';
 
 export class ApiError extends Error {
   readonly status: number;

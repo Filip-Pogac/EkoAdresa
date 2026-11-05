@@ -40,6 +40,38 @@ export const hr = {
     error: 'Karta se trenutno ne može učitati. Ostali podaci i dalje rade.',
     retry: 'Pokušaj ponovno',
     radius: 'Krug od 500 m oko adrese',
+    layersTitle: 'Slojevi na karti',
+    overlays: {
+      flood: 'Poplave',
+      noise: 'Buka',
+      air_stations: 'Mjerne postaje zraka',
+      recycling_yards: 'Reciklažna dvorišta',
+      green_islands: 'Zeleni otoci',
+      stops: 'Stajališta ZET-a',
+    },
+    attribution: {
+      flood: 'Hrvatske vode',
+      noise: 'Grad Zagreb',
+      air_stations: 'Grad Zagreb',
+      recycling_yards: 'Grad Zagreb',
+      green_islands: '© OpenStreetMap contributors',
+      stops: 'Grad Zagreb, ZET',
+    },
+    legend: {
+      flood: 'Poplave, scenarij male vjerojatnosti (najveći obuhvat). Boja je dubina vode:',
+      noise:
+        'Buka Lden, svi izvori. Gdje se izvori preklapaju, karta crta jedan od njih; kartica adrese uzima najglasniji.',
+    },
+    overlayError: (name: string) => `${name}: dio sloja trenutno se ne može učitati.`,
+    popup: {
+      station: (name: string, type: string | null) =>
+        type ? `${name} (${type.toLowerCase()} postaja)` : name,
+      yard: (name: string, mobile: boolean, hours: string | null) =>
+        [name, mobile ? 'mobilno dvorište' : null, hours].filter(Boolean).join(' · '),
+      island: 'Zeleni otok',
+      stop: (name: string | null, lines: string[]) =>
+        `${name ?? 'Stajalište'}${lines.length ? ` · ${lines.length === 1 ? 'linija' : 'linije'} ${lines.join(', ')}` : ''}`,
+    },
   },
   search: {
     label: 'Upišite adresu u Zagrebu',

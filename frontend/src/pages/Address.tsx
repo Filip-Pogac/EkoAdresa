@@ -60,7 +60,7 @@ export function Address() {
         <div className="lg:w-[28rem] lg:shrink-0">
           <ProfilePanel lat={place.lat} lon={place.lon} />
         </div>
-        <div className="flex h-80 lg:sticky lg:top-4 lg:h-[calc(100dvh-2rem)] lg:flex-1">
+        <div className="flex lg:sticky lg:top-4 lg:flex-1">
           <AddressMap point={{ lat: place.lat, lon: place.lon }} />
         </div>
       </div>

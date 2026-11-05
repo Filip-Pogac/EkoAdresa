@@ -255,7 +255,7 @@ Between thresholds the value is linearly interpolated. The formula is publicly d
 ### Phase 5 — Frontend and UX (6 – 8 Nov)
 
 - [x] Home screen: large address search with autocomplete and 3 example addresses for a quick demo — *ARIA combobox (arrows, Enter, Escape), examples Trg bana Jelačića 6, Ulica Vladimira Ruždjaka 20 (Savica), Sljemenska cesta 8; address page URL `/adresa?lat=&lon=&a=` is shareable; 2026-11-05*
-- [ ] Map: address marker, 500 m circle, toggleable layers (flooding, noise, stations, yards, stops)
+- [x] Map: address marker, 500 m circle, toggleable layers (flooding, noise, stations, yards, stops) — *also green islands; flood/noise via cached tile proxy `/api/tiles/{flood|noise}/{z}/{x}/{y}.png` (zg-buka sends no CORS; flood tiles above zoom 14 cut from zoom 14 because hv-poplave draws nothing below 1:20 000); points from `/api/layers/{name}`; legend with the publishers' colours, popups on click; 2026-11-05*
 - [x] Address card: EkoSkor as a large number with a ring indicator + 5 traffic-light rows with a one-sentence explanation per layer — *status = icon + text label; source and data date per row; outside-Zagreb and error states; 2026-11-05*
 - [ ] Air layer detail: chart of the last 30 days (Recharts)
 - [ ] AI assistant panel with 4 suggested questions as buttons
