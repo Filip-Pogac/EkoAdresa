@@ -266,17 +266,17 @@ Between thresholds the value is linearly interpolated. The formula is publicly d
 - [x] „Kako računamo?” modal with the EkoSkor formula and links to sources — *native `<dialog>`, from the header and the card; table of weights and thresholds per `docs/ekoskor.md`, façade rule, renormalisation, limitations; 2026-11-05*
 - [x] "Data sources" (*Izvori podataka*) page generated from `/api/sources` — *`/izvori`; licence "nije navedena" where none is stated; 2026-11-05*
 - [x] Loading states (skeleton), empty states and error messages for every layer — *card, compare, map overlays, city, sources, search; unavailable layer row; 2026-11-05*
-- [ ] Responsiveness: check at 375 px, 768 px and 1440 px — *1440 px checked in the browser; 375/768 not yet: the Chrome window could not be resized. Do it with Playwright viewports in Phase 6. Known fix done: EkoSkor ring shrinks in the two-column compare view*
-- [ ] Accessibility: colour contrast ≥ 4.5:1, traffic light always paired with a text label (not colour alone), keyboard navigation
+- [x] Responsiveness: check at 375 px, 768 px and 1440 px — *Playwright `e2e/responsive.spec.ts`, all pages, screenshots reviewed; header wraps to 3 lines at 375 px (acceptable)*
+- [x] Accessibility: colour contrast ≥ 4.5:1, traffic light always paired with a text label (not colour alone), keyboard navigation — *Lighthouse accessibility 100 (home, address); duplicate compare heading fixed (found by Playwright). Map point popups are mouse-only; the card lists the same facts*
 
 ### Phase 6 — Deploy and testing (8 Nov)
 
-- [ ] Deploy the backend to Render / Railway with the cached data in the repository
-- [ ] Deploy the frontend to Vercel / Netlify with the `VITE_API_URL` variable
-- [ ] Warm the cache: precompute profiles for the 20 addresses used in the demo and video
-- [ ] End-to-end test: 10 hand-picked addresses (centre, Savica, Sesvete, Novi Zagreb, Sljeme, Dubrava…) with no errors
+- [x] Deploy the backend to Render / Railway with the cached data in the repository — *Vercel instead (decision 2026-11-05): Python function from the repo root (`index.py`), region fra1, <https://ekoadresa-api.vercel.app>; cache in `/tmp`, committed seed `data/cache_seed.json`; `CORS_ORIGINS` set to the frontend only*
+- [x] Deploy the frontend to Vercel / Netlify with the `VITE_API_URL` variable — *<https://ekoadresa.vercel.app>; map code lazy-loaded (main bundle 81 kB gzip). Lighthouse (mobile) home: Performance 99, Accessibility 100, Best practices 100; address page 66 / 100 / 100 (MapLibre start-up); 2026-11-05*
+- [x] Warm the cache: precompute profiles for the 20 addresses used in the demo and video — *`scripts/warm_cache.py`: 18 addresses (2 of the 20 candidates are not in the OSM index), 95 entries, loaded at startup*
+- [x] End-to-end test: 10 hand-picked addresses (centre, Savica, Sesvete, Novi Zagreb, Sljeme, Dubrava…) with no errors — *all 10 + 15 random addresses: no errors, no unavailable layer (production, 2026-11-05). Playwright: golden path (search → card → compare) + 5 pages × 375/768/1440 px, no horizontal scroll, no console errors: 16/16 pass*
 - [ ] Test on mobile (Android and iOS browsers)
-- [ ] Measure: `/api/profile` p95 ≤ 5 s with a cold cache, ≤ 1 s with a warm cache
+- [x] Measure: `/api/profile` p95 ≤ 5 s with a cold cache, ≤ 1 s with a warm cache — *production: cold p95 0.50 s (15 random addresses), warm p95 0.07 s; seeded demo addresses p95 0.18 s. A cold serverless start adds ~3–4 s to the first request*
 - [ ] 1-hour bug bash with the whole team, fix all blocking bugs
 
 ### Phase 7 — Submission documentation (8 – 9 Nov)

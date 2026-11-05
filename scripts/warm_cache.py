@@ -74,7 +74,8 @@ async def main() -> None:
         entries = [
             e for e in cache.export() if not e["namespace"].startswith(SKIP_NAMESPACE_PREFIXES)
         ]
-    OUT_PATH.write_text(json.dumps(entries, ensure_ascii=False, indent=0) + "\n", encoding="utf-8")
+    text = json.dumps(entries, ensure_ascii=False, indent=0) + "\n"
+    OUT_PATH.write_text(text, encoding="utf-8", newline="\n")  # same bytes on every OS
     log.info("%d cache entries -> %s", len(entries), OUT_PATH.relative_to(ROOT))
 
 
