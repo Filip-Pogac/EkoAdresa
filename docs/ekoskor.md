@@ -1,48 +1,51 @@
-# EkoSkor — kako računamo (methodology)
+# EkoSkor: kako računamo
 
-> EkoSkor v1. Implemented in `backend/app/services/ekoskor.py`, tested in `backend/tests/test_ekoskor.py`.
-> Any change to a threshold or weight updates the code, the tests and this file in the same commit.
+> EkoSkor v1. Izračun je u `backend/app/services/ekoskor.py`, testovi u `backend/tests/test_ekoskor.py`.
+> Svaka promjena praga ili pondera mijenja kod, testove i ovaj dokument u istoj izmjeni (commitu).
 
-EkoSkor is a number from 0 to 100. Each of five layers gets a sub-score from 0 to 100, rounded to a whole number as shown on the address card; EkoSkor is the weighted mean of those shown sub-scores, **rounded half up** (42.5 → 43), so anyone can recompute it from the card.
+EkoSkor je broj od 0 do 100. Svaki od pet slojeva dobiva ocjenu od 0 do 100, zaokruženu na cijeli broj kako je prikazana na kartici adrese. EkoSkor je ponderirani prosjek tih prikazanih ocjena, **zaokružen na bliži cijeli broj, s polovinom prema gore** (42,5 → 43), pa ga svatko može sam izračunati s kartice.
 
-## Layers, weights and thresholds
+## Slojevi, ponderi i pragovi
 
-| Layer | Weight | 100 | 50 | 0 | Source |
+| Sloj | Ponder | 100 bodova | 50 bodova | 0 bodova | Izvor |
 |---|---|---|---|---|---|
-| Poplave (flood) | 25 % | outside all flood zones | low-probability zone | medium- or high-probability zone | `hv-poplave` |
-| Buka (noise), L<sub>den</sub> | 25 % | ≤ 53 dB | 54–64 dB | ≥ 65 dB | `zg-buka` |
-| Zrak (air), PM10 | 20 % | ≤ 15 µg/m³ | 27,5 µg/m³ | ≥ 40 µg/m³ | `zg-zrak-mjerenja` |
-| Otpad (waste) | 15 % | fixed recycling yard ≤ 1 km **and** green island ≤ 300 m | e.g. yard 3 km and island 900 m | yard ≥ 5 km **and** island ≥ 1,5 km | `zg-reciklaza`, `osm-reciklaza` |
-| Zelena mobilnost | 15 % | ≥ 3 stops within 300 m | at least one stop within 500 m | no stop within 500 m | `zg-zet` |
+| Poplave | 25 % | izvan svih zona opasnosti | zona male vjerojatnosti | zona srednje ili velike vjerojatnosti | `hv-poplave` |
+| Buka, L<sub>den</sub> | 25 % | ≤ 53 dB | 54–64 dB | ≥ 65 dB | `zg-buka` |
+| Zrak, PM10 | 20 % | ≤ 15 µg/m³ | 27,5 µg/m³ | ≥ 40 µg/m³ | `zg-zrak-mjerenja` |
+| Otpad | 15 % | fiksno reciklažno dvorište ≤ 1 km **i** zeleni otok ≤ 300 m | npr. dvorište 3 km i otok 900 m | dvorište ≥ 5 km **i** otok ≥ 1,5 km | `zg-reciklaza`, `osm-reciklaza` |
+| Zelena mobilnost | 15 % | ≥ 3 perona ZET-a do 300 m | barem jedan peron do 500 m | nijedan peron do 500 m | `zg-zet` |
 
-### How each layer is read
+### Kako se čita pojedini sloj
 
-- **Flood.** The Hrvatske vode map has three probability scenarios. The point gets the highest-probability scenario whose flood extent covers it. Depth class is shown as extra information but does not change the score.
-- **Noise.** The City noise map gives a separate L<sub>den</sub> band per source (road, tram, rail, industry) in 5 dB steps. We take the **loudest source** (decision 2026-11-05) and use the band's lower bound: band 50–54 → 100, 55–59 and 60–64 → 50, 65 and louder → 0. **Points inside buildings (decision 2026-11-05):** the map has no bands inside building footprints, and address points often fall inside their building (Trg bana Jelačića 6 read as "no band" although the façade on the square is 65–69 dB). So when the point has no band, the card takes the loudest band on a ring of 8 points 15 m around it, then 30 m if that ring is empty. This is the dwelling's **most exposed façade**, the reference point the EU Environmental Noise Directive (2002/49/EC) uses for exposure. The API returns the ring radius as `facade_m`, and the card says the value was read near the building. **No mapped band** at the point and on both rings is read as quieter than 50 dB → 100. The road-noise layer's extent covers the whole City, which supports this reading; `TODO(verify)` against the noise map report. The 53 dB threshold is the WHO (2018) guideline for road-traffic noise, L<sub>den</sub>.
-- **Air.** Mean PM10 at the **nearest City monitoring station**, January–August 2023 (the latest published data). The score is 100 at or below 15 µg/m³ (WHO 2021 annual air quality guideline), 0 at or above 40 µg/m³ (EU annual limit value, Directive 2008/50/EC), linear in between. The value is always shown with its period. Nearest-station is a coarse approximation: there are only 6 City stations.
-- **Waste.** Straight-line distance to the nearest **fixed** recycling yard (the 10 mobile yards operate only on certain days and do not count, decision 2026-11-05) and to the nearest green island (OpenStreetMap recycling containers for paper, plastic or glass). Each distance gets its own 0–100 part, linear between "near" and "far": yard 100 at ≤ 1 km → 0 at ≥ 5 km, green island 100 at ≤ 300 m → 0 at ≥ 1,5 km. The waste score is the mean of the two parts (decision 2026-11-05; the earlier on/off rule "yard ≤ 1 km and island ≤ 300 m" scored 0 for 89 % of the City).
-- **Mobility.** Number of ZET bus and tram **platforms** (one published point per stop and direction, decision 2026-11-05) within 300 m and 500 m, straight-line. The rule table leaves "no platform within 300 m but one within 500 m" open; we score it 50, and 0 only when nothing is within 500 m.
+- **Poplave.** Karta Hrvatskih voda ima tri scenarija vjerojatnosti. Točka dobiva scenarij najveće vjerojatnosti čiji obuhvat poplave je pokriva. Razred dubine prikazuje se kao dodatna informacija, ali ne mijenja ocjenu.
+- **Buka.** Strateška karta buke Grada Zagreba daje zaseban razred L<sub>den</sub> za svaki izvor (cestovni, tramvajski, željeznički promet i industrija) u koracima od 5 dB. Uzimamo **najglasniji izvor** (odluka 5. 11. 2026.) i donju granicu razreda: razred 50–54 → 100, 55–59 i 60–64 → 50, 65 i glasnije → 0.
+  - **Točke unutar zgrada (odluka 5. 11. 2026.):** karta nema razreda unutar tlocrta zgrada, a adresne točke često padaju unutar svoje zgrade. Primjerice, Trg bana Jelačića 6 očitavao se kao „bez razreda", iako je pročelje prema trgu u razredu 65–69 dB. Kad točka nema razred, kartica zato uzima najglasniji razred na prstenu od 8 točaka 15 m oko nje, a ako je i taj prazan, na prstenu od 30 m. To je **pročelje stana najizloženije buci**, referentno mjesto za izloženost prema Direktivi o buci okoliša (2002/49/EZ). API vraća polumjer prstena kao `facade_m`, a kartica navodi da je vrijednost očitana uz pročelje zgrade.
+  - **Bez razreda** na točki i na oba prstena čita se kao tiše od 50 dB → 100. Obuhvat sloja cestovne buke pokriva cijeli Grad, što podupire takvo čitanje; `TODO(verify)` prema izvješću o karti buke.
+  - Prag od 53 dB smjernica je Svjetske zdravstvene organizacije (2018.) za buku cestovnog prometa, L<sub>den</sub>.
+- **Zrak.** Prosjek PM10 na **najbližoj gradskoj mjernoj postaji** za razdoblje siječanj – kolovoz 2023. (razdoblje dostupno u objavljenom skupu podataka). Ocjena je 100 uz 15 µg/m³ ili manje (godišnja smjernica SZO-a iz 2021.), 0 uz 40 µg/m³ ili više (godišnja granična vrijednost EU-a, Direktiva 2008/50/EZ), a između raste linearno. Vrijednost se uvijek prikazuje s razdobljem mjerenja. Najbliža postaja gruba je procjena: gradskih postaja ima samo 6.
+- **Otpad.** Zračna udaljenost do najbližeg **fiksnog** reciklažnog dvorišta (10 mobilnih dvorišta radi samo određenim danima i ne ulazi u ocjenu, odluka 5. 11. 2026.) i do najbližeg zelenog otoka (spremnici za papir, plastiku ili staklo iz OpenStreetMapa). Svaka udaljenost daje svoj dio od 0 do 100, linearno između „blizu" i „daleko": dvorište 100 uz ≤ 1 km → 0 uz ≥ 5 km, zeleni otok 100 uz ≤ 300 m → 0 uz ≥ 1,5 km. Ocjena otpada prosjek je ta dva dijela (odluka 5. 11. 2026.; ranije pravilo „dvorište ≤ 1 km i otok ≤ 300 m, inače 0" davalo je 0 za 89 % Grada).
+- **Zelena mobilnost.** Broj **perona** autobusnih i tramvajskih stajališta ZET-a (jedna objavljena točka po stajalištu i smjeru, odluka 5. 11. 2026.) do 300 m i do 500 m zračne udaljenosti. Ako do 300 m nema perona, a do 500 m ima, ocjena je 50; 0 je samo ako do 500 m nema nijednog.
 
-## Traffic light per layer
+## Semafor po sloju
 
-Each layer row on the address card shows a status from its sub-score, in equal thirds: **Dobro** (green) at 67–100, **Umjereno** (yellow) at 34–66, **Loše** (red) at 0–33. For flood, noise and mobility, which only score 100, 50 or 0, this is simply 100 → green, 50 → yellow, 0 → red. The status always comes with its text label and an icon, never colour alone.
+Svaki redak sloja na kartici adrese prikazuje stanje prema ocjeni, u jednakim trećinama: **Dobro** (zeleno) 67–100, **Umjereno** (žuto) 34–66, **Loše** (crveno) 0–33. Za poplave, buku i mobilnost, koje imaju samo ocjene 100, 50 ili 0, to je jednostavno 100 → zeleno, 50 → žuto, 0 → crveno. Uz boju je uvijek tekst i ikona, nikad samo boja.
 
-## Missing data
+## Nedostupni podaci
 
-If a layer is unavailable (service down, no data), it is left out and the remaining weights are renormalised to 100 %. With fewer than 3 layers available there is no EkoSkor.
+Ako sloj nije dostupan (servis ne radi ili nema podataka), izostavlja se, a ponderi ostalih slojeva preračunavaju se na 100 %. Uz manje od 3 dostupna sloja EkoSkor se ne računa.
 
-## City heatmap (*Za grad*)
+## Karta grada (*Za grad*)
 
-The heatmap uses the same formula on a 250 × 250 m grid (EPSG:3765, HTRS96/TM) clipped to the City of Zagreb, evaluated at each cell centre. See `scripts/build_heatmap.py`.
+Karta grada koristi istu formulu na mreži ćelija 250 × 250 m (EPSG:3765, HTRS96/TM) unutar granice Grada Zagreba, izračunatu u središtu svake ćelije. Vidi `scripts/build_heatmap.py`.
 
-- **Build of 2026-11-05 (linear waste rule):** 10 260 cells, 641 km². EkoSkor min 12, median 65, max 96 (10th–90th percentile 42–77). Noise available in all cells.
-- **A cell is one sample point.** Each cell shows the value at its centre, up to ~175 m from any address in it. Example: the cell containing Trg bana Jelačića has its centre 63 m south of the square, inside a building block with no mapped noise band, so the cell scores noise 100 while the square itself (tram, 70–74 dB) scores 0. The address card is always computed at the exact address, with the façade rule above; the heatmap does not use the façade rule yet (rebuilding it with the rule is open).
-- **Waste coverage.** With the earlier on/off rule 89 % of cells scored 0 and none scored 100, so the rule was replaced by the linear one above. Now 51 % of cells score 0: 72 % of cells without a ZET stop within 500 m (outskirts, forest) and 32 % of cells with one. Reasons: only 10 fixed yards for the whole City, and OSM green-island coverage is sparse outside the centre. Improving the green-island source (e.g. geocoding the City list `zg-zeleni-otoci`) would help most.
+- **Izračun od 5. 11. 2026. (linearno pravilo za otpad):** 10 260 ćelija, 641 km². EkoSkor najmanje 12, medijan 65, najviše 96 (10.–90. percentil 42–77). Buka je dostupna u svim ćelijama.
+- **Ćelija je jedna točka uzorka.** Svaka ćelija prikazuje vrijednost u svom središtu, do ~175 m od bilo koje adrese u njoj. Primjer: središte ćelije s Trgom bana Jelačića 63 m je južno od trga, unutar bloka zgrada bez razreda buke, pa ćelija ima ocjenu buke 100, a sam trg (tramvaj, 70–74 dB) 0. Kartica adrese uvijek se računa točno na adresi, s pravilom pročelja; karta grada pravilo pročelja još ne koristi (ponovni izračun je otvoren).
+- **Pokrivenost otpada.** Uz ranije pravilo „sve ili ništa" 89 % ćelija imalo je ocjenu 0, a nijedna 100, pa je pravilo zamijenjeno linearnim. Sada 51 % ćelija ima ocjenu 0: 72 % ćelija bez stajališta ZET-a do 500 m (rubni dijelovi, šuma) i 32 % ćelija sa stajalištem. Razlozi: samo 10 fiksnih dvorišta za cijeli Grad i rijetka pokrivenost zelenih otoka u OpenStreetMapu izvan središta. Najviše bi pomogao bolji izvor zelenih otoka (npr. geokodiranje gradskog popisa `zg-zeleni-otoci`).
 
-## Limitations
+## Ograničenja
 
-- Distances are straight-line, not walking routes.
-- Noise and flood maps are strategic maps at city scale; a single building can differ.
-- Air uses 2023 data from the nearest of 6 stations; it does not describe the air at the exact address.
-- Green islands come from OpenStreetMap and may be incomplete.
-- EkoSkor is an orientation, not an expert assessment, and not legal, insurance or real-estate advice.
+- Udaljenosti su zračne, ne pješačke rute.
+- Karte buke i poplava strateške su karte na razini grada; pojedina zgrada može odstupati.
+- Zrak se temelji na podacima iz 2023. s najbliže od 6 postaja i ne opisuje zrak točno na adresi.
+- Zeleni otoci su iz OpenStreetMapa i popis možda nije potpun.
+- EkoSkor je orijentacija, a ne stručna procjena, i nije pravni, osiguravateljni ni savjet o nekretninama.
