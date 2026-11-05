@@ -100,9 +100,9 @@ Responses differ between points as required. Depth-class interpretation is taken
 | Trg bana Jelačića 45.8131, 15.9772 | road Lden 50 (50–54), tram Lden 70 (70–74), tram Lnight 60 (60–64) |
 | Sljeme 45.8986, 15.9486 | no features |
 
-**Open questions (need a human decision):**
+**Open questions:**
 1. "No features" most likely means below the lowest mapped band (Lden < 50 dB), but it could also mean outside map coverage. `TODO(verify)` against the map report / metadata record.
-2. Combining sources: take the loudest source (simple, explainable) or sum energetically (10·log10 Σ10^(L/10), more correct, but approximate on 5 dB bands). Decide in Phase 3 (`services/noise.py`).
+2. ~~Combining sources~~ **Decided 2026-11-05:** take the **loudest source** (simple, explainable), not the energetic sum. Implemented in `backend/app/services/noise.py`, documented in `docs/ekoskor.md`.
 
 ### `rh-buka` — Informacijski sustav strateških karata buke i akcijskih planova (national, fallback)
 
@@ -224,7 +224,7 @@ Each station has a matching measurement dataset "Podaci o kvaliteti zraka u Grad
 
 - **Fetched:** 2026-11-04 → 20 yards: **10 fixed, 10 mobile** (`kind` from `VRSTA`). Whitespace normalised in all text fields.
 - Accepted-waste flags `DA`/`NE` → `accepts` list. `OTPAD_MU` kept under its original name, meaning `TODO(verify)`.
-- Mobile yards (`MRD …`) operate only on certain days; whether they count as "yard within 1 km" for EkoSkor is `TODO(decide)` in Phase 3.
+- Mobile yards (`MRD …`) operate only on certain days; **decided 2026-11-05: they do not count** for EkoSkor (fixed yards only); they are still listed as extra information. See `docs/ekoskor.md`.
 
 **Output:** `data/waste.geojson` (EPSG:4326), one FeatureCollection, `properties.type` = `recycling_yard` | `green_island`, every feature carries `source_id`. Raw downloads in `data/raw/` (not committed).
 
@@ -239,7 +239,7 @@ Each station has a matching measurement dataset "Podaci o kvaliteti zraka u Grad
 - **Tram stops:** data.zagreb.hr package `geoportal-tramvajska-stajalista-zet`, licence "Otvorena dozvola (OD)", resources from **2022-12-08**
   - Download (ArcGIS Hub export, EPSG:4326): `https://opendata.arcgis.com/api/v3/datasets/8f84d42e684141eaa7ceb26d9c9b8f5a_0/downloads/data?format=geojson&spatialRefId=4326&where=1%3D1`
   - 260 points; fields `OBJECTID`, `Naziv_stajališta`, `Linije`, `Opis`, `Napomena`
-- **One point per platform/direction** (names end in "- jug", "- istok"…). For "stops within 300 m" decide whether to count platforms or group by name without the direction suffix. `TODO(decide)` in Phase 3.
+- **One point per platform/direction** (names end in "- jug", "- istok"…). **Decided 2026-11-05: count platforms** (every published point), not named stops. See `docs/ekoskor.md`.
 - **GTFS:** no GTFS package on data.zagreb.hr (`q=gtfs` → 0).
 
 #### Transform (`scripts/fetch_transit.py`)
