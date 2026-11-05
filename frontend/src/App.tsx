@@ -1,16 +1,35 @@
-import { AddressMap } from './components/map/AddressMap';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { BrowserRouter, Link, Route, Routes } from 'react-router';
 import { hr } from './i18n/hr';
+import { Address } from './pages/Address';
+import { Home } from './pages/Home';
+
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { refetchOnWindowFocus: false } },
+});
 
 export function App() {
   return (
-    <div className="mx-auto flex min-h-dvh max-w-6xl flex-col gap-4 p-4">
-      <header>
-        <h1 className="text-2xl font-bold text-primary">{hr.app.name}</h1>
-        <p className="text-ink-muted">{hr.app.tagline}</p>
-      </header>
-      <main className="flex flex-1 flex-col">
-        <AddressMap />
-      </main>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <div className="flex min-h-dvh flex-col">
+          <header className="border-b border-border bg-surface">
+            <div className="mx-auto flex w-full max-w-6xl items-center px-4">
+              <Link
+                to="/"
+                aria-label={hr.app.home}
+                className="flex min-h-12 items-center text-lg font-bold text-primary"
+              >
+                {hr.app.name}
+              </Link>
+            </div>
+          </header>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/adresa" element={<Address />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }

@@ -1,0 +1,43 @@
+import type { GeocodeResponse, Profile, Source } from './types';
+
+const API_URL = (import.meta.env.VITE_API_URL as string | undefined) ?? 'http://localhost:8000';
+
+export class ApiError extends Error {
+  readonly status: number;
+  readonly detail: string | null;
+
+  constructor(status: number, detail: string | null) {
+    super(`API ${status}: ${detail ?? 'error'}`);
+    this.status = status;
+    this.detail = detail;
+  }
+}
+
+async function get<T>(
+  path: string,
+  params: Record<string, string | number | undefined> = {},
+  signal?: AbortSignal,
+): Promise<T> {
+  const url = new URL(path, API_URL);
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined) url.searchParams.set(key, String(value));
+  }
+  const resp = await fetch(url, { signal });
+  if (!resp.ok) {
+    const body: unknown = await resp.json().catch(() => null);
+    const detail =
+      body && typeof body === 'object' && 'detail' in body && typeof body.detail === 'string'
+        ? body.detail
+        : null;
+    throw new ApiError(resp.status, detail);
+  }
+  return (await resp.json()) as T;
+}
+
+export const api = {
+  geocode: (q: string, signal?: AbortSignal) =>
+    get<GeocodeResponse>('/api/geocode', { q, limit: 6 }, signal),
+  profile: (lat: number, lon: number, signal?: AbortSignal) =>
+    get<Profile>('/api/profile', { lat, lon }, signal),
+  sources: (signal?: AbortSignal) => get<Source[]>('/api/sources', {}, signal),
+};
