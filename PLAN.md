@@ -224,7 +224,7 @@ Between thresholds the value is linearly interpolated. The formula is publicly d
 - [x] `backend/services/wms.py`: generic function `get_feature_info(service_url, layer, lat, lon)` with reprojection to HTRS96/TM (EPSG:3765) when the service requires it — *`get_feature_info` (noise) + `get_map_pixel` (flood workaround), 4 retries. No reprojection needed: both WMS accept CRS:84; EPSG:3765 is only needed for the air WFS (Phase 3, `air.py`)*
 - [x] Cache WMS responses in SQLite keyed by `(layer, lat rounded to 4 decimals, lon rounded to 4 decimals)` — *`backend/app/cache.py`, 30-day TTL, serves the last cached value (`stale=True`, with `fetched_at`) when the service fails*
 - [x] Unit tests: the 3 test points from Phase 0 return the expected values for flooding and noise — *`backend/tests/test_services.py` on recorded fixtures (`tests/record_fixtures.py`, 2026-11-04); raw pixel colour + noise bands now, zone/dB interpretation tested in Phase 3*
-- [x] `scripts/build_heatmap.py`: computes EkoSkor for a 250 × 250 m grid over Zagreb into `data/heatmap.geojson` (run overnight if it takes long) — *10 260 cells, EkoSkor 12–89 (median 63); flood from 500 px GetMap tiles, noise per cell via cache (21 min cold, 12 s warm); 2026-11-05*
+- [x] `scripts/build_heatmap.py`: computes EkoSkor for a 250 × 250 m grid over Zagreb into `data/heatmap.geojson` (run overnight if it takes long) — *10 260 cells, EkoSkor 12–96 (median 65, linear waste rule); flood from 500 px GetMap tiles, noise per cell via cache (21 min cold, 12 s warm); 2026-11-05*
 
 ### Phase 3 — Backend core (6 – 7 Nov)
 

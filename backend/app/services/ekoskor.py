@@ -30,11 +30,21 @@ NOISE_POOR_MIN_DB = 65
 PM10_GOOD_UG_M3 = 15.0
 PM10_POOR_UG_M3 = 40.0
 # Waste and mobility distances in metres.
+# Waste: each distance scores 100 at "near" and 0 at "far", linear in between (decision
+# 2026-11-05, replaces the 1 km / 300 m on-off rule, which scored 0 almost everywhere).
 YARD_NEAR_M = 1000
+YARD_FAR_M = 5000
 ISLAND_NEAR_M = 300
+ISLAND_FAR_M = 1500
 STOPS_NEAR_M = 300
 STOPS_WALK_M = 500
 STOPS_GOOD_COUNT = 3
+
+
+def _linear_down(value: float, near: float, far: float) -> float:
+    """100 at ≤ near, 0 at ≥ far, linear in between."""
+    t = (value - near) / (far - near)
+    return 100.0 * (1.0 - min(1.0, max(0.0, t)))
 
 
 def flood_score(zone: FloodZone) -> float:
@@ -57,14 +67,15 @@ def noise_score(lden_db: float | None) -> float:
 
 def air_score(pm10_ug_m3: float) -> float:
     """100 at ≤ 15 µg/m3, 0 at ≥ 40 µg/m3, linear in between."""
-    t = (pm10_ug_m3 - PM10_GOOD_UG_M3) / (PM10_POOR_UG_M3 - PM10_GOOD_UG_M3)
-    return 100.0 * (1.0 - min(1.0, max(0.0, t)))
+    return _linear_down(pm10_ug_m3, PM10_GOOD_UG_M3, PM10_POOR_UG_M3)
 
 
 def waste_score(yard_distance_m: float, island_distance_m: float) -> float:
-    """Fixed recycling yard ≤ 1 km and green island ≤ 300 m: 100; one of them 50; neither 0."""
-    near = (yard_distance_m <= YARD_NEAR_M) + (island_distance_m <= ISLAND_NEAR_M)
-    return 50.0 * near
+    """Mean of: fixed recycling yard 100 at ≤ 1 km -> 0 at ≥ 5 km, and green island
+    100 at ≤ 300 m -> 0 at ≥ 1.5 km."""
+    yard = _linear_down(yard_distance_m, YARD_NEAR_M, YARD_FAR_M)
+    island = _linear_down(island_distance_m, ISLAND_NEAR_M, ISLAND_FAR_M)
+    return (yard + island) / 2
 
 
 def mobility_score(stops_300m: int, stops_500m: int) -> float:

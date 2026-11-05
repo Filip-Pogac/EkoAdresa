@@ -57,15 +57,19 @@ def test_air(pm10: float, expected: float) -> None:
 @pytest.mark.parametrize(
     ("yard_m", "island_m", "expected"),
     [
-        (1000, 300, 100),  # both edges inclusive
-        (1001, 300, 50),
-        (1000, 301, 50),
-        (1001, 301, 0),
+        (1000, 300, 100),  # both "near" edges inclusive
         (200, 50, 100),
+        (5000, 1500, 0),  # both "far" edges
+        (9000, 4000, 0),
+        (5000, 300, 50),  # island perfect, yard at far edge
+        (1000, 1500, 50),  # yard perfect, island at far edge
+        (3000, 900, 50),  # both halfway: 50 and 50
+        (2000, 300, 87.5),  # yard 75, island 100
+        (1000, 600, 87.5),  # yard 100, island 75
     ],
 )
 def test_waste(yard_m: float, island_m: float, expected: float) -> None:
-    assert waste_score(yard_m, island_m) == expected
+    assert waste_score(yard_m, island_m) == pytest.approx(expected)
 
 
 @pytest.mark.parametrize(
