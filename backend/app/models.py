@@ -91,3 +91,42 @@ class AirLayer(LayerBase):
     latest: list[AirValue]  # last available day per pollutant
     history: list[AirValue]  # last 30 days of available data, all pollutants
     live_index: LiveAirIndex | None  # None if the national service did not answer in time
+
+
+class Place(BaseModel):
+    """A point of interest near the address, with its straight-line distance."""
+
+    name: str | None
+    lat: float
+    lon: float
+    distance_m: int
+    source_id: str
+
+
+class RecyclingYard(Place):
+    address: str | None
+    opening_hours: str | None  # as published (2022 data)
+
+
+class GreenIsland(Place):
+    accepts: list[str]  # e.g. ["glass", "paper", "plastic"]
+
+
+class WasteLayer(LayerBase):
+    yard: RecyclingYard  # nearest fixed yard (scored)
+    mobile_yard: RecyclingYard  # nearest mobile yard: extra information, not scored
+    island: GreenIsland
+    yard_distance_m: int
+    island_distance_m: int
+
+
+class Stop(Place):
+    type: Literal["bus", "tram"]
+    direction: str | None
+    lines: list[str]
+
+
+class MobilityLayer(LayerBase):
+    stops_300m: int  # ZET platforms (one per stop and direction)
+    stops_500m: int
+    nearest_stop: Stop
