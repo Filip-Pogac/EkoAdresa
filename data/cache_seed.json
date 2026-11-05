@@ -1,0 +1,1159 @@
+[
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-mala-vjerojatnost",
+"lat": "45.7652",
+"lon": "15.9390",
+"value": "#7A8EF5",
+"fetched_at": 1793911870.0226135
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-mala-vjerojatnost",
+"lat": "45.7776",
+"lon": "15.9680",
+"value": "#73B2FF",
+"fetched_at": 1793911867.1285334
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-mala-vjerojatnost",
+"lat": "45.7864",
+"lon": "15.9264",
+"value": "#73DFFF",
+"fetched_at": 1793911868.9186609
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-mala-vjerojatnost",
+"lat": "45.7903",
+"lon": "15.9943",
+"value": "#73DFFF",
+"fetched_at": 1793911866.140447
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-mala-vjerojatnost",
+"lat": "45.7949",
+"lon": "15.9698",
+"value": "#7A8EF5",
+"fetched_at": 1793911868.191537
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-mala-vjerojatnost",
+"lat": "45.7961",
+"lon": "16.0481",
+"value": "#7A8EF5",
+"fetched_at": 1793911870.4887433
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-mala-vjerojatnost",
+"lat": "45.7970",
+"lon": "15.9792",
+"value": "#72B0FE",
+"fetched_at": 1793911869.5586987
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-mala-vjerojatnost",
+"lat": "45.7984",
+"lon": "15.9626",
+"value": null,
+"fetched_at": 1793911868.3941703
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-mala-vjerojatnost",
+"lat": "45.7994",
+"lon": "15.8963",
+"value": "#73DFFF",
+"fetched_at": 1793911869.2344365
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-mala-vjerojatnost",
+"lat": "45.7994",
+"lon": "15.9579",
+"value": "#BEE8FF",
+"fetched_at": 1793911868.6320944
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-mala-vjerojatnost",
+"lat": "45.8132",
+"lon": "15.9743",
+"value": null,
+"fetched_at": 1793911866.8901324
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-mala-vjerojatnost",
+"lat": "45.8134",
+"lon": "15.9773",
+"value": null,
+"fetched_at": 1793911865.479453
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-mala-vjerojatnost",
+"lat": "45.8155",
+"lon": "15.9355",
+"value": "#BEE8FF",
+"fetched_at": 1793911869.800222
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-mala-vjerojatnost",
+"lat": "45.8167",
+"lon": "16.0029",
+"value": null,
+"fetched_at": 1793911867.3043795
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-mala-vjerojatnost",
+"lat": "45.8173",
+"lon": "15.8729",
+"value": null,
+"fetched_at": 1793911870.2942123
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-mala-vjerojatnost",
+"lat": "45.8273",
+"lon": "16.1101",
+"value": null,
+"fetched_at": 1793911867.539974
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-mala-vjerojatnost",
+"lat": "45.8280",
+"lon": "16.0503",
+"value": null,
+"fetched_at": 1793911867.9198532
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-mala-vjerojatnost",
+"lat": "45.8991",
+"lon": "15.9474",
+"value": null,
+"fetched_at": 1793911866.374267
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-srednja-vjerojatnost",
+"lat": "45.7652",
+"lon": "15.9390",
+"value": null,
+"fetched_at": 1793911869.9827225
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-srednja-vjerojatnost",
+"lat": "45.7776",
+"lon": "15.9680",
+"value": null,
+"fetched_at": 1793911867.1154892
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-srednja-vjerojatnost",
+"lat": "45.7864",
+"lon": "15.9264",
+"value": null,
+"fetched_at": 1793911868.908773
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-srednja-vjerojatnost",
+"lat": "45.7903",
+"lon": "15.9943",
+"value": null,
+"fetched_at": 1793911866.0637052
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-srednja-vjerojatnost",
+"lat": "45.7949",
+"lon": "15.9698",
+"value": null,
+"fetched_at": 1793911868.156772
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-srednja-vjerojatnost",
+"lat": "45.7961",
+"lon": "16.0481",
+"value": null,
+"fetched_at": 1793911870.4764347
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-srednja-vjerojatnost",
+"lat": "45.7970",
+"lon": "15.9792",
+"value": null,
+"fetched_at": 1793911869.4760537
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-srednja-vjerojatnost",
+"lat": "45.7984",
+"lon": "15.9626",
+"value": null,
+"fetched_at": 1793911868.3691742
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-srednja-vjerojatnost",
+"lat": "45.7994",
+"lon": "15.8963",
+"value": null,
+"fetched_at": 1793911869.1899414
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-srednja-vjerojatnost",
+"lat": "45.7994",
+"lon": "15.9579",
+"value": null,
+"fetched_at": 1793911868.602502
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-srednja-vjerojatnost",
+"lat": "45.8132",
+"lon": "15.9743",
+"value": null,
+"fetched_at": 1793911866.880591
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-srednja-vjerojatnost",
+"lat": "45.8134",
+"lon": "15.9773",
+"value": null,
+"fetched_at": 1793911865.414368
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-srednja-vjerojatnost",
+"lat": "45.8155",
+"lon": "15.9355",
+"value": null,
+"fetched_at": 1793911869.785545
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-srednja-vjerojatnost",
+"lat": "45.8167",
+"lon": "16.0029",
+"value": null,
+"fetched_at": 1793911867.283492
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-srednja-vjerojatnost",
+"lat": "45.8173",
+"lon": "15.8729",
+"value": null,
+"fetched_at": 1793911870.2692056
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-srednja-vjerojatnost",
+"lat": "45.8273",
+"lon": "16.1101",
+"value": null,
+"fetched_at": 1793911867.607474
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-srednja-vjerojatnost",
+"lat": "45.8280",
+"lon": "16.0503",
+"value": null,
+"fetched_at": 1793911867.8801932
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-srednja-vjerojatnost",
+"lat": "45.8991",
+"lon": "15.9474",
+"value": null,
+"fetched_at": 1793911866.3193142
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-velika-vjerojatnost",
+"lat": "45.7652",
+"lon": "15.9390",
+"value": null,
+"fetched_at": 1793911869.9613662
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-velika-vjerojatnost",
+"lat": "45.7776",
+"lon": "15.9680",
+"value": null,
+"fetched_at": 1793911867.0963576
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-velika-vjerojatnost",
+"lat": "45.7864",
+"lon": "15.9264",
+"value": null,
+"fetched_at": 1793911868.8955464
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-velika-vjerojatnost",
+"lat": "45.7903",
+"lon": "15.9943",
+"value": null,
+"fetched_at": 1793911866.1000507
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-velika-vjerojatnost",
+"lat": "45.7949",
+"lon": "15.9698",
+"value": null,
+"fetched_at": 1793911868.141543
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-velika-vjerojatnost",
+"lat": "45.7961",
+"lon": "16.0481",
+"value": null,
+"fetched_at": 1793911870.4608443
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-velika-vjerojatnost",
+"lat": "45.7970",
+"lon": "15.9792",
+"value": null,
+"fetched_at": 1793911869.4574869
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-velika-vjerojatnost",
+"lat": "45.7984",
+"lon": "15.9626",
+"value": null,
+"fetched_at": 1793911868.3379612
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-velika-vjerojatnost",
+"lat": "45.7994",
+"lon": "15.8963",
+"value": null,
+"fetched_at": 1793911869.2015724
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-velika-vjerojatnost",
+"lat": "45.7994",
+"lon": "15.9579",
+"value": null,
+"fetched_at": 1793911868.6193697
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-velika-vjerojatnost",
+"lat": "45.8132",
+"lon": "15.9743",
+"value": null,
+"fetched_at": 1793911866.8583646
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-velika-vjerojatnost",
+"lat": "45.8134",
+"lon": "15.9773",
+"value": null,
+"fetched_at": 1793911865.455043
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-velika-vjerojatnost",
+"lat": "45.8155",
+"lon": "15.9355",
+"value": null,
+"fetched_at": 1793911869.7524006
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-velika-vjerojatnost",
+"lat": "45.8167",
+"lon": "16.0029",
+"value": null,
+"fetched_at": 1793911867.2953765
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-velika-vjerojatnost",
+"lat": "45.8173",
+"lon": "15.8729",
+"value": null,
+"fetched_at": 1793911870.2372668
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-velika-vjerojatnost",
+"lat": "45.8273",
+"lon": "16.1101",
+"value": null,
+"fetched_at": 1793911867.4879007
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-velika-vjerojatnost",
+"lat": "45.8280",
+"lon": "16.0503",
+"value": null,
+"fetched_at": 1793911867.868059
+},
+{
+"namespace": "hv-poplave:hr.fd.opasnost-od-poplave-velika-vjerojatnost",
+"lat": "45.8991",
+"lon": "15.9474",
+"value": null,
+"fetched_at": 1793911866.307359
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.7652",
+"lon": "15.9390",
+"value": [
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lden.fid-26b3a052_1a1ad5ed0c3_-2254",
+"geometry": null,
+"properties": {
+"razina": 55
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lnight.fid-26b3a052_1a1ad5ed0c3_-224c",
+"geometry": null,
+"properties": {
+"razina": 45
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lnight.fid-26b3a052_1a1ad5ed0c3_-224b",
+"geometry": null,
+"properties": {
+"razina": 50
+}
+}
+],
+"fetched_at": 1793911870.1073084
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.7776",
+"lon": "15.9680",
+"value": [
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lden.fid--b6984c6_1a1ad44ee91_35c0",
+"geometry": null,
+"properties": {
+"razina": 80
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lnight.fid--b6984c6_1a1ad44ee91_35c4",
+"geometry": null,
+"properties": {
+"razina": 70
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lden.fid--b6984c6_1a1ad44ee91_35c5",
+"geometry": null,
+"properties": {
+"razina": 65
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lnight.fid--b6984c6_1a1ad44ee91_35c6",
+"geometry": null,
+"properties": {
+"razina": 60
+}
+}
+],
+"fetched_at": 1793911867.141778
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.7864",
+"lon": "15.9264",
+"value": [
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lden.fid-7e47348_1a1ad337b57_76e7",
+"geometry": null,
+"properties": {
+"razina": 55
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lnight.fid-7e47348_1a1ad337b57_76ee",
+"geometry": null,
+"properties": {
+"razina": 45
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lden.fid-7e47348_1a1ad337b57_76f3",
+"geometry": null,
+"properties": {
+"razina": 50
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lnight.fid-7e47348_1a1ad337b57_76f4",
+"geometry": null,
+"properties": {
+"razina": 45
+}
+}
+],
+"fetched_at": 1793911869.069738
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.7903",
+"lon": "15.9943",
+"value": [
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lden.fid-26b3a052_1a1ad5ed0c3_-228a",
+"geometry": null,
+"properties": {
+"razina": 65
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lnight.fid-26b3a052_1a1ad5ed0c3_-2285",
+"geometry": null,
+"properties": {
+"razina": 55
+}
+}
+],
+"fetched_at": 1793911866.2299557
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.7949",
+"lon": "15.9698",
+"value": [
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lden.fid--1f4c9c7e_1a1ad5844f2_-1d86",
+"geometry": null,
+"properties": {
+"razina": 70
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lden.fid--1f4c9c7e_1a1ad5844f2_-1d84",
+"geometry": null,
+"properties": {
+"razina": 65
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lnight.fid--1f4c9c7e_1a1ad5844f2_-1d83",
+"geometry": null,
+"properties": {
+"razina": 60
+}
+}
+],
+"fetched_at": 1793911868.227012
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.7961",
+"lon": "16.0481",
+"value": [
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lden.fid-7e47348_1a1ad337b57_76fa",
+"geometry": null,
+"properties": {
+"razina": 50
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lnight.fid-7e47348_1a1ad337b57_7703",
+"geometry": null,
+"properties": {
+"razina": 45
+}
+}
+],
+"fetched_at": 1793911870.6654315
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.7970",
+"lon": "15.9792",
+"value": [
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lden.fid--66399299_1a1ad3bf0fc_71b0",
+"geometry": null,
+"properties": {
+"razina": 75
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lnight.fid--66399299_1a1ad3bf0fc_71b1",
+"geometry": null,
+"properties": {
+"razina": 65
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lden.fid--66399299_1a1ad3bf0fc_71b3",
+"geometry": null,
+"properties": {
+"razina": 50
+}
+}
+],
+"fetched_at": 1793911869.630463
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.7984",
+"lon": "15.9626",
+"value": [
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lden.fid-26b3a052_1a1ad5ed0c3_-2269",
+"geometry": null,
+"properties": {
+"razina": 65
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lnight.fid-26b3a052_1a1ad5ed0c3_-2267",
+"geometry": null,
+"properties": {
+"razina": 55
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lden.fid-26b3a052_1a1ad5ed0c3_-2260",
+"geometry": null,
+"properties": {
+"razina": 55
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lnight.fid-26b3a052_1a1ad5ed0c3_-225f",
+"geometry": null,
+"properties": {
+"razina": 50
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Zeljeznicki_promet_Lden.fid-26b3a052_1a1ad5ed0c3_-225b",
+"geometry": null,
+"properties": {
+"razina": 50
+}
+}
+],
+"fetched_at": 1793911868.458169
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.7994",
+"lon": "15.8963",
+"value": [
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lden.fid--66399299_1a1ad3bf0fc_71a2",
+"geometry": null,
+"properties": {
+"razina": 70
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lnight.fid--66399299_1a1ad3bf0fc_71ae",
+"geometry": null,
+"properties": {
+"razina": 60
+}
+}
+],
+"fetched_at": 1793911869.3174195
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.7994",
+"lon": "15.9579",
+"value": [
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lden.fid--7123b8ee_1a1ad7345a9_-6048",
+"geometry": null,
+"properties": {
+"razina": 80
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lnight.fid--7123b8ee_1a1ad7345a9_-6046",
+"geometry": null,
+"properties": {
+"razina": 70
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lden.fid--7123b8ee_1a1ad7345a9_-6043",
+"geometry": null,
+"properties": {
+"razina": 50
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Zeljeznicki_promet_Lden.fid--7123b8ee_1a1ad7345a9_-603e",
+"geometry": null,
+"properties": {
+"razina": 50
+}
+}
+],
+"fetched_at": 1793911868.7429335
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8132",
+"lon": "15.9743",
+"value": [
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lden.fid-7e47348_1a1ad337b57_76e0",
+"geometry": null,
+"properties": {
+"razina": 55
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lnight.fid-7e47348_1a1ad337b57_76e2",
+"geometry": null,
+"properties": {
+"razina": 45
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lden.fid-7e47348_1a1ad337b57_76e4",
+"geometry": null,
+"properties": {
+"razina": 75
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lnight.fid-7e47348_1a1ad337b57_76e5",
+"geometry": null,
+"properties": {
+"razina": 65
+}
+}
+],
+"fetched_at": 1793911866.9361968
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8133",
+"lon": "15.9772",
+"value": [
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lden.fid--b6984c6_1a1ad44ee91_35bc",
+"geometry": null,
+"properties": {
+"razina": 65
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lnight.fid--b6984c6_1a1ad44ee91_35bd",
+"geometry": null,
+"properties": {
+"razina": 60
+}
+}
+],
+"fetched_at": 1793911865.8798947
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8133",
+"lon": "15.9773",
+"value": [
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lden.fid-7e47348_1a1ad337b57_76da",
+"geometry": null,
+"properties": {
+"razina": 65
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lnight.fid-7e47348_1a1ad337b57_76db",
+"geometry": null,
+"properties": {
+"razina": 60
+}
+}
+],
+"fetched_at": 1793911865.8375733
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8133",
+"lon": "15.9775",
+"value": [
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lden.fid--66399299_1a1ad3bf0fc_719c",
+"geometry": null,
+"properties": {
+"razina": 65
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lnight.fid--66399299_1a1ad3bf0fc_719d",
+"geometry": null,
+"properties": {
+"razina": 60
+}
+}
+],
+"fetched_at": 1793911865.9090095
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8134",
+"lon": "15.9771",
+"value": [
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lden.fid--7123b8ee_1a1ad7345a9_-604d",
+"geometry": null,
+"properties": {
+"razina": 65
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lnight.fid--7123b8ee_1a1ad7345a9_-604c",
+"geometry": null,
+"properties": {
+"razina": 60
+}
+}
+],
+"fetched_at": 1793911865.9319494
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8134",
+"lon": "15.9773",
+"value": [],
+"fetched_at": 1793911865.5675547
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8134",
+"lon": "15.9775",
+"value": [],
+"fetched_at": 1793911865.8904014
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8135",
+"lon": "15.9772",
+"value": [],
+"fetched_at": 1793911865.9007504
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8135",
+"lon": "15.9773",
+"value": [],
+"fetched_at": 1793911865.8674939
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8135",
+"lon": "15.9775",
+"value": [],
+"fetched_at": 1793911865.917017
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8155",
+"lon": "15.9355",
+"value": [
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lden.fid--66399299_1a1ad3bf0fc_71b7",
+"geometry": null,
+"properties": {
+"razina": 50
+}
+}
+],
+"fetched_at": 1793911869.8313267
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8167",
+"lon": "16.0029",
+"value": [
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lden.fid--b6984c6_1a1ad44ee91_35c9",
+"geometry": null,
+"properties": {
+"razina": 75
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lnight.fid--b6984c6_1a1ad44ee91_35ce",
+"geometry": null,
+"properties": {
+"razina": 65
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lden.fid--b6984c6_1a1ad44ee91_35d0",
+"geometry": null,
+"properties": {
+"razina": 75
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lnight.fid--b6984c6_1a1ad44ee91_35d2",
+"geometry": null,
+"properties": {
+"razina": 70
+}
+}
+],
+"fetched_at": 1793911867.3702412
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8173",
+"lon": "15.8729",
+"value": [
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lden.fid--1f4c9c7e_1a1ad5844f2_-1d7a",
+"geometry": null,
+"properties": {
+"razina": 65
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lnight.fid--1f4c9c7e_1a1ad5844f2_-1d73",
+"geometry": null,
+"properties": {
+"razina": 55
+}
+}
+],
+"fetched_at": 1793911870.3345613
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8273",
+"lon": "16.1101",
+"value": [
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lden.fid--1f4c9c7e_1a1ad5844f2_-1d91",
+"geometry": null,
+"properties": {
+"razina": 80
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lnight.fid--1f4c9c7e_1a1ad5844f2_-1d8a",
+"geometry": null,
+"properties": {
+"razina": 70
+}
+}
+],
+"fetched_at": 1793911867.7295883
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8280",
+"lon": "16.0503",
+"value": [
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lden.fid-26b3a052_1a1ad5ed0c3_-227c",
+"geometry": null,
+"properties": {
+"razina": 70
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lnight.fid-26b3a052_1a1ad5ed0c3_-2272",
+"geometry": null,
+"properties": {
+"razina": 60
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Cestovni_promet_Lnight.fid-26b3a052_1a1ad5ed0c3_-2271",
+"geometry": null,
+"properties": {
+"razina": 65
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lden.fid-26b3a052_1a1ad5ed0c3_-2270",
+"geometry": null,
+"properties": {
+"razina": 65
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lden.fid-26b3a052_1a1ad5ed0c3_-226f",
+"geometry": null,
+"properties": {
+"razina": 70
+}
+},
+{
+"type": "Feature",
+"id": "SKB_R4_Tramvajski_promet_Lnight.fid-26b3a052_1a1ad5ed0c3_-226c",
+"geometry": null,
+"properties": {
+"razina": 60
+}
+}
+],
+"fetched_at": 1793911868.000399
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8988",
+"lon": "15.9474",
+"value": [],
+"fetched_at": 1793911866.6929593
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8989",
+"lon": "15.9472",
+"value": [],
+"fetched_at": 1793911866.6776304
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8989",
+"lon": "15.9474",
+"value": [],
+"fetched_at": 1793911866.4845889
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8989",
+"lon": "15.9477",
+"value": [],
+"fetched_at": 1793911866.7046373
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8990",
+"lon": "15.9473",
+"value": [],
+"fetched_at": 1793911866.5158708
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8990",
+"lon": "15.9476",
+"value": [],
+"fetched_at": 1793911866.464745
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8991",
+"lon": "15.9470",
+"value": [],
+"fetched_at": 1793911866.7125714
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8991",
+"lon": "15.9472",
+"value": [],
+"fetched_at": 1793911866.5383706
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8991",
+"lon": "15.9473",
+"value": [],
+"fetched_at": 1793911866.50487
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8991",
+"lon": "15.9474",
+"value": [],
+"fetched_at": 1793911866.3318305
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8991",
+"lon": "15.9476",
+"value": [],
+"fetched_at": 1793911866.5242636
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8991",
+"lon": "15.9478",
+"value": [],
+"fetched_at": 1793911866.7245715
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8992",
+"lon": "15.9472",
+"value": [],
+"fetched_at": 1793911866.6856363
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8992",
+"lon": "15.9474",
+"value": [],
+"fetched_at": 1793911866.4958525
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8992",
+"lon": "15.9477",
+"value": [],
+"fetched_at": 1793911866.664067
+},
+{
+"namespace": "zg-buka:SKB_R4:razina",
+"lat": "45.8993",
+"lon": "15.9474",
+"value": [],
+"fetched_at": 1793911866.6400418
+}
+]

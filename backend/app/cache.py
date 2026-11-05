@@ -26,6 +26,13 @@ DEFAULT_PATH = Path(__file__).resolve().parent.parent / "cache" / "remote.sqlite
 # hv-poplave and zg-buka are static map datasets; 30 days only bounds how long we go
 # without noticing a republished map.
 DEFAULT_TTL_S = 30 * 24 * 3600
+# On Vercel (which sets VERCEL=1) only /tmp is writable, and it is wiped when a new
+# instance starts; data/cache_seed.json refills the demo addresses (Cache.load_seed).
+VERCEL_PATH = Path("/tmp/ekoadresa/remote.sqlite")
+
+
+def _default_path() -> Path:
+    return VERCEL_PATH if os.getenv("VERCEL") else DEFAULT_PATH
 
 
 @dataclass(frozen=True)
@@ -37,7 +44,7 @@ class Cached(Generic[T]):
 
 class Cache:
     def __init__(self, path: Path | str | None = None) -> None:
-        self.path = Path(path or os.getenv("CACHE_PATH") or DEFAULT_PATH)
+        self.path = Path(path or os.getenv("CACHE_PATH") or _default_path())
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with self._connect() as db:
             db.execute("PRAGMA journal_mode=WAL")
@@ -79,6 +86,37 @@ class Cache:
                 "INSERT OR REPLACE INTO entries VALUES (?, ?, ?, ?, ?)",
                 (*self._key(namespace, lat, lon), json.dumps(value), fetched_at),
             )
+
+    def export(self) -> list[dict]:
+        """All entries as JSON-ready dicts (rounded coordinates only, no addresses)."""
+        with self._connect() as db:
+            rows = db.execute(
+                "SELECT namespace, lat, lon, value, fetched_at FROM entries"
+                " ORDER BY namespace, lat, lon"
+            ).fetchall()
+        return [
+            {"namespace": n, "lat": la, "lon": lo, "value": json.loads(v), "fetched_at": f}
+            for n, la, lo, v, f in rows
+        ]
+
+    def load_seed(self, path: Path) -> int:
+        """Add entries from a seed file (Cache.export format) that are not cached yet.
+
+        The committed seed (data/cache_seed.json, scripts/warm_cache.py) keeps the demo
+        addresses fast and working when a public service is down, also on hosts whose
+        disk is wiped between instances (CLAUDE.md §3.11). Returns the number added.
+        """
+        if not path.exists():
+            return 0
+        added = 0
+        with self._connect() as db:
+            for e in json.loads(path.read_text(encoding="utf-8")):
+                cur = db.execute(
+                    "INSERT OR IGNORE INTO entries VALUES (?, ?, ?, ?, ?)",
+                    (e["namespace"], e["lat"], e["lon"], json.dumps(e["value"]), e["fetched_at"]),
+                )
+                added += cur.rowcount
+        return added
 
 
 async def cached_fetch(

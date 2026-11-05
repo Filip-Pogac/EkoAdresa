@@ -1,5 +1,6 @@
 """Unit tests for app.cache."""
 
+import json
 from pathlib import Path
 
 import pytest
@@ -119,3 +120,27 @@ async def test_failure_is_not_cached(cache: Cache) -> None:
 def test_persists_across_instances(tmp_path: Path) -> None:
     Cache(tmp_path / "c.sqlite").set(NS, LAT, LON, {"a": 1}, 123.0)
     assert Cache(tmp_path / "c.sqlite").get(NS, LAT, LON) == ({"a": 1}, 123.0)
+
+
+def test_seed_adds_missing_entries_only(tmp_path: Path) -> None:
+    seed_source = Cache(tmp_path / "seed.sqlite")
+    seed_source.set("ns", 45.8131, 15.9772, {"band": 70}, fetched_at=100.0)
+    seed_source.set("ns", 45.7905, 15.9950, {"band": 65}, fetched_at=100.0)
+    seed = tmp_path / "seed.json"
+    seed.write_text(json.dumps(seed_source.export()), encoding="utf-8")
+
+    cache = Cache(tmp_path / "live.sqlite")
+    cache.set("ns", 45.8131, 15.9772, {"band": 75}, fetched_at=200.0)  # newer, must stay
+    assert cache.load_seed(seed) == 1
+    assert cache.get("ns", 45.8131, 15.9772) == ({"band": 75}, 200.0)
+    assert cache.get("ns", 45.7905, 15.9950) == ({"band": 65}, 100.0)
+    assert cache.load_seed(tmp_path / "missing.json") == 0
+
+
+def test_committed_seed_has_no_addresses() -> None:
+    from app.paths import DATA_DIR
+
+    entries = json.loads((DATA_DIR / "cache_seed.json").read_text(encoding="utf-8"))
+    assert entries
+    keys = {"namespace", "lat", "lon", "value", "fetched_at"}
+    assert all(set(e) == keys for e in entries)  # rounded coordinates, no labels

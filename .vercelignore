@@ -1,0 +1,8 @@
+# Not uploaded to Vercel (neither project needs them)
+**/node_modules
+**/.venv
+backend/cache
+data/raw
+**/__pycache__
+.pytest_cache
+.ruff_cache

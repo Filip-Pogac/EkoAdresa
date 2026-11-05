@@ -1,3 +1,4 @@
+import logging
 import os
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -9,14 +10,22 @@ from fastapi.middleware.gzip import GZipMiddleware
 
 from app.cache import Cache
 from app.http import USER_AGENT
+from app.paths import DATA_DIR
 from app.routers import compare, geocode, health, mapdata, profile, sources
 from app.services import geocode as geocode_service
+
+CACHE_SEED_FILE = "cache_seed.json"  # scripts/warm_cache.py
+
+# httpx2 logs every request URL at INFO, and our WMS URLs contain the queried coordinates.
+# Keep them out of the logs on any host whose logging level is INFO (CLAUDE.md §2.7).
+logging.getLogger("httpx2").setLevel(logging.WARNING)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     geocode_service.warm_up()  # ~2 s at startup instead of on the first search
     app.state.cache = Cache()
+    app.state.cache.load_seed(DATA_DIR / CACHE_SEED_FILE)  # demo addresses (CLAUDE.md §3.11)
     async with httpx.AsyncClient(headers={"User-Agent": USER_AGENT}, timeout=10) as client:
         app.state.http = client  # one connection pool for all outgoing requests
         yield
