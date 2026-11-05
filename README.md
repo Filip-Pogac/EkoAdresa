@@ -1,6 +1,6 @@
 # EkoAdresa
 
-Okolišni profil bilo koje adrese u Zagrebu: poplave, buka, zrak, otpad i zelena mobilnost na jednom mjestu, uz EkoSkor 0–100 i AI asistenta koji odgovara samo iz otvorenih podataka.
+Okolišni profil bilo koje adrese u Zagrebu: poplave, buka, zrak, otpad i zelena mobilnost na jednom mjestu, uz EkoSkor 0–100, kartu slojeva i usporedbu dviju adresa.
 
 Rješenje za **Datathon Portala otvorenih podataka 2026**, izazov B (*Okoliš i održivi prostor*).
 

@@ -53,14 +53,14 @@ In addition:
 
 - [ ] The user gets from typing an address to seeing the profile in ≤ 3 clicks and ≤ 5 seconds
 - [ ] The address profile combines at least **5 datasets** from at least **3 different publishers**
-- [ ] The AI assistant answers questions in Croatian and cites, for every claim, the dataset it comes from
+- [ ] The AI assistant answers questions in Croatian and cites, for every claim, the dataset it comes from *(deferred 2026-11-05: AI assistant not built for now, see `TODO.md` §5)*
 - [ ] The app works on mobile (375 px width) and desktop (1440 px)
 
 ### 2.3. Technical goals
 
 - [ ] All code published on GitHub under an open-source licence (MIT)
 - [ ] The app is publicly reachable at a URL for the jury (working prototype) at least until 17 Nov 2026
-- [ ] The LLM layer is swappable: works with a commercial API and with an open-source model (Ollama) without code changes, configuration only
+- [ ] The LLM layer is swappable: works with a commercial API and with an open-source model (Ollama) without code changes, configuration only *(deferred 2026-11-05: AI assistant not built for now, see `TODO.md` §5)*
 
 ### 2.4. Out of scope (we do not build)
 
@@ -89,8 +89,8 @@ In addition:
 ### 3.2. Access and accounts
 
 - [ ] GitHub repository `ekoadresa` (public) with access for all members
-- [ ] LLM API key (e.g. Anthropic) with a spending limit
-- [ ] Ollama installed locally by at least one member (fallback model, e.g. `qwen2.5:7b`)
+- [ ] LLM API key (e.g. Anthropic) with a spending limit *(deferred 2026-11-05: AI assistant not built for now, see `TODO.md` §5)*
+- [ ] Ollama installed locally by at least one member (fallback model, e.g. `qwen2.5:7b`) *(deferred 2026-11-05: AI assistant not built for now, see `TODO.md` §5)*
 - [ ] Frontend hosting account (Vercel or Netlify, free plan)
 - [ ] Backend hosting account (Render, Railway or Fly.io, free plan)
 
@@ -241,6 +241,8 @@ Between thresholds the value is linearly interpolated. The formula is publicly d
 
 ### Phase 4 — AI assistant (7 Nov)
 
+> **Deferred (decision 2026-11-05).** Not built for the submission; may be implemented later. Full spec, tests, cost estimate and every dependent item: `TODO.md` §5.
+
 - [ ] System prompt in Croatian: the assistant may only use data obtained through tools, cites a `source_id` with every claim, and says so when data is missing
 - [ ] Tools (tool calling): `get_profile(lat, lon)`, `compare(a, b)`, `explain_layer(layer)`, `nearest_facility(type)`
 - [ ] `LLMProvider` abstraction with two implementations: `AnthropicProvider` and `OllamaProvider`, selected via the `LLM_PROVIDER` variable
@@ -258,8 +260,8 @@ Between thresholds the value is linearly interpolated. The formula is publicly d
 - [x] Map: address marker, 500 m circle, toggleable layers (flooding, noise, stations, yards, stops) — *also green islands; flood/noise via cached tile proxy `/api/tiles/{flood|noise}/{z}/{x}/{y}.png` (zg-buka sends no CORS; flood tiles above zoom 14 cut from zoom 14 because hv-poplave draws nothing below 1:20 000); points from `/api/layers/{name}`; legend with the publishers' colours, popups on click; 2026-11-05*
 - [x] Address card: EkoSkor as a large number with a ring indicator + 5 traffic-light rows with a one-sentence explanation per layer — *status = icon + text label; source and data date per row; outside-Zagreb and error states; 2026-11-05*
 - [x] Air layer detail: chart of the last 30 days (Recharts) — *behind a "Prikaži mjerenja po danima" button, lazy-loaded (107 kB gzip, separate chunk); one pollutant at a time (PM10 first); WHO 2021 24-h guideline line for PM10 45 / PM2.5 15 / NO2 25 µg/m³, none for O3 (8-h guideline only); missing days shown as gaps; text summary + screen-reader table; data Aug 2023, dated; 2026-11-05*
-- [ ] AI assistant panel with 4 suggested questions as buttons
-- [ ] Compare mode: two cards side by side, differences highlighted with colour, AI summary below — *done except the AI summary (needs Phase 4): `/usporedba` with shareable URL, two EkoSkor rings, per-layer rows with a "Bolje" label + border on the better side (not colour alone), entry from the address page; 2026-11-05*
+- [ ] AI assistant panel with 4 suggested questions as buttons *(deferred 2026-11-05: AI assistant not built for now, see `TODO.md` §5)*
+- [x] Compare mode: two cards side by side, differences highlighted with colour, AI summary below — *done; the AI summary is deferred with Phase 4 (`TODO.md` §5): `/usporedba` with shareable URL, two EkoSkor rings, per-layer rows with a "Bolje" label + border on the better side (not colour alone), entry from the address page; 2026-11-05*
 - [x] "For the city" (*Za grad*) view: EkoSkor heatmap + number of residents in red zones (if population data is available) — *`/grad` from `/api/heatmap` (171 kB gzip), 5 sequential classes (YlGn, not traffic-light colours), popup with sub-scores and link to the point's profile. No population data, stated on the page. Heatmap does not use the façade noise rule yet, stated on the page; 2026-11-05*
 - [x] „Kako računamo?” modal with the EkoSkor formula and links to sources — *native `<dialog>`, from the header and the card; table of weights and thresholds per `docs/ekoskor.md`, façade rule, renormalisation, limitations; 2026-11-05*
 - [x] "Data sources" (*Izvori podataka*) page generated from `/api/sources` — *`/izvori`; licence "nije navedena" where none is stated; 2026-11-05*
@@ -297,7 +299,7 @@ Between thresholds the value is linearly interpolated. The formula is publicly d
   | 0:00–0:20 | Problem: you're looking for a flat, and nobody sees the flood and noise data |
   | 0:20–0:35 | Target users: citizens, buyers and tenants, schools and kindergartens, the city |
   | 0:35–0:55 | Data sources: 5+ datasets, publisher logos |
-  | 0:55–2:05 | Demo: type an address → card → AI question → compare two flats → city view |
+  | 0:55–2:05 | Demo: type an address → card → ~~AI question~~ map layers → compare two flats → city view (AI deferred, `TODO.md` §5) |
   | 2:05–2:30 | Technical architecture (diagram) |
   | 2:30–2:50 | User value and further development |
   | 2:50–3:00 | Team name, link to the demo and GitHub |
@@ -332,9 +334,9 @@ Between thresholds the value is linearly interpolated. The formula is publicly d
 - [ ] For an address on Sljeme, EkoSkor is higher than for an address in the city centre
 - [ ] Every layer shows the source name and a link to the dataset
 - [ ] If one layer is unavailable, the others still render, and the unavailable one shows a clear message
-- [ ] Comparing two addresses shows both cards and an AI summary of the differences
-- [ ] The AI assistant answers ≥ 8 of 10 questions from `chat_cases.yaml` correctly
-- [ ] For a question outside the available data (e.g. „Kolika je cijena kvadrata?” / "What is the price per square metre?"), the AI assistant answers that it does not have that data
+- [ ] Comparing two addresses shows both cards and an AI summary of the differences *(deferred 2026-11-05: AI assistant not built for now, see `TODO.md` §5)*
+- [ ] The AI assistant answers ≥ 8 of 10 questions from `chat_cases.yaml` correctly *(deferred 2026-11-05: AI assistant not built for now, see `TODO.md` §5)*
+- [ ] For a question outside the available data (e.g. „Kolika je cijena kvadrata?” / "What is the price per square metre?"), the AI assistant answers that it does not have that data *(deferred 2026-11-05: AI assistant not built for now, see `TODO.md` §5)*
 - [ ] The Zagreb heatmap loads in ≤ 3 s
 
 ### 6.2. Non-functional
@@ -344,7 +346,7 @@ Between thresholds the value is linearly interpolated. The formula is publicly d
 - [ ] The system starts locally with the single command `docker-compose up` on a clean machine
 - [ ] CI (lint + tests) passes on the `main` branch
 - [ ] No API keys or secrets in the repository (checked with `gitleaks`)
-- [ ] Setting `LLM_PROVIDER=ollama` makes the assistant work without a commercial API
+- [ ] Setting `LLM_PROVIDER=ollama` makes the assistant work without a commercial API *(deferred 2026-11-05: AI assistant not built for now, see `TODO.md` §5)*
 
 ### 6.3. Submission and rule compliance
 

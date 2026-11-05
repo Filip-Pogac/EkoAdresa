@@ -20,6 +20,8 @@ The user types an address and instantly sees **what it is like to live there** e
 3. **Map** — address marker, 500 m radius, toggleable layers (flood zones, noise, stations, yards, stops).
 4. **AI assistant** — answers questions in Croatian (*"Mogu li spavati s otvorenim prozorom?"*, *"Treba li mi osiguranje od poplave?"*) **only from the fetched data**, citing the source of every claim. If the data is not there, it says so.
 5. **Compare two addresses** — two cards side by side, differences highlighted, AI summary in 3–4 sentences. This is the strongest demo moment.
+
+> **Decision 2026-11-05:** the AI assistant (item 4) and the AI summary in item 5 are **deferred** and not part of the current build. Everything about them (design, tests, costs, every dependent place in this file and `PLAN.md`) is recorded in `TODO.md` §5. Sections 1.4 (AI row), 2.5, 3.7 and the AI parts of 1.3 and 3.11 are on hold until then.
 6. **City view** — heatmap of EkoSkor on a 250 × 250 m grid over Zagreb, for public bodies.
 7. **"Kako računamo?"** — the EkoSkor formula and every source, public and readable.
 
@@ -218,7 +220,7 @@ Changing a threshold or weight requires updating `test_ekoskor.py` and `docs/eko
     - Sljeme (high EkoSkor, few stops)
   - WMS/WFS calls mocked in unit tests from recorded responses in `backend/tests/fixtures/`.
 - **Assistant evals:** `chat_cases.yaml`, 10 questions, run manually before recording; target ≥ 8/10 correct and 10/10 with no invented number.
-- **Playwright:** one golden-path E2E (search → card → ask the assistant → compare two addresses). Must pass before any demo recording.
+- **Playwright:** one golden-path E2E (search → card → compare two addresses; "ask the assistant" only if the assistant is built, `TODO.md` §5). Must pass before any demo recording.
 - **Lighthouse:** Performance ≥ 80, Accessibility ≥ 90 on the home page.
 - No coverage targets — test what would embarrass us in the video.
 
@@ -244,4 +246,4 @@ Changing a threshold or weight requires updating `test_ekoskor.py` and `docs/eko
 9. **Commits:** Conventional Commits (`feat:`, `fix:`, `data:`, `docs:`, `style:`). One logical change per commit. Never add AI tools as author or co-author.
 10. **When unsure about a dataset's meaning** (what a flood zone class or noise band represents), say so and flag it for a human to check rather than inventing an interpretation.
 11. **Demo reliability over cleverness.** Anything on the demo path needs a fallback: pre-warmed cache for the demo addresses, committed data snapshot, last cached WMS response if the service is down, cached AI answers for the scripted questions.
-12. **Scope cuts, in this order, if time runs out:** (1) city heatmap, (2) compare view, (3) air history chart. The address card, map and AI assistant are never cut.
+12. **Scope cuts, in this order, if time runs out:** (1) city heatmap, (2) compare view, (3) air history chart. The address card and map are never cut. (The AI assistant is deferred, `TODO.md` §5.)
