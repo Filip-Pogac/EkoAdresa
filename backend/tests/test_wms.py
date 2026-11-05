@@ -145,3 +145,13 @@ async def test_gives_up_after_max_attempts() -> None:
         with pytest.raises(wms.WMSError):
             await map_pixel(c)
     assert len(seen) == wms.MAX_ATTEMPTS
+
+
+@pytest.mark.anyio
+async def test_errors_do_not_contain_coordinates(caplog: pytest.LogCaptureFixture) -> None:
+    async with client_with([httpx.Response(502)] * wms.MAX_ATTEMPTS, []) as c:
+        with pytest.raises(wms.WMSError) as err:
+            await map_pixel(c)
+    assert "HTTP 502" in str(err.value)
+    for text in [str(err.value), caplog.text]:
+        assert "BBOX" not in text and f"{LON:.4f}" not in text and f"{LAT:.4f}" not in text

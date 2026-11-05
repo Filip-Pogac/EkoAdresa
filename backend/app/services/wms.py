@@ -60,6 +60,14 @@ def _bbox_around(lat: float, lon: float, half_m: float) -> tuple[float, float, f
     return (lon - dlon, lat - dlat, lon + dlon, lat + dlat)
 
 
+def _describe(exc: Exception) -> str:
+    """Error without its URL: request URLs contain the queried coordinates, and addresses
+    must not end up in logs (CLAUDE.md §2.7)."""
+    if isinstance(exc, httpx.HTTPStatusError):
+        return f"HTTP {exc.response.status_code}"
+    return type(exc).__name__
+
+
 async def _get(
     client: httpx.AsyncClient, url: str, params: dict, parse: Callable[[httpx.Response], T]
 ) -> T:
@@ -75,10 +83,12 @@ async def _get(
             return parse(resp)
         except (httpx.HTTPError, ValueError, OSError) as exc:
             last_error = exc
-            log.warning("WMS %s %s failed (attempt %d): %s", url, params["REQUEST"], attempt, exc)
+            log.warning(
+                "WMS %s %s failed (attempt %d): %s", url, params["REQUEST"], attempt, _describe(exc)
+            )
             if attempt < MAX_ATTEMPTS:
                 await asyncio.sleep(RETRY_DELAY_S * 2 ** (attempt - 1))
-    raise WMSError(f"{url}: {last_error}") from last_error
+    raise WMSError(f"{url}: {_describe(last_error)}") from last_error  # type: ignore[arg-type]
 
 
 def _parse_features(resp: httpx.Response) -> list[dict]:
