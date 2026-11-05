@@ -1,6 +1,6 @@
 """Pydantic request/response schemas. The frontend types in src/api mirror these."""
 
-from datetime import datetime
+from datetime import date, datetime
 from typing import Literal
 
 from pydantic import BaseModel
@@ -26,12 +26,15 @@ Status = Literal["green", "yellow", "red", "unavailable"]
 NoiseSource = Literal["road", "tram", "rail", "industry"]
 
 
-class RemoteLayer(BaseModel):
-    """Fields shared by layers read from a remote service through app.cache."""
-
+class LayerBase(BaseModel):
     status: Status
     score: int  # EkoSkor sub-score 0-100
-    source_id: str
+    source_id: str  # dataset the score is computed from
+
+
+class RemoteLayer(LayerBase):
+    """A layer read from a remote service through app.cache."""
+
     fetched_at: datetime  # UTC, when the remote service answered (may be older if cached)
     stale: bool  # True = the service failed just now; this is the last cached answer
 
@@ -49,3 +52,42 @@ class NoiseLayer(RemoteLayer):
     lnight_db_min: int | None
     lnight_db_max: int | None
     loudest_source: NoiseSource | None  # source of the loudest Lden band
+
+
+Pollutant = Literal["no2", "o3", "pm10", "pm2_5"]
+
+
+class AirStation(BaseModel):
+    id: str
+    name: str
+    station_type: str | None  # as published: "Prometna", "Pozadinska", "Industrijska"
+    lat: float
+    lon: float
+    distance_m: int
+    source_id: str  # zg-zrak-postaje
+
+
+class AirValue(BaseModel):
+    pollutant: Pollutant
+    value_ug_m3: float
+    date: date  # daily value
+
+
+class LiveAirIndex(BaseModel):
+    """National air quality index at the nearest national station (extra information)."""
+
+    value: float
+    measured_at: datetime
+    distance_m: int
+    scale_verified: bool  # False until the index scale is confirmed (docs/data-sources.md)
+    source_id: str  # rh-zrak-indeks
+
+
+class AirLayer(LayerBase):
+    station: AirStation
+    pm10_mean_ug_m3: float  # basis of the score
+    period_from: date  # data period of the City measurements (2023)
+    period_to: date
+    latest: list[AirValue]  # last available day per pollutant
+    history: list[AirValue]  # last 30 days of available data, all pollutants
+    live_index: LiveAirIndex | None  # None if the national service did not answer in time

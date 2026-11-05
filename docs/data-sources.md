@@ -184,6 +184,8 @@ Each station has a matching measurement dataset "Podaci o kvaliteti zraka u Grad
 
 **Decision for the air layer:** use `rh-zrak-indeks` (WFS) for the "current index" with its timestamp shown, and `zg-zrak-mjerenja` (2023, labelled with the date) for the history chart and the City station details. If the WFS is unreachable, fall back to the latest 2023 value, clearly dated.
 
+**Updated decision (2026-11-05, option a):** the air **score** uses the Jan–Aug 2023 PM10 mean of the nearest City station (`zg-zrak-mjerenja`), the same basis as the heatmap (`docs/ekoskor.md`). `rh-zrak-indeks` is shown only as extra information: `backend/app/services/air.py` fetches all 25 national stations in one WFS request (22 KB, ~0.3 s), reprojects them from EPSG:3765 to EPSG:4326, caches the answer for 1 h for all addresses, and gives up after 2.5 s without failing the layer. Until the index scale is confirmed the API marks it `scale_verified: false`.
+
 ### `zg-reciklaza` — Reciklažna dvorišta grada Zagreba (Grad Zagreb)
 
 - **Checked:** 2026-11-04

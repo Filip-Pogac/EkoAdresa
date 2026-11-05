@@ -231,7 +231,7 @@ Between thresholds the value is linearly interpolated. The formula is publicly d
 - [x] `GET /api/geocode`: ~~proxy to Nominatim~~ local search over OSM addresses (`scripts/fetch_addresses.py` → `data/addresses.parquet`) — *Nominatim's policy forbids autocomplete; public Photon throttled us in testing. Accent-insensitive, ~3 ms per query, City of Zagreb only. 2026-11-05*
 - [x] `services/flood.py`: returns `high | medium | low | none` for a point — *`flood_at`: 3 scenarios in parallel through the cache, zone + depth class, `stale` fallback; 2026-11-05*
 - [x] `services/noise.py`: returns `lden_db`, `lnight_db` (or a dB range from the legend) — *`noise_at`: loudest source, Lden/Lnight as 5 dB ranges ("no band" = below 50 dB); 2026-11-05*
-- [ ] `services/air.py`: nearest station (Haversine), distance, latest available index and 30-day history
+- [x] `services/air.py`: nearest station (Haversine), distance, latest available index and 30-day history — *option a: score from nearest City station 2023 PM10 mean (EPSG:3765 distance, as heatmap); latest values + 30 days; national index as extra info (1 h cache, 2.5 s limit); 2026-11-05*
 - [ ] `services/waste.py`: nearest recycling yard and green island with distance in metres
 - [ ] `services/mobility.py`: number of stops within 300 m and 500 m, and the nearest stop
 - [x] `services/ekoskor.py`: implementation of the formula from section 4.3 with unit tests for edge values — *done for the heatmap; traffic light in thirds (≥ 67 green, ≥ 34 yellow); 2026-11-05*
