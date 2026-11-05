@@ -187,15 +187,17 @@ Several of these datasets have **no licence stated** in their metadata. Note tha
 | `layers.*.status` | `green \| yellow \| red \| unavailable` | |
 | `generated_at` | ISO 8601 | |
 
-**EkoSkor v1** (implemented in `services/ekoskor.py`, documented in `docs/ekoskor.md`, linear interpolation between thresholds; weights renormalised over available layers):
+**EkoSkor v1.** **`docs/ekoskor.md` is the authoritative description**; the code is `services/ekoskor.py`. Summary: weighted mean of five 0–100 sub-scores, rounded half up; weights renormalised over available layers; no EkoSkor with fewer than 3 layers.
 
 | Layer | Weight | 100 | 50 | 0 |
 |---|---|---|---|---|
-| Flood | 25 % | outside all zones | low probability zone | medium or high probability zone |
-| Noise L<sub>den</sub> | 25 % | ≤ 53 dB (WHO road traffic) | 54–64 dB | ≥ 65 dB |
-| Air | 20 % | good | moderate | poor or worse |
-| Waste | 15 % | yard ≤ 1 km and island ≤ 300 m | one of the two | neither |
-| Mobility | 15 % | ≥ 3 stops in 300 m | 1–2 stops | 0 stops in 500 m |
+| Flood | 25 % | outside all zones | low-probability zone | medium- or high-probability zone |
+| Noise L<sub>den</sub>, loudest source | 25 % | ≤ 53 dB (WHO road traffic); no mapped band = below 50 dB | 54–64 dB | ≥ 65 dB |
+| Air, PM10 mean Jan–Aug 2023, nearest City station | 20 % | ≤ 15 µg/m³ (WHO 2021) | 27,5 µg/m³ (linear) | ≥ 40 µg/m³ (EU limit) |
+| Waste | 15 % | fixed yard ≤ 1 km and green island ≤ 300 m | mean of two linear parts: yard 1 → 5 km, island 300 m → 1,5 km | yard ≥ 5 km and island ≥ 1,5 km |
+| Mobility, ZET platforms | 15 % | ≥ 3 within 300 m | any within 500 m | none within 500 m |
+
+Traffic light per layer from its sub-score: ≥ 67 green, 34–66 yellow, ≤ 33 red.
 
 Changing a threshold or weight requires updating `test_ekoskor.py` and `docs/ekoskor.md` in the same commit.
 
