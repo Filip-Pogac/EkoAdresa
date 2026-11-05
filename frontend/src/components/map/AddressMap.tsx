@@ -1,20 +1,11 @@
-import * as maplibregl from 'maplibre-gl';
-import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import { useEffect, useRef, useState } from 'react';
 import { hr } from '../../i18n/hr';
 import { ErrorState } from '../common/ErrorState';
 import { Skeleton } from '../common/Skeleton';
 import { LayerToggle } from './LayerToggle';
 import { Legend } from './Legend';
+import { maplibregl, STYLE_URL, ZAGREB_CENTER } from './maplibre';
 import { addOverlay, type OverlayId } from './overlays';
-
-// MapLibre resolves its worker relative to its own bundle, which breaks once Vite
-// relocates the module (dev pre-bundling and production build). Point it at the file.
-maplibregl.setWorkerUrl(workerUrl);
-
-/** Trg bana Jelačića, EPSG:4326 [lon, lat]. */
-const ZAGREB_CENTER: [number, number] = [15.9772, 45.8131];
-const STYLE_URL = 'https://tiles.openfreemap.org/styles/liberty';
 
 type MapStatus = 'loading' | 'ready' | 'error';
 

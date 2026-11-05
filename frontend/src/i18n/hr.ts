@@ -35,6 +35,142 @@ export const hr = {
     home: 'EkoAdresa – početna',
     pilot: 'Pilot područje: Grad Zagreb',
   },
+  nav: {
+    label: 'Glavna navigacija',
+    compare: 'Usporedi',
+    city: 'Za grad',
+    sources: 'Izvori',
+    howWeScore: 'Kako računamo?',
+  },
+  compare: {
+    title: 'Usporedba dviju adresa',
+    intro: 'Odaberite dvije adrese i pogledajte po čemu se razlikuju.',
+    start: 'Usporedi s drugom adresom',
+    slot: { a: 'Adresa A', b: 'Adresa B' },
+    searchLabel: { a: 'Prva adresa', b: 'Druga adresa' },
+    change: 'Promijeni',
+    loading: 'Uspoređujem adrese…',
+    error: 'Usporedba se trenutno ne može učitati.',
+    outside: (slot: string) =>
+      `${slot} je izvan Grada Zagreba. EkoAdresa za sada pokriva samo Zagreb.`,
+    better: 'Bolje',
+    same: 'Jednaka ocjena',
+    notCompared: 'Nije moguće usporediti: sloj nije dostupan za obje adrese.',
+    ekoskorDiff: (diff: number | null, a: string, b: string) => {
+      if (diff === null) return 'EkoSkor nije dostupan za obje adrese.';
+      if (diff === 0) return 'Obje adrese imaju jednak EkoSkor.';
+      const n = Math.abs(diff);
+      const word =
+        n % 10 === 1 && n % 100 !== 11
+          ? 'bod'
+          : [2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100)
+            ? 'boda'
+            : 'bodova';
+      return `${diff > 0 ? b : a} ima EkoSkor viši za ${n} ${word}.`;
+    },
+    layersTitle: 'Razlike po slojevima',
+  },
+  howWeScore: {
+    title: 'Kako računamo EkoSkor?',
+    close: 'Zatvori',
+    intro:
+      'EkoSkor je broj od 0 do 100. Svaki od pet slojeva dobiva ocjenu od 0 do 100, a EkoSkor je njihov ponderirani prosjek, zaokružen na cijeli broj. Ocjene slojeva prikazane su na kartici, pa EkoSkor svatko može sam izračunati.',
+    tableCaption: 'Ponder i pragovi po slojevima',
+    columns: {
+      layer: 'Sloj',
+      weight: 'Ponder',
+      best: '100 bodova',
+      mid: '50 bodova',
+      worst: '0 bodova',
+    },
+    rows: [
+      {
+        layer: 'Poplave',
+        weight: '25 %',
+        best: 'izvan svih zona opasnosti',
+        mid: 'zona male vjerojatnosti',
+        worst: 'zona srednje ili velike vjerojatnosti',
+      },
+      {
+        layer: 'Buka (Lden, najglasniji izvor)',
+        weight: '25 %',
+        best: 'do 53 dB (smjernica SZO)',
+        mid: '54–64 dB',
+        worst: '65 dB ili više',
+      },
+      {
+        layer: 'Zrak (PM10, najbliža gradska postaja, sij.–kol. 2023.)',
+        weight: '20 %',
+        best: 'do 15 µg/m³ (smjernica SZO)',
+        mid: '27,5 µg/m³ (linearno)',
+        worst: '40 µg/m³ ili više (granica EU)',
+      },
+      {
+        layer: 'Otpad',
+        weight: '15 %',
+        best: 'reciklažno dvorište do 1 km i zeleni otok do 300 m',
+        mid: 'prosjek dvaju dijelova, linearno: dvorište 1–5 km, otok 300 m – 1,5 km',
+        worst: 'dvorište 5 km ili dalje i otok 1,5 km ili dalje',
+      },
+      {
+        layer: 'Zelena mobilnost (perona ZET-a)',
+        weight: '15 %',
+        best: '3 ili više do 300 m',
+        mid: 'barem jedan do 500 m',
+        worst: 'nijedan do 500 m',
+      },
+    ],
+    lightsTitle: 'Semafor po sloju',
+    lights: 'Dobro: ocjena 67–100. Umjereno: 34–66. Loše: 0–33. Uz boju je uvijek i tekst i ikona.',
+    rulesTitle: 'Pravila',
+    rules: [
+      'Buka: ako je točka unutar zgrade, gdje karta buke nema vrijednosti, uzima se najglasnija vrijednost do 15 m oko točke (ili do 30 m), kao pročelje zgrade najizloženije buci (Direktiva 2002/49/EZ).',
+      'Ako sloj nije dostupan, izostavlja se, a ponderi ostalih slojeva preračunavaju se na 100 %. Uz manje od 3 dostupna sloja EkoSkor se ne računa.',
+      'Udaljenosti su zračne, ne pješačke rute.',
+    ],
+    limitsTitle: 'Ograničenja',
+    limits: [
+      'Karte buke i poplava strateške su karte na razini grada; pojedina zgrada može odstupati.',
+      'Zrak opisuje najbližu od 6 gradskih postaja, ne zrak točno na adresi, i podaci su iz 2023.',
+      'Zeleni otoci su iz OpenStreetMapa i popis možda nije potpun.',
+      'EkoSkor je orijentacija, a ne stručna procjena ni pravni, osiguravateljni ili savjet o nekretninama.',
+    ],
+    sourcesLink: 'Svi izvori podataka',
+  },
+  sources: {
+    title: 'Izvori podataka',
+    intro:
+      'Svi podaci u EkoAdresi dolaze iz javno objavljenih skupova podataka. Licencija je navedena onako kako ju je naveo izdavač.',
+    loading: 'Učitavanje popisa izvora…',
+    error: 'Popis izvora trenutno se ne može učitati.',
+    retry: 'Pokušaj ponovno',
+    publisher: 'Izdavač',
+    licence: 'Licencija',
+    noLicence: 'nije navedena u metapodacima',
+    dataAsOf: 'Datum podataka',
+    usedFor: 'Koristimo za',
+    access: {
+      live: 'Upit javnom servisu; odgovor se privremeno sprema',
+      snapshot: 'Spremljena snimka podataka',
+    },
+    links: 'Poveznice',
+  },
+  city: {
+    title: 'EkoSkor za cijeli Zagreb',
+    intro:
+      'Isti izračun kao na kartici adrese, na mreži ćelija 250 × 250 m. Svaka ćelija prikazuje vrijednost u svom središtu. Kliknite na ćeliju za detalje.',
+    loading: 'Učitavanje karte grada…',
+    error: 'Karta grada trenutno se ne može učitati.',
+    retry: 'Pokušaj ponovno',
+    legend: 'EkoSkor ćelije',
+    noteNoise:
+      'Napomena: karta grada za buku još ne primjenjuje pravilo pročelja zgrade, pa ćelije sa središtem unutar zgrade mogu izgledati tiše. Kartica adrese ga primjenjuje.',
+    noPopulation: 'Podaci o broju stanovnika po ćeliji nisu dostupni, pa ih ne prikazujemo.',
+    popup: (score: number) => `EkoSkor ${score}`,
+    popupLayers: (s: Record<'flood' | 'noise' | 'air' | 'waste' | 'mobility', number>) =>
+      `Poplave ${s.flood} · Buka ${s.noise} · Zrak ${s.air} · Otpad ${s.waste} · Mobilnost ${s.mobility}`,
+    openProfile: 'Otvori profil ove točke',
+  },
   map: {
     label: 'Karta Zagreba',
     loading: 'Učitavanje karte…',

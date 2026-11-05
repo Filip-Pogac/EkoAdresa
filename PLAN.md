@@ -259,12 +259,12 @@ Between thresholds the value is linearly interpolated. The formula is publicly d
 - [x] Address card: EkoSkor as a large number with a ring indicator + 5 traffic-light rows with a one-sentence explanation per layer — *status = icon + text label; source and data date per row; outside-Zagreb and error states; 2026-11-05*
 - [x] Air layer detail: chart of the last 30 days (Recharts) — *behind a "Prikaži mjerenja po danima" button, lazy-loaded (107 kB gzip, separate chunk); one pollutant at a time (PM10 first); WHO 2021 24-h guideline line for PM10 45 / PM2.5 15 / NO2 25 µg/m³, none for O3 (8-h guideline only); missing days shown as gaps; text summary + screen-reader table; data Aug 2023, dated; 2026-11-05*
 - [ ] AI assistant panel with 4 suggested questions as buttons
-- [ ] Compare mode: two cards side by side, differences highlighted with colour, AI summary below
-- [ ] "For the city" (*Za grad*) view: EkoSkor heatmap + number of residents in red zones (if population data is available)
-- [ ] „Kako računamo?” modal with the EkoSkor formula and links to sources
-- [ ] "Data sources" (*Izvori podataka*) page generated from `/api/sources`
-- [ ] Loading states (skeleton), empty states and error messages for every layer
-- [ ] Responsiveness: check at 375 px, 768 px and 1440 px
+- [ ] Compare mode: two cards side by side, differences highlighted with colour, AI summary below — *done except the AI summary (needs Phase 4): `/usporedba` with shareable URL, two EkoSkor rings, per-layer rows with a "Bolje" label + border on the better side (not colour alone), entry from the address page; 2026-11-05*
+- [x] "For the city" (*Za grad*) view: EkoSkor heatmap + number of residents in red zones (if population data is available) — *`/grad` from `/api/heatmap` (171 kB gzip), 5 sequential classes (YlGn, not traffic-light colours), popup with sub-scores and link to the point's profile. No population data, stated on the page. Heatmap does not use the façade noise rule yet, stated on the page; 2026-11-05*
+- [x] „Kako računamo?” modal with the EkoSkor formula and links to sources — *native `<dialog>`, from the header and the card; table of weights and thresholds per `docs/ekoskor.md`, façade rule, renormalisation, limitations; 2026-11-05*
+- [x] "Data sources" (*Izvori podataka*) page generated from `/api/sources` — *`/izvori`; licence "nije navedena" where none is stated; 2026-11-05*
+- [x] Loading states (skeleton), empty states and error messages for every layer — *card, compare, map overlays, city, sources, search; unavailable layer row; 2026-11-05*
+- [ ] Responsiveness: check at 375 px, 768 px and 1440 px — *1440 px checked in the browser; 375/768 not yet: the Chrome window could not be resized. Do it with Playwright viewports in Phase 6. Known fix done: EkoSkor ring shrinks in the two-column compare view*
 - [ ] Accessibility: colour contrast ≥ 4.5:1, traffic light always paired with a text label (not colour alone), keyboard navigation
 
 ### Phase 6 — Deploy and testing (8 Nov)

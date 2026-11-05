@@ -15,14 +15,19 @@ export function EkoSkorRing({ score }: { score: number | null }) {
   }, [score]);
 
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div className="flex w-full flex-col items-center gap-2">
+      {/* SIZE px at most, smaller in a narrow column (two rings side by side on a phone) */}
       <div
-        className="relative"
-        style={{ width: SIZE, height: SIZE }}
+        className="relative aspect-square w-full"
+        style={{ maxWidth: SIZE }}
         role="img"
         aria-label={score === null ? hr.ekoskor.missing : hr.ekoskor.aria(score)}
       >
-        <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className="-rotate-90" aria-hidden="true">
+        <svg
+          viewBox={`0 0 ${SIZE} ${SIZE}`}
+          className="h-full w-full -rotate-90"
+          aria-hidden="true"
+        >
           <circle
             cx={SIZE / 2}
             cy={SIZE / 2}
@@ -47,7 +52,7 @@ export function EkoSkorRing({ score }: { score: number | null }) {
           className="absolute inset-0 flex flex-col items-center justify-center"
           aria-hidden="true"
         >
-          <span className="text-5xl font-bold tabular-nums">{score ?? '–'}</span>
+          <span className="text-4xl font-bold tabular-nums sm:text-5xl">{score ?? '–'}</span>
           <span className="text-sm text-ink-muted">{hr.ekoskor.outOf}</span>
         </div>
       </div>

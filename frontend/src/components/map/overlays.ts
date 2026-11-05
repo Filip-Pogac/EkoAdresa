@@ -1,6 +1,6 @@
 /** Map overlays: sources, styles and legend data. Colours of the WMS layers are the
  * publishers' own legends (GetLegendGraphic JSON, fetched 2026-11-05). */
-import type * as maplibregl from 'maplibre-gl';
+import type { maplibregl } from './maplibre';
 import { API_URL } from '../../api/client';
 
 export type OverlayId =

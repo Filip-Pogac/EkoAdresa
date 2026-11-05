@@ -6,7 +6,7 @@ import { AddressMap } from '../components/map/AddressMap';
 import { AddressSearch } from '../components/search/AddressSearch';
 import { useProfile } from '../hooks/useProfile';
 import { hr } from '../i18n/hr';
-import { parseAddressParams } from '../routes';
+import { comparePath, parseAddressParams } from '../routes';
 
 function NewSearchLink() {
   return (
@@ -55,7 +55,15 @@ export function Address() {
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-4 px-4 py-4">
       <AddressSearch />
-      <h1 className="text-2xl font-bold">{place.label ?? hr.card.pinnedPoint}</h1>
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+        <h1 className="text-2xl font-bold">{place.label ?? hr.card.pinnedPoint}</h1>
+        <Link
+          to={comparePath(place, null)}
+          className="inline-flex min-h-12 items-center rounded-lg bg-primary px-5 font-semibold text-primary-ink"
+        >
+          {hr.compare.start}
+        </Link>
+      </div>
       <div className="flex flex-1 flex-col gap-4 lg:flex-row-reverse lg:items-start">
         <div className="lg:w-[28rem] lg:shrink-0">
           <ProfilePanel lat={place.lat} lon={place.lon} />

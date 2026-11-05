@@ -1,10 +1,10 @@
-import type { LayerName, Profile } from '../../api/types';
+import type { Profile } from '../../api/types';
 import { hr } from '../../i18n/hr';
+import { HowWeScoreButton } from '../common/HowWeScoreModal';
 import { Skeleton } from '../common/Skeleton';
 import { EkoSkorRing } from './EkoSkorRing';
+import { LAYER_ORDER } from './layerText';
 import { LayerRow } from './LayerRow';
-
-const LAYER_ORDER: LayerName[] = ['flood', 'noise', 'air', 'waste', 'mobility'];
 
 export function AddressCard({ profile }: { profile: Profile }) {
   return (
@@ -16,9 +16,12 @@ export function AddressCard({ profile }: { profile: Profile }) {
         {hr.card.title}
       </h2>
       <EkoSkorRing score={profile.ekoskor} />
-      <p className="text-center text-ink-muted">
-        {profile.ekoskor === null ? hr.ekoskor.missing : hr.ekoskor.explain}
-      </p>
+      <div className="flex flex-col items-center">
+        <p className="text-center text-ink-muted">
+          {profile.ekoskor === null ? hr.ekoskor.missing : hr.ekoskor.explain}
+        </p>
+        <HowWeScoreButton />
+      </div>
       <ul>
         {LAYER_ORDER.map((name) => (
           <LayerRow key={name} name={name} layers={profile.layers} />

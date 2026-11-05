@@ -1,7 +1,31 @@
-import type { GeocodeResponse, Profile, Source } from './types';
+import type { Comparison, GeocodeResponse, Profile, Source } from './types';
 
 export const API_URL =
   (import.meta.env.VITE_API_URL as string | undefined) ?? 'http://localhost:8000';
+
+export interface LatLon {
+  lat: number;
+  lon: number;
+}
+
+/** Properties of one heatmap cell (scripts/build_heatmap.py): EkoSkor and sub-scores 0-100. */
+export interface HeatmapCell {
+  ekoskor: number;
+  flood: number;
+  noise: number;
+  air: number;
+  waste: number;
+  mobility: number;
+}
+
+export interface HeatmapCollection {
+  type: 'FeatureCollection';
+  features: {
+    type: 'Feature';
+    geometry: { type: 'Polygon'; coordinates: number[][][] };
+    properties: HeatmapCell;
+  }[];
+}
 
 export class ApiError extends Error {
   readonly status: number;
@@ -41,4 +65,11 @@ export const api = {
   profile: (lat: number, lon: number, signal?: AbortSignal) =>
     get<Profile>('/api/profile', { lat, lon }, signal),
   sources: (signal?: AbortSignal) => get<Source[]>('/api/sources', {}, signal),
+  compare: (a: LatLon, b: LatLon, signal?: AbortSignal) =>
+    get<Comparison>(
+      '/api/compare',
+      { a_lat: a.lat, a_lon: a.lon, b_lat: b.lat, b_lon: b.lon },
+      signal,
+    ),
+  heatmap: (signal?: AbortSignal) => get<HeatmapCollection>('/api/heatmap', {}, signal),
 };

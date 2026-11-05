@@ -7,7 +7,15 @@ import { hr } from '../../i18n/hr';
 import { addressPath } from '../../routes';
 
 /** Address autocomplete (ARIA 1.2 combobox): arrows move, Enter picks, Escape closes. */
-export function AddressSearch({ autoFocus = false }: { autoFocus?: boolean }) {
+interface AddressSearchProps {
+  autoFocus?: boolean;
+  /** Visible label; defaults to the main search label. */
+  label?: string;
+  /** Called with the picked result; by default the address page is opened. */
+  onSelect?: (result: GeocodeResult) => void;
+}
+
+export function AddressSearch({ autoFocus = false, label, onSelect }: AddressSearchProps) {
   const [text, setText] = useState('');
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
@@ -27,7 +35,10 @@ export function AddressSearch({ autoFocus = false }: { autoFocus?: boolean }) {
 
   const choose = (r: GeocodeResult) => {
     setOpen(false);
-    navigate(addressPath(r.lat, r.lon, r.label));
+    if (onSelect) {
+      setText('');
+      onSelect(r);
+    } else navigate(addressPath(r.lat, r.lon, r.label));
   };
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -53,7 +64,7 @@ export function AddressSearch({ autoFocus = false }: { autoFocus?: boolean }) {
   return (
     <div className="relative">
       <label htmlFor={`${ids}-input`} className="mb-2 block text-lg font-semibold">
-        {hr.search.label}
+        {label ?? hr.search.label}
       </label>
       <input
         id={`${ids}-input`}
@@ -82,7 +93,7 @@ export function AddressSearch({ autoFocus = false }: { autoFocus?: boolean }) {
       <div
         className={`absolute inset-x-0 top-full z-20 mt-2 overflow-hidden rounded-lg border border-border bg-surface shadow-lg ${expanded ? '' : 'hidden'}`}
       >
-        <ul id={listId} role="listbox" aria-label={hr.search.label}>
+        <ul id={listId} role="listbox" aria-label={label ?? hr.search.label}>
           {results.map((r, i) => (
             <li
               key={`${r.label}-${r.lat}-${r.lon}`}
