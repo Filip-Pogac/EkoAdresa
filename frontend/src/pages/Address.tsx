@@ -71,14 +71,15 @@ export function Address() {
           {hr.compare.start}
         </Link>
       </div>
-      <div className="flex flex-1 flex-col gap-4 lg:flex-row-reverse lg:items-start">
-        <div className="lg:w-[28rem] lg:shrink-0">
-          <ProfilePanel lat={place.lat} lon={place.lon} />
-        </div>
+      {/* Map first: on top on a phone, left of the card on desktop (CLAUDE.md §2.3) */}
+      <div className="flex flex-1 flex-col gap-4 lg:flex-row lg:items-start">
         <div className="flex lg:sticky lg:top-4 lg:flex-1">
           <Suspense fallback={<Skeleton label={hr.map.loading} className="h-80 w-full" />}>
             <AddressMap point={{ lat: place.lat, lon: place.lon }} />
           </Suspense>
+        </div>
+        <div className="lg:w-[28rem] lg:shrink-0">
+          <ProfilePanel lat={place.lat} lon={place.lon} />
         </div>
       </div>
     </main>
