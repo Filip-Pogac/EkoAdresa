@@ -1,12 +1,19 @@
+import { lazy, Suspense } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { ApiError } from '../api/client';
 import { AddressCard, AddressCardSkeleton } from '../components/card/AddressCard';
 import { ErrorState } from '../components/common/ErrorState';
-import { AddressMap } from '../components/map/AddressMap';
+import { Skeleton } from '../components/common/Skeleton';
 import { AddressSearch } from '../components/search/AddressSearch';
 import { useProfile } from '../hooks/useProfile';
 import { hr } from '../i18n/hr';
 import { comparePath, parseAddressParams } from '../routes';
+
+// MapLibre is the biggest dependency: loaded only when a map is shown, so the home page
+// stays light and the card can render before the map (Lighthouse, CLAUDE.md §2.6)
+const AddressMap = lazy(() =>
+  import('../components/map/AddressMap').then((m) => ({ default: m.AddressMap })),
+);
 
 function NewSearchLink() {
   return (
@@ -69,7 +76,9 @@ export function Address() {
           <ProfilePanel lat={place.lat} lon={place.lon} />
         </div>
         <div className="flex lg:sticky lg:top-4 lg:flex-1">
-          <AddressMap point={{ lat: place.lat, lon: place.lon }} />
+          <Suspense fallback={<Skeleton label={hr.map.loading} className="h-80 w-full" />}>
+            <AddressMap point={{ lat: place.lat, lon: place.lon }} />
+          </Suspense>
         </div>
       </div>
     </main>

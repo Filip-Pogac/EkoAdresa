@@ -1,9 +1,13 @@
+import { lazy, Suspense } from 'react';
 import { HEATMAP_CLASSES } from '../components/city/heatmapClasses';
-import { HeatmapView } from '../components/city/HeatmapView';
 import { ErrorState } from '../components/common/ErrorState';
 import { Skeleton } from '../components/common/Skeleton';
 import { useHeatmap } from '../hooks/useHeatmap';
 import { hr } from '../i18n/hr';
+
+const HeatmapView = lazy(() =>
+  import('../components/city/HeatmapView').then((m) => ({ default: m.HeatmapView })),
+);
 
 export function City() {
   const { data, error, isPending, refetch } = useHeatmap();
@@ -21,7 +25,11 @@ export function City() {
           onRetry={() => void refetch()}
         />
       )}
-      {data && <HeatmapView data={data} />}
+      {data && (
+        <Suspense fallback={<Skeleton label={hr.city.loading} className="h-[70dvh] w-full" />}>
+          <HeatmapView data={data} />
+        </Suspense>
+      )}
       <div className="flex flex-col gap-2">
         <p className="font-semibold">{hr.city.legend}</p>
         <ul className="flex flex-wrap gap-x-4 gap-y-1">
