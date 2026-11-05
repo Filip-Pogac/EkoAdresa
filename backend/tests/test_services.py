@@ -9,6 +9,8 @@ Checks both the raw WMS answers (pixel colour, noise bands) and their interpreta
 (flood zone, loudest Lden) in flood.py / noise.py.
 """
 
+import math
+from collections.abc import Callable
 from pathlib import Path
 
 import httpx2 as httpx
@@ -44,11 +46,14 @@ def anyio_backend() -> str:
 
 
 def point_at_bbox_centre(bbox: str) -> str:
+    """Reference point name; '<name>_ring' for a façade ring point around it (noise.ring)."""
     min_lon, min_lat, max_lon, max_lat = map(float, bbox.split(","))
     lat, lon = (min_lat + max_lat) / 2, (min_lon + max_lon) / 2
     for name, (p_lat, p_lon) in POINTS.items():
         if abs(lat - p_lat) < 1e-6 and abs(lon - p_lon) < 1e-6:
             return name
+        if abs(lat - p_lat) < 0.0005 and abs(lon - p_lon) < 0.0005:  # within ~40 m
+            return f"{name}_ring"
     raise AssertionError(f"request for an unknown point {lat}, {lon}")
 
 
@@ -109,7 +114,7 @@ EXPECTED_FLOOD_LAYER = {  # (zone, depth_class, status, score)
 EXPECTED_NOISE_LAYER = {  # (lden min, max, lnight min, max, loudest source, status, score)
     "savica": (70, 74, 60, 64, "road", "red", 0),
     "jelacic": (70, 74, 60, 64, "tram", "red", 0),
-    "sljeme": (None, 49, None, 49, None, "green", 100),  # no mapped band: below 50 dB
+    "sljeme": (None, 49, None, 49, None, "green", 100),  # no band, rings empty: < 50 dB
 }
 
 
@@ -141,7 +146,66 @@ async def test_noise_layer(client: httpx.AsyncClient, cache: Cache, point: str) 
         layer.score,
     )
     assert got == EXPECTED_NOISE_LAYER[point]
+    assert layer.facade_m is None  # savica, jelacic: band at the point; sljeme: none found
     assert layer.source_id == "zg-buka"
+
+
+def bands_where(band_at: Callable[[float, float], dict[str, int]]) -> Callable:
+    """Fake zg-buka GetFeatureInfo: features from band_at(lat, lon) at the bbox centre."""
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        min_lon, min_lat, max_lon, max_lat = map(float, request.url.params["BBOX"].split(","))
+        bands = band_at((min_lat + max_lat) / 2, (min_lon + max_lon) / 2)
+        features = [{"id": f"SKB_R4_{k}.fid-1", "properties": {"razina": db}}
+                    for k, db in bands.items()]  # fmt: skip
+        return httpx.Response(200, json={"type": "FeatureCollection", "features": features})
+
+    return handler
+
+
+ADDRESS = (45.8134, 15.9773)  # inside a building; the street is to the south
+
+
+def south_street(distance_m: float) -> Callable[[float, float], dict[str, int]]:
+    """Tram 70 dB Lden / 60 dB Lnight, road 55 dB, at points >= distance_m south."""
+
+    def band_at(lat: float, lon: float) -> dict[str, int]:
+        if (ADDRESS[0] - lat) * noise.M_PER_DEG_LAT >= distance_m - 0.5:
+            return {"Tramvajski_promet_Lden": 70, "Tramvajski_promet_Lnight": 60,
+                    "Cestovni_promet_Lden": 55}  # fmt: skip
+        return {}
+
+    return band_at
+
+
+@pytest.mark.anyio
+@pytest.mark.parametrize(("street_m", "facade_m"), [(15, 15), (30, 30)])
+async def test_point_in_building_uses_most_exposed_facade(
+    cache: Cache, street_m: int, facade_m: int
+) -> None:
+    async with httpx.AsyncClient(
+        transport=httpx.MockTransport(bands_where(south_street(street_m)))
+    ) as c:
+        layer = await noise.noise_at(c, cache, *ADDRESS)
+    assert layer.facade_m == facade_m
+    assert (layer.lden_db_min, layer.lnight_db_min, layer.loudest_source) == (70, 60, "tram")
+    assert (layer.status, layer.score) == ("red", 0)
+
+
+@pytest.mark.anyio
+async def test_quiet_building_beyond_the_rings_stays_quiet(cache: Cache) -> None:
+    async with httpx.AsyncClient(transport=httpx.MockTransport(bands_where(south_street(60)))) as c:
+        layer = await noise.noise_at(c, cache, *ADDRESS)
+    assert (layer.facade_m, layer.lden_db_max, layer.status) == (None, 49, "green")
+
+
+def test_ring_radius_in_metres() -> None:
+    from app.services.geo import to_htrs
+
+    x0, y0 = to_htrs.transform(ADDRESS[1], ADDRESS[0])
+    for lat, lon in noise.ring(*ADDRESS, 15):
+        x, y = to_htrs.transform(lon, lat)
+        assert abs(math.hypot(x - x0, y - y0) - 15) < 0.2  # EPSG:3765 metres
 
 
 def down(request: httpx.Request) -> httpx.Response:

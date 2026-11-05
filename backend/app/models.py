@@ -52,6 +52,9 @@ class NoiseLayer(RemoteLayer):
     lnight_db_min: int | None
     lnight_db_max: int | None
     loudest_source: NoiseSource | None  # source of the loudest Lden band
+    # None = band read at the point. Otherwise the point had no band (inside a building
+    # footprint) and the bands are the loudest found this many metres around it.
+    facade_m: int | None
 
 
 Pollutant = Literal["no2", "o3", "pm10", "pm2_5"]
