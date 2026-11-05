@@ -5,6 +5,7 @@ import type {
   MobilityLayer,
   NoiseLayer,
   NoiseSource,
+  Pollutant,
   Status,
   UnavailableLayer,
   WasteLayer,
@@ -156,6 +157,28 @@ export const hr = {
         `Postaja ${l.station.name} (${formatDistance(l.station.distance_m)}): prosjek PM10 ${formatNumber(l.pm10_mean_ug_m3)} µg/m³ (SZO: do 15).`,
       period: (l: AirLayer) =>
         `Prosjek dnevnih mjerenja od ${formatDate(l.period_from)} do ${formatDate(l.period_to)}`,
+      history: {
+        show: 'Prikaži mjerenja po danima',
+        hide: 'Sakrij mjerenja',
+        loading: 'Učitavanje grafa…',
+        pollutantsLegend: 'Onečišćujuća tvar',
+        pollutant: { pm10: 'PM10', pm2_5: 'PM2,5', no2: 'NO₂', o3: 'O₃' } satisfies Record<
+          Pollutant,
+          string
+        >,
+        unit: 'µg/m³',
+        guideline: (v: number) => `Smjernica SZO (2021.) za dnevni prosjek: ${v} µg/m³`,
+        noGuideline: 'Za O₃ SZO daje smjernicu za 8-satni prosjek, ne dnevni, pa je graf nema.',
+        summary: (from: string, to: string, max: number, maxDate: string) =>
+          `Od ${formatDate(from)} do ${formatDate(to)} najviša dnevna vrijednost bila je ${formatNumber(max)} µg/m³ (${formatDate(maxDate)}).`,
+        above: (n: number, limit: number) =>
+          n === 0 ? `Nijedan dan iznad ${limit} µg/m³.` : `Dana iznad ${limit} µg/m³: ${n}.`,
+        missing: (n: number) => `Dana bez mjerenja: ${n} (praznine na grafu).`,
+        tableCaption: (pollutant: string) => `Dnevne vrijednosti, ${pollutant}`,
+        date: 'Datum',
+        value: 'Vrijednost (µg/m³)',
+        noValue: 'nema mjerenja',
+      },
     },
     waste: {
       title: 'Otpad',

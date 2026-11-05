@@ -257,7 +257,7 @@ Between thresholds the value is linearly interpolated. The formula is publicly d
 - [x] Home screen: large address search with autocomplete and 3 example addresses for a quick demo — *ARIA combobox (arrows, Enter, Escape), examples Trg bana Jelačića 6, Ulica Vladimira Ruždjaka 20 (Savica), Sljemenska cesta 8; address page URL `/adresa?lat=&lon=&a=` is shareable; 2026-11-05*
 - [x] Map: address marker, 500 m circle, toggleable layers (flooding, noise, stations, yards, stops) — *also green islands; flood/noise via cached tile proxy `/api/tiles/{flood|noise}/{z}/{x}/{y}.png` (zg-buka sends no CORS; flood tiles above zoom 14 cut from zoom 14 because hv-poplave draws nothing below 1:20 000); points from `/api/layers/{name}`; legend with the publishers' colours, popups on click; 2026-11-05*
 - [x] Address card: EkoSkor as a large number with a ring indicator + 5 traffic-light rows with a one-sentence explanation per layer — *status = icon + text label; source and data date per row; outside-Zagreb and error states; 2026-11-05*
-- [ ] Air layer detail: chart of the last 30 days (Recharts)
+- [x] Air layer detail: chart of the last 30 days (Recharts) — *behind a "Prikaži mjerenja po danima" button, lazy-loaded (107 kB gzip, separate chunk); one pollutant at a time (PM10 first); WHO 2021 24-h guideline line for PM10 45 / PM2.5 15 / NO2 25 µg/m³, none for O3 (8-h guideline only); missing days shown as gaps; text summary + screen-reader table; data Aug 2023, dated; 2026-11-05*
 - [ ] AI assistant panel with 4 suggested questions as buttons
 - [ ] Compare mode: two cards side by side, differences highlighted with colour, AI summary below
 - [ ] "For the city" (*Za grad*) view: EkoSkor heatmap + number of residents in red zones (if population data is available)
