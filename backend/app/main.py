@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.cache import Cache
 from app.http import USER_AGENT
-from app.routers import geocode, health, profile
+from app.routers import compare, geocode, health, profile, sources
 from app.services import geocode as geocode_service
 
 
@@ -41,3 +41,5 @@ app.add_middleware(
 app.include_router(health.router)
 app.include_router(geocode.router)
 app.include_router(profile.router)
+app.include_router(compare.router)
+app.include_router(sources.router)

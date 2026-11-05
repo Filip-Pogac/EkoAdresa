@@ -1,44 +1,26 @@
 """GET /api/profile end to end, offline: recorded WMS/WFS responses + committed data."""
 
 import asyncio
-from collections.abc import Callable, Iterator
+from collections.abc import Callable
 from pathlib import Path
 
 import httpx2 as httpx
 import pytest
 from fastapi.testclient import TestClient
 
-from app.cache import Cache
-from app.deps import get_cache, get_http_client
 from app.main import app
-from app.services import air, ekoskor, flood, profile, wms
+from app.services import air, ekoskor, flood, profile
 from tests import test_services
+from tests.conftest import Handler
 from tests.reference_points import POINTS
 
 WFS_FIXTURE = Path(__file__).parent / "fixtures" / "wfs" / "rh_zrak_indeks.xml"
-Handler = Callable[[httpx.Request], httpx.Response]
 
 
 def recorded(request: httpx.Request) -> httpx.Response:
     if str(request.url).startswith(air.LIVE_URL):
         return httpx.Response(200, content=WFS_FIXTURE.read_bytes())
     return test_services.replay(request)  # flood + noise WMS fixtures per reference point
-
-
-@pytest.fixture
-def use(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[Callable[[Handler], None]]:
-    """use(handler): route the API's outgoing requests to `handler`, with a fresh cache."""
-    monkeypatch.setattr(wms, "RETRY_DELAY_S", 0)
-    cache = Cache(tmp_path / "remote.sqlite")
-    app.dependency_overrides[get_cache] = lambda: cache
-
-    def install(handler: Handler) -> None:
-        app.dependency_overrides[get_http_client] = lambda: httpx.AsyncClient(
-            transport=httpx.MockTransport(handler)
-        )
-
-    yield install
-    app.dependency_overrides.clear()
 
 
 api = TestClient(app)

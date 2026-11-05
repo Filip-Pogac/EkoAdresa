@@ -6,6 +6,8 @@
 
 Licences are quoted exactly as stated by the publisher; "none stated" means the metadata names no licence.
 
+The API serves the same facts at `GET /api/sources` from `backend/app/sources.py` (licence `null` = none stated). `backend/tests/test_sources.py` fails if a `source_id` emitted by the services or the data files is missing from the registry or from this table. `rh-buka` and `zg-zeleni-otoci` are documented here but not used at runtime, so they are not in the registry.
+
 | `source_id` | Dataset | Publisher | Access URL | Format | Licence (as stated) | Last update (as stated / observed) |
 |---|---|---|---|---|---|---|
 | `hv-poplave` | Karte opasnosti od poplava | Hrvatske vode | `https://servisi.voda.hr/poplave_opasnosti/wms` | OGC WMS 1.3.0 (GetMap; GetFeatureInfo refused) | none stated (Fees/AccessConstraints `NONE`) | `TODO(verify)` in NIPP record `9119600a-…` |

@@ -159,3 +159,32 @@ class Profile(BaseModel):
     ekoskor: int | None  # None if fewer than 3 layers are available
     layers: Layers
     generated_at: datetime
+
+
+LayerName = Literal["flood", "noise", "air", "waste", "mobility"]
+
+
+class LayerDiff(BaseModel):
+    score_a: int | None  # None = layer unavailable for that address
+    score_b: int | None
+    better: Literal["a", "b"] | None  # None = equal sub-scores, or a layer is unavailable
+
+
+class Comparison(BaseModel):
+    a: Profile
+    b: Profile
+    ekoskor_diff: int | None  # b - a; None if either EkoSkor is missing
+    layers: dict[LayerName, LayerDiff]
+
+
+class Source(BaseModel):
+    """One dataset or service, as registered in app.sources and docs/data-sources.md."""
+
+    id: str
+    name: str  # dataset title as published
+    publisher: str
+    access: Literal["live", "snapshot"]  # live = queried per request; snapshot = committed file
+    urls: list[str]  # catalogue page or service endpoint
+    licence: str | None  # exactly as stated by the publisher; None = no licence stated
+    data_as_of: str  # data period or last update, as stated or observed
+    used_for: str  # Croatian, shown on the "Izvori podataka" page
