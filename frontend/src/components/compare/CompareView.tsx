@@ -17,9 +17,6 @@ export function CompareView({ comparison, labels }: CompareViewProps) {
       aria-labelledby="compare-result"
       className="flex flex-col gap-4 rounded-lg border border-border bg-surface p-5"
     >
-      <h2 id="compare-result" className="sr-only">
-        {hr.compare.layersTitle}
-      </h2>
       <div className="grid grid-cols-2 gap-4">
         {(['a', 'b'] as const).map((key) => (
           <div
@@ -36,7 +33,9 @@ export function CompareView({ comparison, labels }: CompareViewProps) {
       <p className="text-center text-lg font-semibold">
         {hr.compare.ekoskorDiff(diff, labels.a, labels.b)}
       </p>
-      <h3 className="text-xl font-bold">{hr.compare.layersTitle}</h3>
+      <h2 id="compare-result" className="text-xl font-bold">
+        {hr.compare.layersTitle}
+      </h2>
       <ul>
         {LAYER_ORDER.map((name) => (
           <DiffRow key={name} name={name} comparison={comparison} labels={labels} />
