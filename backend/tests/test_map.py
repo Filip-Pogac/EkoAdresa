@@ -151,3 +151,14 @@ def test_tile_outside_zagreb_is_404(served: Callable) -> None:
     assert api.get(tile_url("noise", (14, 0, 0))).status_code == 404
     assert api.get("/api/tiles/elsewhere/14/8919/5841.png").status_code == 422
     assert requests == []
+
+
+def test_heatmap() -> None:
+    resp = api.get("/api/heatmap", headers={"Accept-Encoding": "gzip"})
+    assert resp.status_code == 200
+    assert resp.headers["content-encoding"] == "gzip"  # 2.5 MB raw
+    body = resp.json()
+    assert len(body["features"]) == 10_260  # build of 2026-11-05, docs/ekoskor.md
+    assert set(body["metadata"]["sources"]) <= SOURCES.keys()
+    cell = body["features"][0]["properties"]
+    assert set(cell) == {"ekoskor", "flood", "noise", "air", "waste", "mobility"}

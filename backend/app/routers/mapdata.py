@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, Path, Response
 from app.cache import Cache
 from app.deps import get_cache, get_http_client
 from app.services import tiles, wms
-from app.services.map_layers import PointLayer, point_layer
+from app.services.map_layers import PointLayer, heatmap_bytes, point_layer
 
 router = APIRouter(prefix="/api", tags=["map"])
 
@@ -51,3 +51,22 @@ async def get_tile(
     except wms.WMSError as exc:
         raise HTTPException(status_code=502, detail="tile_service_unavailable") from exc
     return Response(png, media_type="image/png", headers={"Cache-Control": "public, max-age=86400"})
+
+
+@router.get(
+    "/heatmap",
+    summary="EkoSkor za cijeli Grad Zagreb (mreža 250 × 250 m)",
+    description=(
+        "GeoJSON FeatureCollection (EPSG:4326): po jedna ćelija 250 × 250 m s EkoSkorom i "
+        "ocjenama pet slojeva u središtu ćelije. Izračunato skriptom `scripts/build_heatmap.py`; "
+        "metodologija u docs/ekoskor.md."
+    ),
+    responses={200: {"content": {"application/geo+json": {}}}},
+    response_class=Response,
+)
+def get_heatmap() -> Response:
+    return Response(
+        heatmap_bytes(),
+        media_type="application/geo+json",
+        headers={"Cache-Control": "public, max-age=86400"},
+    )

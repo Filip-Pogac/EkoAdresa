@@ -45,3 +45,9 @@ def point_layer(name: PointLayer) -> dict:
             }
         )
     return {"type": "FeatureCollection", "features": features}
+
+
+@cache
+def heatmap_bytes() -> bytes:
+    """data/heatmap.geojson as is (scripts/build_heatmap.py), read once per process."""
+    return (DATA_DIR / "heatmap.geojson").read_bytes()
