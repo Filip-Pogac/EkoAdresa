@@ -226,7 +226,7 @@ Changing a threshold or weight requires updating `test_ekoskor.py` and `docs/eko
 
 ### 2.7 Security & privacy (prototype level)
 - Secrets only in `.env` / hosting env vars; `.env.example` committed; `gitleaks` in CI.
-- No user accounts and no stored addresses on the server; the cache key is the rounded coordinate, not the typed address.
+- E-mail addresses may be stored (e.g. for notifications), but users must be told before they submit one: what is stored, why, and how to remove it.
 - No addresses or IPs in logs beyond aggregate counts.
 - Respect public OSM services' usage policies (Overpass, Nominatim): identifying User-Agent, low request rates, cache everything. Never use Nominatim for autocomplete.
 - Every team member turns off "use my data for training" in the AI tools they use (Claude, ChatGPT, Codex) before pasting project material.

@@ -48,12 +48,13 @@ Requested features not yet in `PLAN.md`. Each one is weighed against the deadlin
   - Is there an open dataset or service with waste collection schedules per street or district? Look on data.zagreb.hr / data.gov.hr. The operator is Zagrebački holding – Podružnica Čistoća (named in `zg-reciklaza`). Record publisher, licence, format, update frequency and coverage.
   - Air alerts: `rh-zrak-indeks` (national index, already queried live) could trigger "air quality poor today", but the index scale is still unverified (`scale_verified: false`).
   - Flood warnings: which institution publishes real-time warnings, and is it open data? `TODO(verify)`.
-- **Privacy conflict (`CLAUDE.md` §2.7):** "no user accounts and no stored addresses on the server". Push or e-mail notifications need a stored subscription with an address, so they break this rule. Options:
-  1. **Calendar file (.ics) download** for the address: the browser builds it from the schedule and nothing is stored on the server. Works with any phone calendar. Recommended first step.
-  2. Web Push with a subscription stored on the server: needs a privacy policy, consent and deletion. Much more work.
+- **Privacy (`CLAUDE.md` §2.7, updated 2026-11-05):** e-mail addresses may be stored, but the user must be told before submitting: what is stored (e-mail and the address or area the schedule is for), why, and how to remove it. Every e-mail needs a working unsubscribe/delete link. Options:
+  1. **E-mail reminders:** a subscription form with the notice above, stored subscriptions, and a scheduled job that sends the reminders. Needs a mail-sending service and a small database (the stack has none yet).
+  2. **Calendar file (.ics) download** for the address: built in the browser from the schedule, nothing stored. Works with any phone calendar.
   3. Show "next collection: Tuesday, plastic" on the card only (no notification).
-- **Decision needed (human):** which channel; whether it is in scope for the datathon or "daljnji razvoj" (`docs/daljnji-razvoj.md`).
-- Estimate: option 3 ≈ ½ day once a dataset exists; option 1 + ½ day; option 2 several days. Without an open schedule dataset, it cannot be built.
+  4. Web Push: a stored browser subscription with the same notice; more work than e-mail.
+- **Decision needed (human):** which channel(s); whether it is in scope for the datathon or "daljnji razvoj" (`docs/daljnji-razvoj.md`).
+- Estimate, once an open schedule dataset exists: option 3 ≈ ½ day; option 2 + ½ day; option 1 ≈ 1–2 days (form, notice, storage, sending, unsubscribe); option 4 several days. Without such a dataset, none of them can be built.
 
 ## 5. AI assistant: deferred (decision 2026-11-05)
 
