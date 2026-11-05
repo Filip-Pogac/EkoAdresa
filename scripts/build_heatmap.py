@@ -43,6 +43,7 @@ from app.services import ekoskor, flood, noise, wms  # noqa: E402
 DATA = ROOT / "data"
 RAW = DATA / "raw" / "heatmap"
 OUT_PATH = DATA / "heatmap.geojson"
+BOUNDARY_PATH = DATA / "zagreb_boundary.geojson"  # also used by the API (geocode filter)
 
 USER_AGENT = "EkoAdresa/0.1 (+https://github.com/Filip-Pogac/EkoAdresa)"
 OVERPASS_URL = "https://overpass-api.de/api/interpreter"
@@ -91,6 +92,24 @@ def fetch_boundary(client: httpx.Client) -> shapely.Geometry:
     boundary = unary_union(list(polygonize(lines)))
     log.info("boundary: OSM relation %s '%s'", rel["id"], rel["tags"].get("name"))
     return boundary
+
+
+def write_boundary(boundary: shapely.Geometry) -> None:
+    """City boundary as GeoJSON (EPSG:4326, 6 decimals ~ 0.1 m), source osm-granice."""
+    geometry = json.loads(shapely.to_geojson(shapely.set_precision(boundary, 1e-6)))
+    collection = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "geometry": geometry,
+                "properties": {"name": "Grad Zagreb", "source_id": "osm-granice"},
+            }
+        ],
+    }
+    text = json.dumps(collection, separators=(",", ":"))
+    BOUNDARY_PATH.write_text(text, encoding="utf-8", newline="\n")
+    log.info("wrote %s", BOUNDARY_PATH.relative_to(ROOT))
 
 
 def build_grid(boundary_wgs: shapely.Geometry) -> pd.DataFrame:
@@ -279,6 +298,7 @@ async def main() -> None:
 
     with httpx.Client(headers={"User-Agent": USER_AGENT}, timeout=120) as c:
         boundary = fetch_boundary(c)
+    write_boundary(boundary)
     grid = build_grid(boundary)
 
     async with httpx.AsyncClient(headers={"User-Agent": USER_AGENT}, timeout=30) as client:
