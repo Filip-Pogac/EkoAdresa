@@ -67,3 +67,32 @@ test('clicking a stop opens its popup and stays on the address', async ({ page, 
   await expect(page.locator('.maplibregl-popup')).toContainText('Trg bana J. Jelačića');
   await expect(page).toHaveURL(/lat=45\.813406/); // did not navigate
 });
+
+test('clicking the home page map opens the profile of that point', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  await expect(page.getByRole('heading', { name: 'Ili odaberite točku na karti' })).toBeVisible();
+  // Home map: no layer checkboxes, one main action
+  await expect(page.getByRole('group', { name: 'Slojevi na karti' })).toHaveCount(0);
+
+  // The map loads on the first interaction (here a mouse move), not on page load
+  await page.mouse.move(700, 400);
+  const map = page.locator('.maplibregl-canvas');
+  await expect(map).toBeVisible();
+  await expect(page.getByText('Učitavanje karte…')).toHaveCount(0);
+  const box = await map.boundingBox();
+  if (!box) throw new Error('map has no size');
+  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2); // centre of Zagreb
+
+  await expect(page).toHaveURL(/\/adresa\?lat=45\.\d+&lon=15\.\d+$/);
+  await expect(page.getByRole('img', { name: /^EkoSkor \d+ od 100$/ })).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('the home page map loads from its button without other interaction', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Prikaži kartu Zagreba' }).click();
+  await expect(page.locator('.maplibregl-canvas')).toBeVisible();
+});

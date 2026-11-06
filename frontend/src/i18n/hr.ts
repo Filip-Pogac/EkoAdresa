@@ -36,6 +36,8 @@ export const hr = {
     tagline: 'Kako je živjeti na ovoj adresi?',
     home: 'EkoAdresa – početna',
     pilot: 'Pilot područje: Grad Zagreb',
+    mapTitle: 'Ili odaberite točku na karti',
+    showMap: 'Prikaži kartu Zagreba',
   },
   nav: {
     label: 'Glavna navigacija',

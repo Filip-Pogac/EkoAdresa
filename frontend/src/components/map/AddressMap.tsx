@@ -81,9 +81,11 @@ interface AddressMapProps {
   point?: { lat: number; lon: number };
   /** Called with a clicked point (EPSG:4326), except when a map point with a popup is hit. */
   onPick?: (lat: number, lon: number) => void;
+  /** Show the overlay checkboxes and legend (off on the home page: one main action). */
+  layers?: boolean;
 }
 
-export function AddressMap({ point, onPick }: AddressMapProps) {
+export function AddressMap({ point, onPick, layers = true }: AddressMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   // The click handler is registered once per map; it reads the latest callback from here.
@@ -229,8 +231,8 @@ export function AddressMap({ point, onPick }: AddressMapProps) {
       {status !== 'error' && (
         <>
           {onPick && <p className="text-sm text-ink-muted">{hr.map.clickHint}</p>}
-          <LayerToggle active={active} failed={failed} onToggle={toggle} />
-          <Legend active={active} />
+          {layers && <LayerToggle active={active} failed={failed} onToggle={toggle} />}
+          {layers && <Legend active={active} />}
         </>
       )}
     </div>
