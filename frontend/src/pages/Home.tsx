@@ -35,17 +35,21 @@ function MapPlaceholder({ load }: { load: () => void }) {
 export function Home() {
   const navigate = useNavigate();
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-10 lg:flex-row lg:items-start">
-      <div className="flex flex-col gap-8 lg:w-[28rem] lg:shrink-0 lg:pt-8">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-4xl font-bold text-primary">{hr.app.name}</h1>
-          <p className="text-xl">{hr.app.tagline}</p>
-          <p className="text-ink-muted">{hr.app.pilot}</p>
-        </div>
-        <AddressSearch autoFocus />
-        <ExampleAddresses />
+    // One column on a phone in reading order (text, search, map, examples); on desktop a grid
+    // puts the map on the right beside the text, search and examples.
+    <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-10 lg:grid lg:grid-cols-[28rem_1fr] lg:grid-rows-[auto_auto_1fr] lg:items-start">
+      <div className="flex flex-col gap-2 lg:col-start-1 lg:row-start-1 lg:pt-8">
+        <h1 className="text-4xl font-bold text-primary">{hr.app.name}</h1>
+        <p className="text-xl">{hr.app.tagline}</p>
+        <p className="text-ink-muted">{hr.app.pilot}</p>
       </div>
-      <section aria-labelledby="home-map-title" className="flex flex-1 flex-col gap-3">
+      <div className="lg:col-start-1 lg:row-start-2">
+        <AddressSearch autoFocus />
+      </div>
+      <section
+        aria-labelledby="home-map-title"
+        className="flex flex-col gap-3 lg:col-start-2 lg:row-span-3 lg:row-start-1"
+      >
         <h2 id="home-map-title" className="text-lg font-semibold">
           {hr.app.mapTitle}
         </h2>
@@ -55,6 +59,9 @@ export function Home() {
           </Suspense>
         </LoadOnIntent>
       </section>
+      <div className="lg:col-start-1 lg:row-start-3">
+        <ExampleAddresses />
+      </div>
     </main>
   );
 }
