@@ -23,14 +23,20 @@ class GeocodeResponse(BaseModel):
 
 
 class NearestAddress(BaseModel):
-    label: str  # e.g. "Ilica 25, 10000 Zagreb"
-    lat: float  # EPSG:4326, the address point
+    """What to call a point picked on the map: the nearest address, or else the named park
+    or forest the point lies in."""
+
+    kind: Literal["address", "green_area"]
+    label: str  # e.g. "Ilica 25, 10000 Zagreb" or "Park šuma Maksimir"
+    lat: float  # EPSG:4326: the address point; for a green area, the requested point
     lon: float
-    distance_m: int  # straight line from the requested point
+    distance_m: int  # straight line from the requested point; 0 for a green area
+    source_id: str  # osm-adrese or osm-parkovi
 
 
 class ReverseResponse(BaseModel):
-    """Nearest address to a point, or None if none is within geocode.REVERSE_MAX_M."""
+    """Nearest address within geocode.REVERSE_MAX_M, else the named park or forest the point
+    is in, else None."""
 
     result: NearestAddress | None
     source_id: str

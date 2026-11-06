@@ -11,7 +11,8 @@ Jelačića"). If the last typed word starts with a digit and follows a word, it 
 number ("ilica 1" lists Ilica 1, 1A, 10, 11…).
 
 Reverse: `nearest` gives the closest address to a point picked on the map, if one is within
-REVERSE_MAX_M (straight line, EPSG:3765). The point itself is not stored or logged.
+REVERSE_MAX_M (straight line, EPSG:3765); otherwise the name of the park or forest the point
+lies in (services/green.py), if it has one. The point itself is not stored or logged.
 """
 
 import re
@@ -24,6 +25,7 @@ import pandas as pd
 
 from app.models import GeocodeResult, NearestAddress
 from app.paths import DATA_DIR
+from app.services import green
 from app.services.geo import distances_m, project
 
 SOURCE_ID = "osm-adrese"
@@ -180,13 +182,24 @@ def search(query: str, limit: int) -> list[GeocodeResult]:
 
 
 def nearest(lat: float, lon: float) -> NearestAddress | None:
-    """Closest address to (lat, lon), or None if none is within REVERSE_MAX_M."""
+    """Closest address within REVERSE_MAX_M; else the named park or forest the point is in;
+    else None."""
     index = _index()
     d = distances_m(index.xy, lat, lon)
     i = int(np.argmin(d))
-    if d[i] > REVERSE_MAX_M:
+    if d[i] <= REVERSE_MAX_M:
+        a_lon, a_lat = index.lonlat[i]
+        return NearestAddress(
+            kind="address",
+            label=index.labels[i],
+            lat=float(a_lat),
+            lon=float(a_lon),
+            distance_m=round(float(d[i])),
+            source_id=SOURCE_ID,
+        )
+    park = green.named_area_at(lat, lon)
+    if park is None:
         return None
-    a_lon, a_lat = index.lonlat[i]
     return NearestAddress(
-        label=index.labels[i], lat=float(a_lat), lon=float(a_lon), distance_m=round(float(d[i]))
+        kind="green_area", label=park, lat=lat, lon=lon, distance_m=0, source_id=green.SOURCE_ID
     )

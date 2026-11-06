@@ -31,12 +31,16 @@ def search_addresses(
     summary="Najbliža adresa točki na karti",
     description=(
         "Najbliža adresa iz lokalne snimke OpenStreetMap podataka (© OpenStreetMap "
-        "contributors, ODbL) zračnom linijom, ako je unutar 150 m; inače `result` je null. "
-        "Točka se ne sprema."
+        "contributors, ODbL) zračnom linijom, ako je unutar 150 m; inače naziv parka ili "
+        "šume u kojoj je točka (`kind: green_area`); inače `result` je null. Točka se ne "
+        "sprema."
     ),
 )
 def nearest_address(
     lat: Annotated[float, Query(ge=-90, le=90, description="Geografska širina, EPSG:4326")],
     lon: Annotated[float, Query(ge=-180, le=180, description="Geografska dužina, EPSG:4326")],
 ) -> ReverseResponse:
-    return ReverseResponse(result=geocode.nearest(lat, lon), source_id=geocode.SOURCE_ID)
+    result = geocode.nearest(lat, lon)
+    return ReverseResponse(
+        result=result, source_id=result.source_id if result else geocode.SOURCE_ID
+    )

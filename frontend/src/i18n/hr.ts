@@ -263,6 +263,8 @@ export const hr = {
     retry: 'Pokušaj ponovno',
     newSearch: 'Nova pretraga',
     pinnedPoint: 'Odabrana točka na karti',
+    greenAreaNote:
+      'Točka odabrana na karti, unutar parka ili šume; nema adrese do 150 m. Izvor: © OpenStreetMap contributors.',
     nearestNote: (m: number) =>
       m === 0
         ? 'Točka odabrana na karti, na samoj adresi.'

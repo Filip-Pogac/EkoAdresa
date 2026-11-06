@@ -15,9 +15,17 @@ export interface GeocodeResponse {
   source_id: string;
 }
 
-/** Nearest address to a map point (/api/reverse); null if none within 150 m. */
+/** Nearest address to a map point within 150 m, else the named park or forest the point is
+ * in (/api/reverse); null if neither. */
 export interface ReverseResponse {
-  result: { label: string; lat: number; lon: number; distance_m: number } | null;
+  result: {
+    kind: 'address' | 'green_area';
+    label: string;
+    lat: number;
+    lon: number;
+    distance_m: number;
+    source_id: string;
+  } | null;
   source_id: string;
 }
 
