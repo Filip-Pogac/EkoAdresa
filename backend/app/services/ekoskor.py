@@ -39,6 +39,15 @@ ISLAND_FAR_M = 1500
 STOPS_NEAR_M = 300
 STOPS_WALK_M = 500
 STOPS_GOOD_COUNT = 3
+# Green mobility = 50 % public transport + 25 % cycling + 25 % walking & green (decision
+# 2026-11-06). Cycling: nearest City bike path, 100 at ≤ 200 m -> 0 at ≥ 1 km. Walking &
+# green: nearest park, forest, public garden or nature reserve of at least 0.5 ha, 100 at
+# ≤ 300 m (WHO Europe 2017: green space of 0.5-1 ha within 300 m) -> 0 at ≥ 1 km.
+MOBILITY_PARTS = {"transit": 0.50, "bike": 0.25, "green": 0.25}
+BIKE_NEAR_M = 200
+BIKE_FAR_M = 1000
+GREEN_NEAR_M = 300
+GREEN_FAR_M = 1000
 
 
 def _linear_down(value: float, near: float, far: float) -> float:
@@ -78,7 +87,7 @@ def waste_score(yard_distance_m: float, island_distance_m: float) -> float:
     return (yard + island) / 2
 
 
-def mobility_score(stops_300m: int, stops_500m: int) -> float:
+def transit_score(stops_300m: int, stops_500m: int) -> float:
     """≥ 3 stops (platforms) within 300 m: 100; any stop within 500 m: 50; none: 0."""
     if stops_300m >= STOPS_GOOD_COUNT:
         return 100.0
@@ -87,8 +96,28 @@ def mobility_score(stops_300m: int, stops_500m: int) -> float:
     return 0.0
 
 
-# Traffic light per layer from its sub-score, in equal thirds. For the step layers this is
-# simply 100 -> green, 50 -> yellow, 0 -> red.
+def bike_score(bike_path_m: float) -> float:
+    """Nearest bike path: 100 at ≤ 200 m, 0 at ≥ 1 km, linear in between."""
+    return _linear_down(bike_path_m, BIKE_NEAR_M, BIKE_FAR_M)
+
+
+def green_score(green_m: float) -> float:
+    """Nearest park or forest (≥ 0.5 ha): 100 at ≤ 300 m, 0 at ≥ 1 km; 0 m = inside it."""
+    return _linear_down(green_m, GREEN_NEAR_M, GREEN_FAR_M)
+
+
+def mobility_score(stops_300m: int, stops_500m: int, bike_path_m: float, green_m: float) -> float:
+    """50 % public transport + 25 % cycling + 25 % walking & green."""
+    parts = {
+        "transit": transit_score(stops_300m, stops_500m),
+        "bike": bike_score(bike_path_m),
+        "green": green_score(green_m),
+    }
+    return sum(MOBILITY_PARTS[k] * v for k, v in parts.items())
+
+
+# Traffic light per layer from its sub-score, in equal thirds. For the step layers (flood,
+# noise) this is simply 100 -> green, 50 -> yellow, 0 -> red.
 STATUS_GREEN_MIN = 67
 STATUS_YELLOW_MIN = 34
 

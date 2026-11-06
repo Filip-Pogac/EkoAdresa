@@ -1,6 +1,6 @@
 # EkoAdresa
 
-**Kako je živjeti na ovoj adresi?** EkoAdresa za bilo koju adresu u Zagrebu na jednom mjestu prikazuje opasnost od poplava, razinu buke, kvalitetu zraka, blizinu reciklaže i javnog prijevoza, uz jednu ocjenu: **EkoSkor 0–100**. Svaki podatak dolazi iz javno objavljenih otvorenih podataka i uz njega piše izvor.
+**Kako je živjeti na ovoj adresi?** EkoAdresa za bilo koju adresu u Zagrebu na jednom mjestu prikazuje opasnost od poplava, razinu buke, kvalitetu zraka, blizinu reciklaže te javnog prijevoza, biciklističkih staza i parkova, uz jednu ocjenu: **EkoSkor 0–100**. Svaki podatak dolazi iz javno objavljenih otvorenih podataka i uz njega piše izvor.
 
 Rješenje za **Datathon Portala otvorenih podataka 2026**, izazov B: *Okoliš i održivi prostor*.
 
@@ -23,7 +23,7 @@ Podaci o okolišu već postoje u javnim servisima: karte opasnosti od poplava Hr
 | | |
 |---|---|
 | **Pretraga adrese** s dovršavanjem upisa (i tipkovnicom) i tri primjera | **Kartica adrese:** EkoSkor i pet slojeva (poplave, buka, zrak, otpad, zelena mobilnost), svaki sa semaforom, tekstom i ikonom (ne samo bojom), jednom rečenicom na hrvatskom, izvorom i datumom podataka |
-| **Karta** s krugom od 500 m i slojevima koji se uključuju: poplave, buka, mjerne postaje, reciklažna dvorišta, zeleni otoci, stajališta ZET-a; **klik na kartu** daje EkoSkor bilo koje točke | **Graf mjerenja zraka** po danima uz smjernice SZO-a |
+| **Karta** s krugom od 500 m i slojevima koji se uključuju: poplave, buka, parkovi i šume, biciklističke staze, mjerne postaje, reciklažna dvorišta, zeleni otoci, stajališta ZET-a; **klik na kartu** daje EkoSkor bilo koje točke | **Graf mjerenja zraka** po danima uz smjernice SZO-a |
 | **Usporedba dviju adresa** s oznakom „Bolje" po sloju | **Za grad:** EkoSkor na mreži 250 × 250 m za cijeli Zagreb |
 | **Kako računamo?** cijela formula i pragovi, javno | **Izvori:** svi skupovi s izdavačima, licencijama i poveznicama |
 
@@ -37,7 +37,7 @@ Ostale snimke zaslona: [docs/screenshots/](docs/screenshots/).
 
 ## Podaci
 
-11 izvora od 5 izdavača, povezanih u jedan profil adrese i jednu ocjenu:
+13 izvora od 5 izdavača, povezanih u jedan profil adrese i jednu ocjenu:
 
 | Sloj | Izvor | Izdavač | Pristup |
 |---|---|---|---|
@@ -45,7 +45,7 @@ Ostale snimke zaslona: [docs/screenshots/](docs/screenshots/).
 | Buka | Strateška karta buke Grada Zagreba | Grad Zagreb | OGC WMS, uživo |
 | Zrak | Mjerne postaje i mjerenja kvalitete zraka 2023.; Indeks kvalitete zraka u RH (INSPIRE); mjerenja državnih postaja, zadnja 24 sata | Grad Zagreb; data.gov.hr; DHMZ | data.zagreb.hr / data.gov.hr; OGC WFS uživo; meteo.hr uživo |
 | Otpad | Reciklažna dvorišta; zeleni otoci | Grad Zagreb; OpenStreetMap | data.zagreb.hr; Overpass API |
-| Zelena mobilnost | Autobusna i tramvajska stajališta ZET | Grad Zagreb | data.zagreb.hr |
+| Zelena mobilnost | Autobusna i tramvajska stajališta ZET; biciklističke staze; parkovi i šume | Grad Zagreb; OpenStreetMap | data.zagreb.hr; Overpass API |
 | Adrese, granica | Adrese i granica Grada Zagreba | OpenStreetMap | Overpass API |
 
 Potpun popis s poveznicama, licencijama i datumima: **[docs/data-sources.md](docs/data-sources.md)**. Metodologija EkoSkora: **[docs/ekoskor.md](docs/ekoskor.md)**.

@@ -75,6 +75,7 @@ Python 3.11+, FastAPI, pydantic, httpx2, Shapely, pyproj, NumPy, pandas, PyArrow
 | `fetch_air.py` | data.zagreb.hr (CKAN API, 48 XLSX datoteka) | `data/air_stations.geojson`, `data/air_history.parquet` |
 | `fetch_waste.py` | data.zagreb.hr, OpenStreetMap (Overpass) | `data/waste.geojson` |
 | `fetch_transit.py` | data.zagreb.hr | `data/transit.geojson` |
+| `fetch_green_mobility.py` | data.zagreb.hr, OpenStreetMap (Overpass) | `data/bike_paths.geojson`, `data/parks.geojson` |
 | `fetch_addresses.py` | OpenStreetMap (Overpass) | `data/addresses.parquet` |
 | `build_heatmap.py` | sve gore + WMS poplava i buke | `data/heatmap.geojson`, `data/zagreb_boundary.geojson` |
 | `warm_cache.py` | backend servisi | `data/cache_seed.json` (unaprijed popunjena predmemorija za demo adrese) |
@@ -125,7 +126,7 @@ Skraćeni stvarni odgovor `/api/profile` za Trg bana Josipa Jelačića 6 (5. 11.
    - **Poplave:** za tri scenarija iscrta kartu 101 × 101 px oko točke (WMS `GetMap`, ~1 : 25 000) i pročita boju središnjeg piksela, jer servis ne podržava upit za točku.
    - **Buka:** WMS `GetFeatureInfo` za 8 slojeva (4 izvora × L<sub>den</sub>, L<sub>night</sub>) u jednom upitu; ako je točka unutar zgrade, upiti na prstenu od 8 točaka na 15 m, pa na 30 m.
    - **Zrak:** najbliža od 6 gradskih postaja (udaljenost u EPSG:3765, HTRS96/TM) iz snimke; kao dodatak, istodobno i najviše 2,5 s svaki, državni indeks preko WFS-a i posljednja 24 sata s najbliže od 4 državne postaje DHMZ-a (upit sadrži samo naziv postaje; zastarjeli podaci se ne prikazuju).
-   - **Otpad i mobilnost:** udaljenosti do točaka iz snimke u memoriji (manje od 1 ms).
+   - **Otpad i mobilnost:** udaljenosti do točaka, linija i površina iz snimke u memoriji (prostorni indeks STRtree za staze i parkove; manje od 1 ms).
 4. Odgovori servisa spremaju se u predmemoriju po zaokruženoj koordinati (4 decimale, ~11 × 8 m), 30 dana; indeks zraka 1 sat. Ako servis ne odgovori, koristi se zadnji spremljeni odgovor (`stale: true`, s datumom), a ako ga nema, sloj je „nedostupan".
 5. EkoSkor je ponderirani prosjek prikazanih ocjena slojeva, preračunat na dostupne slojeve.
 
@@ -162,7 +163,7 @@ Skraćeni stvarni odgovor `/api/profile` za Trg bana Josipa Jelačića 6 (5. 11.
 
 ## 9. Tehnički doprinosi
 
-- **Spajanje podataka u jednu odluku:** 11 izvora od 5 izdavača (Hrvatske vode, Grad Zagreb, DHMZ, Državna geodetska uprava prema data.gov.hr za indeks zraka, OpenStreetMap) u jednom profilu, s izvorom uz svaki broj.
+- **Spajanje podataka u jednu odluku:** 13 izvora od 5 izdavača (Hrvatske vode, Grad Zagreb, DHMZ, Državna geodetska uprava prema data.gov.hr za indeks zraka, OpenStreetMap) u jednom profilu, s izvorom uz svaki broj.
 - **Upit za točku nad servisom koji ga ne podržava:** WMS poplava odbija `GetFeatureInfo`, pa se zona i dubina čitaju iz boje piksela prema legendi izdavača.
 - **Buka na pročelju:** karta buke nema vrijednosti unutar zgrada, gdje leži većina adresnih točaka. Pravilo najizloženijeg pročelja (Direktiva 2002/49/EZ) ispravlja ocjenu za takve adrese; primjer: Trg bana Jelačića 6, „tiho" → 65–69 dB.
 - **Javni servisi u pregledniku:** servis buke ne dopušta pozive iz preglednika (CORS), a servis poplava ne iscrtava u krupnom mjerilu. Backend ih zato poslužuje kao kartografske pločice s predmemorijom.

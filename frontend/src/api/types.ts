@@ -127,10 +127,26 @@ export interface Stop extends Place {
   lines: string[];
 }
 
+export interface BikePath extends Place {
+  category: string | null; // kategorija_id as published
+}
+
+/** Park, forest, public garden or nature reserve ≥ 0.5 ha; distance 0 = address inside it. */
+export interface GreenArea extends Place {
+  kind: 'park' | 'forest';
+  area_m2: number;
+}
+
+/** Score = 50 % transit + 25 % bike + 25 % green (docs/ekoskor.md). */
 export interface MobilityLayer extends LayerBase {
   stops_300m: number;
   stops_500m: number;
   nearest_stop: Stop;
+  nearest_bike_path: BikePath;
+  nearest_green: GreenArea;
+  transit_score: number;
+  bike_score: number;
+  green_score: number;
 }
 
 export interface UnavailableLayer {

@@ -8,6 +8,8 @@ from functools import cache
 
 import numpy as np
 import shapely
+import shapely.geometry
+import shapely.ops
 from pyproj import Transformer
 
 from app.paths import DATA_DIR
@@ -39,3 +41,27 @@ def _pilot_area() -> shapely.Geometry:
 
 def in_pilot_area(lat: float, lon: float) -> bool:
     return bool(shapely.contains_xy(_pilot_area(), lon, lat))
+
+
+def _lonlat_to_xy(lonlat: np.ndarray) -> np.ndarray:
+    return np.column_stack(to_htrs.transform(lonlat[:, 0], lonlat[:, 1]))
+
+
+def project_geometries(features: list[dict]) -> list[shapely.Geometry]:
+    """GeoJSON features (EPSG:4326) -> shapely geometries in EPSG:3765 metres."""
+    return [
+        shapely.transform(shapely.geometry.shape(f["geometry"]), _lonlat_to_xy) for f in features
+    ]
+
+
+def nearest_geometry(
+    tree: shapely.STRtree, geoms: list[shapely.Geometry], lat: float, lon: float
+) -> tuple[int, float, float, float]:
+    """(index, distance m, lat, lon of the nearest point on it) for lines or areas in
+    EPSG:3765; distance 0 if the point is inside an area."""
+    x, y = to_htrs.transform(lon, lat)
+    point = shapely.Point(x, y)
+    i = int(tree.nearest(point))
+    near = shapely.ops.nearest_points(geoms[i], point)[0]
+    near_lon, near_lat = from_htrs.transform(near.x, near.y)
+    return i, float(geoms[i].distance(point)), near_lat, near_lon

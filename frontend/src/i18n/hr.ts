@@ -114,11 +114,26 @@ export const hr = {
         worst: 'dvorište 5 km ili dalje i otok 1,5 km ili dalje',
       },
       {
-        layer: 'Zelena mobilnost (perona ZET-a)',
+        layer: 'Zelena mobilnost: javni prijevoz (50 % sloja), perona ZET-a',
         weight: '15 %',
         best: '3 ili više do 300 m',
         mid: 'barem jedan do 500 m',
         worst: 'nijedan do 500 m',
+      },
+      {
+        layer: 'Zelena mobilnost: bicikl (25 % sloja), najbliža biciklistička staza',
+        weight: '',
+        best: 'do 200 m',
+        mid: '600 m (linearno)',
+        worst: '1 km ili dalje',
+      },
+      {
+        layer:
+          'Zelena mobilnost: zelenilo za šetnju (25 % sloja), najbliži park ili šuma od barem 0,5 ha',
+        weight: '',
+        best: 'do 300 m (preporuka SZO-a za Europu) ili unutar njega',
+        mid: '650 m (linearno)',
+        worst: '1 km ili dalje',
       },
     ],
     lightsTitle: 'Semafor po sloju',
@@ -133,7 +148,7 @@ export const hr = {
     limits: [
       'Karte buke i poplava strateške su karte na razini grada; pojedina zgrada može odstupati.',
       'Zrak opisuje najbližu od 6 gradskih postaja, ne zrak točno na adresi, i podaci su iz 2023.',
-      'Zeleni otoci su iz OpenStreetMapa i popis možda nije potpun.',
+      'Zeleni otoci, parkovi i šume su iz OpenStreetMapa i popis možda nije potpun. Biciklističke staze su gradski podaci iz 2022.',
       'EkoSkor je orijentacija, a ne stručna procjena ni pravni, osiguravateljni ili savjet o nekretninama.',
     ],
     sourcesLink: 'Svi izvori podataka',
@@ -183,6 +198,8 @@ export const hr = {
     overlays: {
       flood: 'Poplave',
       noise: 'Buka',
+      parks: 'Parkovi i šume',
+      bike_paths: 'Biciklističke staze',
       air_stations: 'Mjerne postaje zraka',
       recycling_yards: 'Reciklažna dvorišta',
       green_islands: 'Zeleni otoci',
@@ -191,6 +208,8 @@ export const hr = {
     attribution: {
       flood: 'Hrvatske vode',
       noise: 'Grad Zagreb',
+      parks: '© OpenStreetMap contributors',
+      bike_paths: 'Grad Zagreb',
       air_stations: 'Grad Zagreb',
       recycling_yards: 'Grad Zagreb',
       green_islands: '© OpenStreetMap contributors',
@@ -200,6 +219,7 @@ export const hr = {
       flood: 'Poplave, scenarij male vjerojatnosti (najveći obuhvat). Boja je dubina vode:',
       noise:
         'Buka Lden, svi izvori. Gdje se izvori preklapaju, karta crta jedan od njih; kartica adrese uzima najglasniji.',
+      parks: 'Parkovi, šume, javni vrtovi i zaštićena područja od barem 0,5 ha',
     },
     overlayError: (name: string) => `${name}: dio sloja trenutno se ne može učitati.`,
     popup: {
@@ -351,6 +371,19 @@ export const hr = {
         const name = l.nearest_stop.name ?? '';
         return `${near} Najbliže: ${name} (${formatDistance(l.nearest_stop.distance_m)}).`;
       },
+      bike: (l: MobilityLayer) => {
+        const b = l.nearest_bike_path;
+        return `Biciklistička staza ${formatDistance(b.distance_m)}${b.name ? ` (${b.name})` : ''}.`;
+      },
+      green: (l: MobilityLayer) => {
+        const g = l.nearest_green;
+        const what = g.name ?? (g.kind === 'park' ? 'park' : 'šuma');
+        return g.distance_m === 0
+          ? `Adresa je unutar zelene površine: ${what}.`
+          : `Park ili šuma ${formatDistance(g.distance_m)}: ${what}.`;
+      },
+      parts: (l: MobilityLayer) =>
+        `Ocjena: javni prijevoz ${l.transit_score} (50 %), bicikl ${l.bike_score} (25 %), zelenilo za šetnju ${l.green_score} (25 %). Udaljenosti zračnom linijom.`,
     },
     unavailable: (l: UnavailableLayer) =>
       l.reason === 'timeout'

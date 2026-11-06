@@ -5,11 +5,14 @@ import pytest
 from app.services.ekoskor import (
     WEIGHTS,
     air_score,
+    bike_score,
     ekoskor,
     flood_score,
+    green_score,
     mobility_score,
     noise_score,
     status,
+    transit_score,
     waste_score,
 )
 
@@ -84,8 +87,39 @@ def test_waste(yard_m: float, island_m: float, expected: float) -> None:
         (0, 0, 0),
     ],
 )
-def test_mobility(n300: int, n500: int, expected: float) -> None:
-    assert mobility_score(n300, n500) == expected
+def test_transit(n300: int, n500: int, expected: float) -> None:
+    assert transit_score(n300, n500) == expected
+
+
+@pytest.mark.parametrize(
+    ("distance_m", "expected"),
+    [(0, 100), (200, 100), (600, 50), (1000, 0), (5000, 0)],
+)
+def test_bike(distance_m: float, expected: float) -> None:
+    assert bike_score(distance_m) == pytest.approx(expected)
+
+
+@pytest.mark.parametrize(
+    ("distance_m", "expected"),
+    [(0, 100), (300, 100), (650, 50), (1000, 0), (3000, 0)],  # 0 m = inside the park
+)
+def test_green(distance_m: float, expected: float) -> None:
+    assert green_score(distance_m) == pytest.approx(expected)
+
+
+@pytest.mark.parametrize(
+    ("n300", "n500", "bike_m", "green_m", "expected"),
+    [
+        (3, 3, 100, 100, 100),
+        (0, 0, 5000, 5000, 0),
+        (3, 3, 5000, 5000, 50),  # transit alone is half of the layer
+        (0, 0, 0, 0, 50),  # bike path and park, no stop within 500 m
+        (0, 1, 600, 650, 50),  # 0.5 * 50 + 0.25 * 50 + 0.25 * 50
+        (0, 1, 8272, 0, 50),  # Sljeme: one stop within 500 m, inside the nature park
+    ],
+)
+def test_mobility(n300: int, n500: int, bike_m: float, green_m: float, expected: float) -> None:
+    assert mobility_score(n300, n500, bike_m, green_m) == pytest.approx(expected)
 
 
 def test_all_layers_weighted_mean() -> None:

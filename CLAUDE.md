@@ -16,7 +16,7 @@ The user types an address and instantly sees **what it is like to live there** e
    - **Buka** — L<sub>den</sub> and L<sub>night</sub> in dB compared with WHO guidance (strategic noise maps).
    - **Zrak** — nearest monitoring station, distance, latest index, 30-day history chart.
    - **Otpad** — nearest recycling yard (*reciklažno dvorište*) and green island (*zeleni otok*), walking distance.
-   - **Zelena mobilnost** — ZET stops within 300 m / 500 m, nearest stop.
+   - **Zelena mobilnost** — ZET stops within 300 m / 500 m, nearest stop; nearest City bike path; nearest park or forest ≥ 0.5 ha (decision 2026-11-06).
 3. **Map** — address marker, 500 m radius, toggleable layers (flood zones, noise, stations, yards, stops).
 4. **AI assistant** — answers questions in Croatian (*"Mogu li spavati s otvorenim prozorom?"*, *"Treba li mi osiguranje od poplave?"*) **only from the fetched data**, citing the source of every claim. If the data is not there, it says so.
 5. **Compare two addresses** — two cards side by side, differences highlighted, AI summary in 3–4 sentences. This is the strongest demo moment.
@@ -197,7 +197,7 @@ Several of these datasets have **no licence stated** in their metadata. Note tha
 | Noise L<sub>den</sub>, loudest source | 25 % | ≤ 53 dB (WHO road traffic); no mapped band = below 50 dB | 54–64 dB | ≥ 65 dB |
 | Air, PM10 mean Jan–Aug 2023, nearest City station | 20 % | ≤ 15 µg/m³ (WHO 2021) | 27,5 µg/m³ (linear) | ≥ 40 µg/m³ (EU limit) |
 | Waste | 15 % | fixed yard ≤ 1 km and green island ≤ 300 m | mean of two linear parts: yard 1 → 5 km, island 300 m → 1,5 km | yard ≥ 5 km and island ≥ 1,5 km |
-| Mobility, ZET platforms | 15 % | ≥ 3 within 300 m | any within 500 m | none within 500 m |
+| Mobility = 50 % transit + 25 % bike + 25 % green (decision 2026-11-06) | 15 % | transit: ≥ 3 ZET platforms within 300 m; bike: City bike path ≤ 200 m; green: park/forest ≥ 0.5 ha ≤ 300 m or inside | transit: any platform within 500 m; bike and green linear | transit: none within 500 m; bike ≥ 1 km; green ≥ 1 km |
 
 Traffic light per layer from its sub-score: ≥ 67 green, 34–66 yellow, ≤ 33 red.
 

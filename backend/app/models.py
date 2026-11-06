@@ -155,10 +155,31 @@ class Stop(Place):
     lines: list[str]
 
 
+class BikePath(Place):
+    """Nearest City bike path; lat/lon is the nearest point on it."""
+
+    category: str | None  # kategorija_id as published, TODO(verify): codes not documented
+
+
+class GreenArea(Place):
+    """Nearest park, forest, public garden or nature reserve of at least 0.5 ha; lat/lon is
+    the nearest point of its outline, distance 0 if the address is inside it."""
+
+    kind: Literal["park", "forest"]
+    area_m2: int
+
+
 class MobilityLayer(LayerBase):
+    """Score = 50 % transit + 25 % bike + 25 % green (services/ekoskor.py)."""
+
     stops_300m: int  # ZET platforms (one per stop and direction)
     stops_500m: int
     nearest_stop: Stop
+    nearest_bike_path: BikePath
+    nearest_green: GreenArea
+    transit_score: int  # parts of the score, 0-100 each
+    bike_score: int
+    green_score: int
 
 
 class UnavailableLayer(BaseModel):

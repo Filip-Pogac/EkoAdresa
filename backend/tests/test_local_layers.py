@@ -11,9 +11,14 @@ from app.services.waste import waste_at
 from tests.reference_points import POINTS
 
 EXPECTED_MOBILITY = {  # (≤300 m, ≤500 m, nearest type, nearest distance m, score, status)
-    "savica": (2, 7, "bus", 57, 50, "yellow"),
+    "savica": (2, 7, "bus", 57, 75, "green"),
     "jelacic": (6, 16, "tram", 27, 100, "green"),
     "sljeme": (1, 3, "bus", 145, 50, "yellow"),
+}
+EXPECTED_BIKE_GREEN = {  # (bike path m, park/forest name, park m, transit, bike, green parts)
+    "savica": (186, "Park Marije Ružičke Strozzi", 153, 50, 100, 100),
+    "jelacic": (191, "Zrinjevac", 196, 100, 100, 100),
+    "sljeme": (8272, "Park prirode Medvednica", 0, 50, 0, 100),  # inside the nature park
 }
 EXPECTED_WASTE = {  # (nearest fixed yard, yard m, nearest mobile yard, island m), ±10 m
     "savica": ("RD KAJZERICA", 2636, "MRD TRNJE", 521),
@@ -37,6 +42,18 @@ def test_mobility(point: str) -> None:
     assert got == EXPECTED_MOBILITY[point]
     assert layer.source_id == stop.source_id == "zg-zet"
     assert stop.lines and stop.name
+    bike, green = layer.nearest_bike_path, layer.nearest_green
+    assert (
+        bike.distance_m,
+        green.name,
+        green.distance_m,
+        layer.transit_score,
+        layer.bike_score,
+        layer.green_score,
+    ) == EXPECTED_BIKE_GREEN[point]
+    assert bike.source_id == "zg-biciklisticke-staze"
+    assert green.source_id == "osm-parkovi"
+    assert green.area_m2 >= 5000
 
 
 @pytest.mark.parametrize("point", POINTS)

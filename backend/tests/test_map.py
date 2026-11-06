@@ -40,9 +40,16 @@ def quadrant_png() -> bytes:
 
 @pytest.mark.parametrize(
     ("name", "count"),
-    [("air_stations", 6), ("recycling_yards", 20), ("green_islands", 628), ("stops", 2148)],
+    [
+        ("air_stations", 6),
+        ("recycling_yards", 20),
+        ("green_islands", 628),
+        ("stops", 2148),
+        ("bike_paths", 2889),
+        ("parks", 1136),
+    ],
 )
-def test_point_layers(name: str, count: int) -> None:
+def test_map_layers(name: str, count: int) -> None:
     resp = api.get(f"/api/layers/{name}")
     assert resp.status_code == 200
     features = resp.json()["features"]

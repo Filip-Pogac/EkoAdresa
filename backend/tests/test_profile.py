@@ -38,7 +38,7 @@ def get_profile(point: str, **params: object) -> dict:
 
 EXPECTED = {  # status per layer at the reference points
     "savica": {"flood": "yellow", "noise": "red", "air": "yellow", "waste": "green",
-               "mobility": "yellow"},
+               "mobility": "green"},
     "jelacic": {"flood": "green", "noise": "red", "air": "green", "waste": "green",
                 "mobility": "green"},
     "sljeme": {"flood": "green", "noise": "green", "air": "green", "waste": "red",

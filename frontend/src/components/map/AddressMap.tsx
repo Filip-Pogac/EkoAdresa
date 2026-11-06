@@ -30,6 +30,8 @@ function circle([lon, lat]: [number, number], radiusM: number) {
 const OVERLAY_SOURCE_IDS = new Set<string>([
   'flood',
   'noise',
+  'parks',
+  'bike_paths',
   'air_stations',
   'recycling_yards',
   'green_islands',
@@ -169,7 +171,8 @@ export function AddressMap({ point, onPick }: AddressMapProps) {
     for (const id of active) {
       if (!map.getSource(id)) {
         addOverlay(map, id, hr.map.attribution[id]);
-        if (id !== 'flood' && id !== 'noise') map.on('click', id, (e) => showPopup(map, id, e));
+        // Popups only for points; a click on a park or bike path still picks that point
+        if (POINT_LAYER_IDS.includes(id)) map.on('click', id, (e) => showPopup(map, id, e));
       }
     }
     for (const layer of OVERLAY_SOURCE_IDS) {

@@ -1,5 +1,5 @@
 import { hr } from '../../i18n/hr';
-import { FLOOD_DEPTHS, NOISE_BANDS, POINT_STYLE, type OverlayId } from './overlays';
+import { FLOOD_DEPTHS, NOISE_BANDS, POINT_STYLE, SHAPE_STYLE, type OverlayId } from './overlays';
 
 function Swatches({ items }: { items: { label: string; colour: string }[] }) {
   return (
@@ -37,6 +37,30 @@ export function Legend({ active }: { active: Set<OverlayId> }) {
           <p className="text-sm">{hr.map.legend.noise}</p>
           <Swatches items={NOISE_BANDS} />
         </div>
+      )}
+      {(active.has('parks') || active.has('bike_paths')) && (
+        <ul className="flex flex-wrap gap-x-4 gap-y-1">
+          {active.has('parks') && (
+            <li className="flex items-center gap-2 text-sm">
+              <span
+                className="size-4 shrink-0 rounded-sm border border-border"
+                style={{ background: SHAPE_STYLE.parks.colour }}
+                aria-hidden="true"
+              />
+              {hr.map.legend.parks}
+            </li>
+          )}
+          {active.has('bike_paths') && (
+            <li className="flex items-center gap-2 text-sm">
+              <span
+                className="h-1 w-5 shrink-0 rounded-full"
+                style={{ background: SHAPE_STYLE.bike_paths.colour }}
+                aria-hidden="true"
+              />
+              {hr.map.overlays.bike_paths}
+            </li>
+          )}
+        </ul>
       )}
       {points.length > 0 && (
         <ul className="flex flex-wrap gap-x-4 gap-y-1">

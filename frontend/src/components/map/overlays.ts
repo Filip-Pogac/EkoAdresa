@@ -4,11 +4,20 @@ import type { maplibregl } from './maplibre';
 import { API_URL } from '../../api/client';
 
 export type OverlayId =
-  'flood' | 'noise' | 'air_stations' | 'recycling_yards' | 'green_islands' | 'stops';
+  | 'flood'
+  | 'noise'
+  | 'parks'
+  | 'bike_paths'
+  | 'air_stations'
+  | 'recycling_yards'
+  | 'green_islands'
+  | 'stops';
 
 export const OVERLAY_IDS: OverlayId[] = [
   'flood',
   'noise',
+  'parks',
+  'bike_paths',
   'air_stations',
   'recycling_yards',
   'green_islands',
@@ -33,9 +42,15 @@ export const NOISE_BANDS = [
   { label: '≥ 75 dB', colour: '#430A65' },
 ];
 
+/** Bike paths (lines) and parks and forests (areas). Not the traffic-light colours. */
+export const SHAPE_STYLE = {
+  parks: { colour: '#5E9C55', opacity: 0.35 },
+  bike_paths: { colour: '#2B5FA8', width: 2.5 },
+} as const;
+
 /** Point symbols. Not the traffic-light colours, which are reserved for layer status. */
 export const POINT_STYLE: Record<
-  Exclude<OverlayId, 'flood' | 'noise'>,
+  Exclude<OverlayId, 'flood' | 'noise' | 'parks' | 'bike_paths'>,
   { colour: string; radius: number }
 > = {
   air_stations: { colour: '#0E8C8C', radius: 8 },
@@ -66,6 +81,37 @@ export function addOverlay(map: maplibregl.Map, id: OverlayId, attribution: stri
       { id, type: 'raster', source: id, paint: { 'raster-opacity': RASTER_OPACITY } },
       'radius-fill',
     );
+    return;
+  }
+  if (id === 'parks' || id === 'bike_paths') {
+    map.addSource(id, { type: 'geojson', data: `${API_URL}/api/layers/${id}`, attribution });
+    // below the radius circle and the points, like the raster layers
+    if (id === 'parks')
+      map.addLayer(
+        {
+          id,
+          type: 'fill',
+          source: id,
+          paint: {
+            'fill-color': SHAPE_STYLE.parks.colour,
+            'fill-opacity': SHAPE_STYLE.parks.opacity,
+          },
+        },
+        'radius-fill',
+      );
+    else
+      map.addLayer(
+        {
+          id,
+          type: 'line',
+          source: id,
+          paint: {
+            'line-color': SHAPE_STYLE.bike_paths.colour,
+            'line-width': SHAPE_STYLE.bike_paths.width,
+          },
+        },
+        'radius-fill',
+      );
     return;
   }
   const style = POINT_STYLE[id];

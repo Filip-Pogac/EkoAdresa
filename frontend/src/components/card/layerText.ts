@@ -34,7 +34,12 @@ export function layerSentences(name: LayerName, layers: Layers): string[] {
       const l = layers.mobility;
       return l.status === 'unavailable'
         ? [hr.layers.unavailable(l)]
-        : [hr.layers.mobility.sentence(l)];
+        : [
+            hr.layers.mobility.sentence(l),
+            hr.layers.mobility.bike(l),
+            hr.layers.mobility.green(l),
+            hr.layers.mobility.parts(l),
+          ];
     }
   }
 }

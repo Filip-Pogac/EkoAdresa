@@ -1,7 +1,9 @@
-"""Point layers for the map (stations, recycling yards, green islands, ZET stops).
+"""Layers for the map: points (stations, recycling yards, green islands, ZET stops) and
+lines/areas (bike paths, parks and forests).
 
-Served from the committed snapshots in data/, trimmed to the properties the map shows, so
-the browser loads less than half of the raw files. Coordinates EPSG:4326.
+Served from the committed snapshots in data/. Points are trimmed to the properties the map
+shows, so the browser loads less than half of the raw files; the line/area files are
+already compact (scripts/fetch_green_mobility.py) and served as they are. EPSG:4326.
 """
 
 import json
@@ -12,6 +14,9 @@ from typing import Literal
 from app.paths import DATA_DIR
 
 PointLayer = Literal["air_stations", "recycling_yards", "green_islands", "stops"]
+ShapeLayer = Literal["bike_paths", "parks"]
+MapLayer = PointLayer | ShapeLayer
+SHAPE_FILES: dict[str, str] = {"bike_paths": "bike_paths.geojson", "parks": "parks.geojson"}
 
 # layer -> (data file, feature filter, properties kept besides source_id)
 _LAYERS: dict[str, tuple[str, Callable[[dict], bool], list[str]]] = {
@@ -45,6 +50,12 @@ def point_layer(name: PointLayer) -> dict:
             }
         )
     return {"type": "FeatureCollection", "features": features}
+
+
+@cache
+def shape_layer_bytes(name: ShapeLayer) -> bytes:
+    """data/bike_paths.geojson or data/parks.geojson as is, read once per process."""
+    return (DATA_DIR / SHAPE_FILES[name]).read_bytes()
 
 
 @cache
