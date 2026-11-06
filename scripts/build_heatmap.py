@@ -8,7 +8,8 @@ cell centre:
             SQLite cache (resumable), 2 requests at a time
 - air:      mean PM10 Jan-Aug 2023 of the nearest City station (data/air_history.parquet)
 - waste:    data/waste.geojson (fixed yards only, OSM green islands)
-- mobility: data/transit.geojson (platforms), data/bike_paths.geojson, data/parks.geojson
+- mobility: data/transit.geojson (platforms), data/bike_paths.geojson
+- green:    data/parks.geojson
 
 Grid: EPSG:3765 (HTRS96/TM, metres), cells aligned to multiples of 250 m, kept if the
 centre lies inside the City boundary (OpenStreetMap, ISO 3166-2 HR-21). Output in EPSG:4326.
@@ -38,7 +39,8 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "backend"))
 
 from app.cache import Cache, cached_fetch  # noqa: E402
-from app.services import ekoskor, flood, mobility, noise, wms  # noqa: E402
+from app.services import ekoskor, flood, green, mobility, noise, wms  # noqa: E402
+from app.services.geo import lines_or_areas  # noqa: E402
 
 DATA = ROOT / "data"
 RAW = DATA / "raw" / "heatmap"
@@ -248,7 +250,7 @@ def count_within(cells: np.ndarray, points: np.ndarray, radius_m: float) -> np.n
 def nearest_line_or_area_m(cells: np.ndarray, file: str) -> np.ndarray:
     """Distance from each cell centre to the nearest line or area of a snapshot (0 inside),
     with the same geometries as the address card (services/mobility.py)."""
-    _, geoms, tree = mobility.lines_or_areas(file)
+    _, geoms, tree = lines_or_areas(file)
     points = shapely.points(cells)
     (cell_idx, _), dist = tree.query_nearest(points, return_distance=True, all_matches=False)
     out = np.empty(len(cells))
@@ -286,7 +288,7 @@ def local_layers(grid: pd.DataFrame) -> pd.DataFrame:
             "stops_300m": count_within(cells, stop_xy, ekoskor.STOPS_NEAR_M),
             "stops_500m": count_within(cells, stop_xy, ekoskor.STOPS_WALK_M),
             "bike_m": nearest_line_or_area_m(cells, mobility.BIKE_FILE),
-            "green_m": nearest_line_or_area_m(cells, mobility.GREEN_FILE),
+            "green_m": nearest_line_or_area_m(cells, green.DATA_FILE),
             "air_station": [station_ids[i] for i in nearest_station],
             "pm10": [pm10[station_ids[i]] for i in nearest_station],
         }
@@ -332,11 +334,9 @@ async def main() -> None:
             "air": ekoskor.air_score(loc["pm10"]),
             "waste": ekoskor.waste_score(loc["yard_m"], loc["island_m"]),
             "mobility": ekoskor.mobility_score(
-                int(loc["stops_300m"]),
-                int(loc["stops_500m"]),
-                round(loc["bike_m"]),
-                round(loc["green_m"]),
+                int(loc["stops_300m"]), int(loc["stops_500m"]), round(loc["bike_m"])
             ),
+            "green": ekoskor.green_score(round(loc["green_m"])),
         }
         # Rounded sub-scores, as on the address card (app/services/profile.py)
         shown = {k: None if v is None else round(v) for k, v in scores.items()}

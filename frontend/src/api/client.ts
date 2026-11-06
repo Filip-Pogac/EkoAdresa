@@ -16,6 +16,7 @@ export interface HeatmapCell {
   air: number;
   waste: number;
   mobility: number;
+  green: number;
 }
 
 export interface HeatmapCollection {

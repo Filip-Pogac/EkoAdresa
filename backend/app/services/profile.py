@@ -1,4 +1,4 @@
-"""Environmental profile of a point: the five layers in parallel, then EkoSkor.
+"""Environmental profile of a point: the six layers in parallel, then EkoSkor.
 
 Each layer gets LAYER_TIMEOUT_S; a layer that fails or times out is returned as
 UnavailableLayer and the other layers are unaffected (CLAUDE.md §1.3, graceful
@@ -16,7 +16,7 @@ import httpx2 as httpx
 
 from app.cache import Cache
 from app.models import Layers, Location, Profile, UnavailableLayer
-from app.services import air, ekoskor, flood, mobility, noise, waste
+from app.services import air, ekoskor, flood, green, mobility, noise, waste
 
 LAYER_TIMEOUT_S = 4.0
 SOURCE_IDS = {
@@ -25,6 +25,7 @@ SOURCE_IDS = {
     "air": air.SOURCE_ID,
     "waste": waste.SOURCE_ID,
     "mobility": mobility.SOURCE_ID,
+    "green": green.SOURCE_ID,
 }
 
 log = logging.getLogger(__name__)
@@ -51,14 +52,17 @@ async def _local(fn: Callable[[float, float], L], lat: float, lon: float) -> L:
 async def build_profile(
     client: httpx.AsyncClient, cache: Cache, lat: float, lon: float, address: str | None
 ) -> Profile:
-    flood_l, noise_l, air_l, waste_l, mobility_l = await asyncio.gather(
+    flood_l, noise_l, air_l, waste_l, mobility_l, green_l = await asyncio.gather(
         _layer("flood", lambda: flood.flood_at(client, cache, lat, lon)),
         _layer("noise", lambda: noise.noise_at(client, cache, lat, lon)),
         _layer("air", lambda: air.air_at(client, cache, lat, lon)),
         _layer("waste", lambda: _local(waste.waste_at, lat, lon)),
         _layer("mobility", lambda: _local(mobility.mobility_at, lat, lon)),
+        _layer("green", lambda: _local(green.green_at, lat, lon)),
     )
-    layers = Layers(flood=flood_l, noise=noise_l, air=air_l, waste=waste_l, mobility=mobility_l)
+    layers = Layers(
+        flood=flood_l, noise=noise_l, air=air_l, waste=waste_l, mobility=mobility_l, green=green_l
+    )
     scores: dict[ekoskor.Layer, float | None] = {
         name: getattr(layer, "score", None)  # UnavailableLayer has no score
         for name, layer in layers  # type: ignore[misc]

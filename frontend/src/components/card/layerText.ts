@@ -1,7 +1,7 @@
 import type { LayerName, Layers } from '../../api/types';
 import { hr } from '../../i18n/hr';
 
-export const LAYER_ORDER: LayerName[] = ['flood', 'noise', 'air', 'waste', 'mobility'];
+export const LAYER_ORDER: LayerName[] = ['flood', 'noise', 'air', 'waste', 'mobility', 'green'];
 
 /** Plain Croatian sentences for a layer: [main sentence, ...notes (data age etc.)]. */
 export function layerSentences(name: LayerName, layers: Layers): string[] {
@@ -34,12 +34,13 @@ export function layerSentences(name: LayerName, layers: Layers): string[] {
       const l = layers.mobility;
       return l.status === 'unavailable'
         ? [hr.layers.unavailable(l)]
-        : [
-            hr.layers.mobility.sentence(l),
-            hr.layers.mobility.bike(l),
-            hr.layers.mobility.green(l),
-            hr.layers.mobility.parts(l),
-          ];
+        : [hr.layers.mobility.sentence(l), hr.layers.mobility.bike(l), hr.layers.mobility.parts(l)];
+    }
+    case 'green': {
+      const l = layers.green;
+      return l.status === 'unavailable'
+        ? [hr.layers.unavailable(l)]
+        : [hr.layers.green.sentence(l), hr.layers.green.note()];
     }
   }
 }

@@ -170,16 +170,20 @@ class GreenArea(Place):
 
 
 class MobilityLayer(LayerBase):
-    """Score = 50 % transit + 25 % bike + 25 % green (services/ekoskor.py)."""
+    """Score = 2/3 transit + 1/3 bike (services/ekoskor.py)."""
 
     stops_300m: int  # ZET platforms (one per stop and direction)
     stops_500m: int
     nearest_stop: Stop
     nearest_bike_path: BikePath
-    nearest_green: GreenArea
     transit_score: int  # parts of the score, 0-100 each
     bike_score: int
-    green_score: int
+
+
+class GreenLayer(LayerBase):
+    """Zelenilo: nearest park or forest of at least 0.5 ha (services/green.py)."""
+
+    nearest: GreenArea
 
 
 class UnavailableLayer(BaseModel):
@@ -196,6 +200,7 @@ class Layers(BaseModel):
     air: AirLayer | UnavailableLayer
     waste: WasteLayer | UnavailableLayer
     mobility: MobilityLayer | UnavailableLayer
+    green: GreenLayer | UnavailableLayer
 
 
 class Location(BaseModel):
@@ -211,7 +216,7 @@ class Profile(BaseModel):
     generated_at: datetime
 
 
-LayerName = Literal["flood", "noise", "air", "waste", "mobility"]
+LayerName = Literal["flood", "noise", "air", "waste", "mobility", "green"]
 
 
 class LayerDiff(BaseModel):

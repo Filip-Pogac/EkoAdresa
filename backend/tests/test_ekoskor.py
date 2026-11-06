@@ -21,6 +21,17 @@ def test_weights_sum_to_one() -> None:
     assert sum(WEIGHTS.values()) == pytest.approx(1.0)
 
 
+def test_six_layer_weights() -> None:  # decision 2026-11-06
+    assert WEIGHTS == {
+        "flood": 0.20,
+        "noise": 0.20,
+        "air": 0.20,
+        "waste": 0.15,
+        "mobility": 0.15,
+        "green": 0.10,
+    }
+
+
 @pytest.mark.parametrize(
     ("zone", "expected"), [("none", 100), ("low", 50), ("medium", 0), ("high", 0)]
 )
@@ -108,24 +119,25 @@ def test_green(distance_m: float, expected: float) -> None:
 
 
 @pytest.mark.parametrize(
-    ("n300", "n500", "bike_m", "green_m", "expected"),
+    ("n300", "n500", "bike_m", "expected"),
     [
-        (3, 3, 100, 100, 100),
-        (0, 0, 5000, 5000, 0),
-        (3, 3, 5000, 5000, 50),  # transit alone is half of the layer
-        (0, 0, 0, 0, 50),  # bike path and park, no stop within 500 m
-        (0, 1, 600, 650, 50),  # 0.5 * 50 + 0.25 * 50 + 0.25 * 50
-        (0, 1, 8272, 0, 50),  # Sljeme: one stop within 500 m, inside the nature park
+        (3, 3, 100, 100),
+        (0, 0, 5000, 0),
+        (3, 3, 5000, 200 / 3),  # transit alone is two thirds of the layer
+        (0, 0, 0, 100 / 3),  # bike path only, no stop within 500 m
+        (0, 1, 600, 50),  # 2/3 * 50 + 1/3 * 50
+        (0, 0, 920, 10 / 3),  # middle of Maksimir: no stop within 500 m, bike path 920 m
     ],
 )
-def test_mobility(n300: int, n500: int, bike_m: float, green_m: float, expected: float) -> None:
-    assert mobility_score(n300, n500, bike_m, green_m) == pytest.approx(expected)
+def test_mobility(n300: int, n500: int, bike_m: float, expected: float) -> None:
+    assert mobility_score(n300, n500, bike_m) == pytest.approx(expected)
 
 
 def test_all_layers_weighted_mean() -> None:
-    scores = {"flood": 100.0, "noise": 0.0, "air": 50.0, "waste": 100.0, "mobility": 50.0}
-    # 25 + 0 + 10 + 15 + 7.5 = 57.5 -> rounded half up -> 58
-    assert ekoskor(scores) == 58  # type: ignore[arg-type]
+    scores = {"flood": 100.0, "noise": 0.0, "air": 50.0, "waste": 100.0, "mobility": 50.0,
+              "green": 100.0}  # fmt: skip
+    # 20 + 0 + 10 + 15 + 7.5 + 10 = 62.5 -> rounded half up -> 63
+    assert ekoskor(scores) == 63  # type: ignore[arg-type]
 
 
 def test_extremes() -> None:
@@ -134,29 +146,34 @@ def test_extremes() -> None:
 
 
 def test_missing_layer_renormalises() -> None:
-    # air unavailable: (25*100 + 25*0 + 15*100 + 15*100) / 0.80 = 5500 / 80 = 68.75 -> 69
-    scores = {"flood": 100.0, "noise": 0.0, "air": None, "waste": 100.0, "mobility": 100.0}
-    assert ekoskor(scores) == 69  # type: ignore[arg-type]
+    # air unavailable: (20*100 + 20*0 + 15*100 + 15*100 + 10*0) / 0.80 = 5000 / 80 = 62.5 -> 63
+    scores = {"flood": 100.0, "noise": 0.0, "air": None, "waste": 100.0, "mobility": 100.0,
+              "green": 0.0}  # fmt: skip
+    assert ekoskor(scores) == 63  # type: ignore[arg-type]
 
 
 def test_rounds_half_up() -> None:
-    # 0 + 25 + 10 + 7.5 + 0 = 42.5 -> 43 (Python's round() would give 42)
-    scores = {"flood": 0.0, "noise": 100.0, "air": 50.0, "waste": 50.0, "mobility": 0.0}
+    # 0 + 20 + 10 + 7.5 + 0 + 5 = 42.5 -> 43 (Python's round() would give 42)
+    scores = {"flood": 0.0, "noise": 100.0, "air": 50.0, "waste": 50.0, "mobility": 0.0,
+              "green": 50.0}  # fmt: skip
     assert ekoskor(scores) == 43  # type: ignore[arg-type]
 
 
 def test_three_layers_is_enough_two_is_not() -> None:
-    three = {"flood": 100.0, "noise": 100.0, "air": None, "waste": 0.0, "mobility": None}
-    # (2500 + 2500 + 0) / 65 = 76.9 -> 77
-    assert ekoskor(three) == 77  # type: ignore[arg-type]
-    two = {"flood": 100.0, "noise": 100.0, "air": None, "waste": None, "mobility": None}
+    three = {"flood": 100.0, "noise": 100.0, "air": None, "waste": 0.0, "mobility": None,
+             "green": None}  # fmt: skip
+    # (2000 + 2000 + 0) / 55 = 72.7 -> 73
+    assert ekoskor(three) == 73  # type: ignore[arg-type]
+    two = {"flood": 100.0, "noise": 100.0, "air": None, "waste": None, "mobility": None,
+           "green": None}  # fmt: skip
     assert ekoskor(two) is None  # type: ignore[arg-type]
 
 
 @pytest.mark.parametrize(
     ("score", "expected"),
-    [(100, "green"), (67, "green"), (66.9, "yellow"), (50, "yellow"), (34, "yellow"),
-     (33.9, "red"), (0, "red")],
+    [(100, "green"), (67, "green"), (66.7, "green"), (66.4, "yellow"), (50, "yellow"),
+     (34, "yellow"), (33.6, "yellow"), (33.4, "red"), (0, "red")],
 )  # fmt: skip
 def test_status_in_thirds(score: float, expected: str) -> None:
+    # status follows the rounded sub-score the card shows: 66.7 is shown as 67 -> green
     assert status(score) == expected

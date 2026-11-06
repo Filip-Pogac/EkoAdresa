@@ -1,7 +1,7 @@
 /** API response types. Mirror backend/app/models.py; keep both in sync. Coordinates EPSG:4326. */
 
 export type Status = 'green' | 'yellow' | 'red' | 'unavailable';
-export type LayerName = 'flood' | 'noise' | 'air' | 'waste' | 'mobility';
+export type LayerName = 'flood' | 'noise' | 'air' | 'waste' | 'mobility' | 'green';
 
 export interface GeocodeResult {
   label: string;
@@ -137,16 +137,19 @@ export interface GreenArea extends Place {
   area_m2: number;
 }
 
-/** Score = 50 % transit + 25 % bike + 25 % green (docs/ekoskor.md). */
+/** Score = 2/3 transit + 1/3 bike (docs/ekoskor.md). */
 export interface MobilityLayer extends LayerBase {
   stops_300m: number;
   stops_500m: number;
   nearest_stop: Stop;
   nearest_bike_path: BikePath;
-  nearest_green: GreenArea;
   transit_score: number;
   bike_score: number;
-  green_score: number;
+}
+
+/** Zelenilo: nearest park or forest of at least 0.5 ha. */
+export interface GreenLayer extends LayerBase {
+  nearest: GreenArea;
 }
 
 export interface UnavailableLayer {
@@ -161,6 +164,7 @@ export interface Layers {
   air: AirLayer | UnavailableLayer;
   waste: WasteLayer | UnavailableLayer;
   mobility: MobilityLayer | UnavailableLayer;
+  green: GreenLayer | UnavailableLayer;
 }
 
 export interface Profile {

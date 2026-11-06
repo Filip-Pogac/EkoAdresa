@@ -3,6 +3,7 @@ import type {
   AirLayer,
   DhmzReading,
   FloodLayer,
+  GreenLayer,
   MobilityLayer,
   NoiseLayer,
   NoiseSource,
@@ -75,7 +76,7 @@ export const hr = {
     title: 'Kako računamo EkoSkor?',
     close: 'Zatvori',
     intro:
-      'EkoSkor je broj od 0 do 100. Svaki od pet slojeva dobiva ocjenu od 0 do 100, a EkoSkor je njihov ponderirani prosjek, zaokružen na cijeli broj. Ocjene slojeva prikazane su na kartici, pa EkoSkor svatko može sam izračunati.',
+      'EkoSkor je broj od 0 do 100. Svaki od šest slojeva dobiva ocjenu od 0 do 100, a EkoSkor je njihov ponderirani prosjek, zaokružen na cijeli broj. Ocjene slojeva prikazane su na kartici, pa EkoSkor svatko može sam izračunati.',
     tableCaption: 'Ponder i pragovi po slojevima',
     columns: {
       layer: 'Sloj',
@@ -87,14 +88,14 @@ export const hr = {
     rows: [
       {
         layer: 'Poplave',
-        weight: '25 %',
+        weight: '20 %',
         best: 'izvan svih zona opasnosti',
         mid: 'zona male vjerojatnosti',
         worst: 'zona srednje ili velike vjerojatnosti',
       },
       {
         layer: 'Buka (Lden, najglasniji izvor)',
-        weight: '25 %',
+        weight: '20 %',
         best: 'do 53 dB (smjernica SZO)',
         mid: '54–64 dB',
         worst: '65 dB ili više',
@@ -114,23 +115,22 @@ export const hr = {
         worst: 'dvorište 5 km ili dalje i otok 1,5 km ili dalje',
       },
       {
-        layer: 'Zelena mobilnost: javni prijevoz (50 % sloja), perona ZET-a',
+        layer: 'Zelena mobilnost: javni prijevoz (2/3 sloja), perona ZET-a',
         weight: '15 %',
         best: '3 ili više do 300 m',
         mid: 'barem jedan do 500 m',
         worst: 'nijedan do 500 m',
       },
       {
-        layer: 'Zelena mobilnost: bicikl (25 % sloja), najbliža biciklistička staza',
+        layer: 'Zelena mobilnost: bicikl (1/3 sloja), najbliža biciklistička staza',
         weight: '',
         best: 'do 200 m',
         mid: '600 m (linearno)',
         worst: '1 km ili dalje',
       },
       {
-        layer:
-          'Zelena mobilnost: zelenilo za šetnju (25 % sloja), najbliži park ili šuma od barem 0,5 ha',
-        weight: '',
+        layer: 'Zelenilo: najbliži park ili šuma od barem 0,5 ha',
+        weight: '10 %',
         best: 'do 300 m (preporuka SZO-a za Europu) ili unutar njega',
         mid: '650 m (linearno)',
         worst: '1 km ili dalje',
@@ -183,8 +183,8 @@ export const hr = {
       'Napomena: karta grada za buku još ne primjenjuje pravilo pročelja zgrade, pa ćelije sa središtem unutar zgrade mogu izgledati tiše. Kartica adrese ga primjenjuje.',
     noPopulation: 'Podaci o broju stanovnika po ćeliji nisu dostupni, pa ih ne prikazujemo.',
     popup: (score: number) => `EkoSkor ${score}`,
-    popupLayers: (s: Record<'flood' | 'noise' | 'air' | 'waste' | 'mobility', number>) =>
-      `Poplave ${s.flood} · Buka ${s.noise} · Zrak ${s.air} · Otpad ${s.waste} · Mobilnost ${s.mobility}`,
+    popupLayers: (s: Record<'flood' | 'noise' | 'air' | 'waste' | 'mobility' | 'green', number>) =>
+      `Poplave ${s.flood} · Buka ${s.noise} · Zrak ${s.air} · Otpad ${s.waste} · Mobilnost ${s.mobility} · Zelenilo ${s.green}`,
     openProfile: 'Otvori profil ove točke',
   },
   map: {
@@ -268,8 +268,8 @@ export const hr = {
     name: 'EkoSkor',
     outOf: 'od 100',
     aria: (score: number) => `EkoSkor ${score} od 100`,
-    missing: 'Premalo dostupnih slojeva za EkoSkor (potrebna su barem 3 od 5).',
-    explain: 'Ponderirani prosjek pet slojeva ispod.',
+    missing: 'Premalo dostupnih slojeva za EkoSkor (potrebna su barem 3 od 6).',
+    explain: 'Ponderirani prosjek šest slojeva ispod.',
   },
   status: {
     green: 'Dobro',
@@ -375,15 +375,20 @@ export const hr = {
         const b = l.nearest_bike_path;
         return `Biciklistička staza ${formatDistance(b.distance_m)}${b.name ? ` (${b.name})` : ''}.`;
       },
-      green: (l: MobilityLayer) => {
-        const g = l.nearest_green;
+      parts: (l: MobilityLayer) =>
+        `Ocjena: javni prijevoz ${l.transit_score} (2/3), bicikl ${l.bike_score} (1/3). Udaljenosti zračnom linijom.`,
+    },
+    green: {
+      title: 'Zelenilo',
+      sentence: (l: GreenLayer) => {
+        const g = l.nearest;
         const what = g.name ?? (g.kind === 'park' ? 'park' : 'šuma');
         return g.distance_m === 0
           ? `Adresa je unutar zelene površine: ${what}.`
-          : `Park ili šuma ${formatDistance(g.distance_m)}: ${what}.`;
+          : `Najbliži park ili šuma ${formatDistance(g.distance_m)} (zračnom linijom): ${what}.`;
       },
-      parts: (l: MobilityLayer) =>
-        `Ocjena: javni prijevoz ${l.transit_score} (50 %), bicikl ${l.bike_score} (25 %), zelenilo za šetnju ${l.green_score} (25 %). Udaljenosti zračnom linijom.`,
+      note: () =>
+        'Parkovi, šume, javni vrtovi i zaštićena područja od barem 0,5 ha. SZO za Europu preporučuje takvu površinu do 300 m od stana.',
     },
     unavailable: (l: UnavailableLayer) =>
       l.reason === 'timeout'

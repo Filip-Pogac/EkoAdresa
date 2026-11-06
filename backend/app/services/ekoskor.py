@@ -1,4 +1,4 @@
-"""EkoSkor v1: 0-100 score of an address from five layer sub-scores.
+"""EkoSkor v1: 0-100 score of an address from six layer sub-scores.
 
 Formula and thresholds: CLAUDE.md §2.4 and docs/ekoskor.md. Changing a threshold or weight
 requires updating tests/test_ekoskor.py and docs/ekoskor.md in the same commit.
@@ -11,14 +11,16 @@ import math
 from typing import Literal
 
 FloodZone = Literal["high", "medium", "low", "none"]
-Layer = Literal["flood", "noise", "air", "waste", "mobility"]
+Layer = Literal["flood", "noise", "air", "waste", "mobility", "green"]
 
+# Six layers since 2026-11-06 (decision): green space split off from green mobility.
 WEIGHTS: dict[Layer, float] = {
-    "flood": 0.25,
-    "noise": 0.25,
+    "flood": 0.20,
+    "noise": 0.20,
     "air": 0.20,
     "waste": 0.15,
     "mobility": 0.15,
+    "green": 0.10,
 }
 MIN_LAYERS = 3
 
@@ -39,11 +41,12 @@ ISLAND_FAR_M = 1500
 STOPS_NEAR_M = 300
 STOPS_WALK_M = 500
 STOPS_GOOD_COUNT = 3
-# Green mobility = 50 % public transport + 25 % cycling + 25 % walking & green (decision
-# 2026-11-06). Cycling: nearest City bike path, 100 at ≤ 200 m -> 0 at ≥ 1 km. Walking &
-# green: nearest park, forest, public garden or nature reserve of at least 0.5 ha, 100 at
-# ≤ 300 m (WHO Europe 2017: green space of 0.5-1 ha within 300 m) -> 0 at ≥ 1 km.
-MOBILITY_PARTS = {"transit": 0.50, "bike": 0.25, "green": 0.25}
+# Green mobility = 2/3 public transport + 1/3 cycling (decision 2026-11-06). Cycling:
+# nearest City bike path, 100 at ≤ 200 m -> 0 at ≥ 1 km.
+# Green space (own layer): nearest park, forest, public garden or nature reserve of at
+# least 0.5 ha, 100 at ≤ 300 m or inside (WHO Europe 2017: green space of 0.5-1 ha within
+# 300 m) -> 0 at ≥ 1 km.
+MOBILITY_PARTS = {"transit": 2 / 3, "bike": 1 / 3}
 BIKE_NEAR_M = 200
 BIKE_FAR_M = 1000
 GREEN_NEAR_M = 300
@@ -106,14 +109,11 @@ def green_score(green_m: float) -> float:
     return _linear_down(green_m, GREEN_NEAR_M, GREEN_FAR_M)
 
 
-def mobility_score(stops_300m: int, stops_500m: int, bike_path_m: float, green_m: float) -> float:
-    """50 % public transport + 25 % cycling + 25 % walking & green."""
-    parts = {
-        "transit": transit_score(stops_300m, stops_500m),
-        "bike": bike_score(bike_path_m),
-        "green": green_score(green_m),
-    }
-    return sum(MOBILITY_PARTS[k] * v for k, v in parts.items())
+def mobility_score(stops_300m: int, stops_500m: int, bike_path_m: float) -> float:
+    """2/3 public transport + 1/3 cycling."""
+    return MOBILITY_PARTS["transit"] * transit_score(stops_300m, stops_500m) + MOBILITY_PARTS[
+        "bike"
+    ] * bike_score(bike_path_m)
 
 
 # Traffic light per layer from its sub-score, in equal thirds. For the step layers (flood,
@@ -123,6 +123,8 @@ STATUS_YELLOW_MIN = 34
 
 
 def status(score: float) -> Literal["green", "yellow", "red"]:
+    """From the sub-score as the card shows it (layers use round()), so 66.7 -> 67 -> green."""
+    score = round(score)
     if score >= STATUS_GREEN_MIN:
         return "green"
     if score >= STATUS_YELLOW_MIN:

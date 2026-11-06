@@ -8,7 +8,7 @@ Rješenje za **Datathon Portala otvorenih podataka 2026**, izazov B: *Okoliš i 
 - **API (OpenAPI):** <https://ekoadresa-api.vercel.app/docs>
 - **Izvorni kod:** <https://github.com/Filip-Pogac/EkoAdresa> (licencija MIT)
 
-![Kartica adrese: EkoSkor, pet slojeva sa semaforom i karta sa slojem buke](docs/screenshots/04-sloj-buke.png)
+![Kartica adrese: EkoSkor, slojevi sa semaforom i karta sa slojem buke](docs/screenshots/04-sloj-buke.png)
 
 ## Problem i korisnici
 
@@ -22,7 +22,7 @@ Podaci o okolišu već postoje u javnim servisima: karte opasnosti od poplava Hr
 
 | | |
 |---|---|
-| **Pretraga adrese** s dovršavanjem upisa (i tipkovnicom) i tri primjera | **Kartica adrese:** EkoSkor i pet slojeva (poplave, buka, zrak, otpad, zelena mobilnost), svaki sa semaforom, tekstom i ikonom (ne samo bojom), jednom rečenicom na hrvatskom, izvorom i datumom podataka |
+| **Pretraga adrese** s dovršavanjem upisa (i tipkovnicom) i tri primjera | **Kartica adrese:** EkoSkor i šest slojeva (poplave, buka, zrak, otpad, zelena mobilnost, zelenilo), svaki sa semaforom, tekstom i ikonom (ne samo bojom), jednom rečenicom na hrvatskom, izvorom i datumom podataka |
 | **Karta** s krugom od 500 m i slojevima koji se uključuju: poplave, buka, parkovi i šume, biciklističke staze, mjerne postaje, reciklažna dvorišta, zeleni otoci, stajališta ZET-a; **klik na kartu** daje EkoSkor bilo koje točke | **Graf mjerenja zraka** po danima uz smjernice SZO-a |
 | **Usporedba dviju adresa** s oznakom „Bolje" po sloju | **Za grad:** EkoSkor na mreži 250 × 250 m za cijeli Zagreb |
 | **Kako računamo?** cijela formula i pragovi, javno | **Izvori:** svi skupovi s izdavačima, licencijama i poveznicama |
@@ -45,7 +45,8 @@ Ostale snimke zaslona: [docs/screenshots/](docs/screenshots/).
 | Buka | Strateška karta buke Grada Zagreba | Grad Zagreb | OGC WMS, uživo |
 | Zrak | Mjerne postaje i mjerenja kvalitete zraka 2023.; Indeks kvalitete zraka u RH (INSPIRE); mjerenja državnih postaja, zadnja 24 sata | Grad Zagreb; data.gov.hr; DHMZ | data.zagreb.hr / data.gov.hr; OGC WFS uživo; meteo.hr uživo |
 | Otpad | Reciklažna dvorišta; zeleni otoci | Grad Zagreb; OpenStreetMap | data.zagreb.hr; Overpass API |
-| Zelena mobilnost | Autobusna i tramvajska stajališta ZET; biciklističke staze; parkovi i šume | Grad Zagreb; OpenStreetMap | data.zagreb.hr; Overpass API |
+| Zelena mobilnost | Autobusna i tramvajska stajališta ZET; biciklističke staze | Grad Zagreb | data.zagreb.hr |
+| Zelenilo | Parkovi, šume, javni vrtovi i zaštićena područja | OpenStreetMap | Overpass API |
 | Adrese, granica | Adrese i granica Grada Zagreba | OpenStreetMap | Overpass API |
 
 Potpun popis s poveznicama, licencijama i datumima: **[docs/data-sources.md](docs/data-sources.md)**. Metodologija EkoSkora: **[docs/ekoskor.md](docs/ekoskor.md)**.

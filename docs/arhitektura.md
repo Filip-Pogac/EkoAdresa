@@ -60,7 +60,7 @@ Python 3.11+, FastAPI, pydantic, httpx2, Shapely, pyproj, NumPy, pandas, PyArrow
 | `services/dhmz.py` | Posljednja 24 sata PM10, PM2,5 i NO₂ na najbližoj državnoj postaji DHMZ-a (nevalidirano) s vlastitim stanjem prema dnevnim smjernicama SZO-a; ne ulazi u ocjenu |
 | `services/waste.py`, `services/mobility.py` | Najbliža dvorišta i zeleni otoci, broj perona ZET-a (udaljenosti u EPSG:3765) |
 | `services/ekoskor.py` | Ocjene slojeva i EkoSkor prema [ekoskor.md](ekoskor.md) |
-| `services/profile.py` | Svih pet slojeva usporedno, 4 s po sloju, EkoSkor |
+| `services/profile.py` | Svih šest slojeva usporedno, 4 s po sloju, EkoSkor |
 | `services/wms.py` | OGC WMS klijent (GetMap, GetFeatureInfo), ponavljanje neuspjelih upita |
 | `services/tiles.py` | Kartografske pločice poplava i buke za kartu (posrednik s predmemorijom) |
 | `services/geocode.py` | Pretraga lokalnog indeksa adresa |
@@ -90,7 +90,7 @@ Sve krajnje točke su `GET`, odgovori su JSON (osim pločica), koordinate su EPS
 |---|---|---|
 | `/api/health` | — | stanje servisa |
 | `/api/geocode` | `q` (≥ 3 znaka), `limit` | prijedlozi adresa, ulica i naselja u Zagrebu |
-| `/api/profile` | `lat`, `lon`, `address` (neobavezno, ne sprema se) | `Profile`: lokacija, EkoSkor, 5 slojeva, vrijeme izrade |
+| `/api/profile` | `lat`, `lon`, `address` (neobavezno, ne sprema se) | `Profile`: lokacija, EkoSkor, 6 slojeva, vrijeme izrade |
 | `/api/compare` | `a_lat`, `a_lon`, `b_lat`, `b_lon` | dva profila, razlika EkoSkora, bolja strana po sloju |
 | `/api/sources` | — | registar izvora |
 | `/api/layers/{name}` | `air_stations`, `recycling_yards`, `green_islands`, `stops` | GeoJSON točke za kartu |
@@ -122,11 +122,11 @@ Skraćeni stvarni odgovor `/api/profile` za Trg bana Josipa Jelačića 6 (5. 11.
 
 1. Korisnik upiše adresu; frontend nakon 200 ms zatraži `/api/geocode`, a backend pretražuje lokalni indeks od 35 655 adresa iz OpenStreetMapa (oko 3 ms, bez vanjskog servisa).
 2. Odabirom adrese frontend otvara `/adresa?lat=…&lon=…` i traži `/api/profile`.
-3. Backend provjeri je li točka unutar Grada Zagreba, pa **istodobno** pokreće pet slojeva, svaki s rokom od 4 s:
+3. Backend provjeri je li točka unutar Grada Zagreba, pa **istodobno** pokreće šest slojeva, svaki s rokom od 4 s:
    - **Poplave:** za tri scenarija iscrta kartu 101 × 101 px oko točke (WMS `GetMap`, ~1 : 25 000) i pročita boju središnjeg piksela, jer servis ne podržava upit za točku.
    - **Buka:** WMS `GetFeatureInfo` za 8 slojeva (4 izvora × L<sub>den</sub>, L<sub>night</sub>) u jednom upitu; ako je točka unutar zgrade, upiti na prstenu od 8 točaka na 15 m, pa na 30 m.
    - **Zrak:** najbliža od 6 gradskih postaja (udaljenost u EPSG:3765, HTRS96/TM) iz snimke; kao dodatak, istodobno i najviše 2,5 s svaki, državni indeks preko WFS-a i posljednja 24 sata s najbliže od 4 državne postaje DHMZ-a (upit sadrži samo naziv postaje; zastarjeli podaci se ne prikazuju).
-   - **Otpad i mobilnost:** udaljenosti do točaka, linija i površina iz snimke u memoriji (prostorni indeks STRtree za staze i parkove; manje od 1 ms).
+   - **Otpad, mobilnost i zelenilo:** udaljenosti do točaka, linija i površina iz snimke u memoriji (prostorni indeks STRtree za staze i parkove; manje od 1 ms).
 4. Odgovori servisa spremaju se u predmemoriju po zaokruženoj koordinati (4 decimale, ~11 × 8 m), 30 dana; indeks zraka 1 sat. Ako servis ne odgovori, koristi se zadnji spremljeni odgovor (`stale: true`, s datumom), a ako ga nema, sloj je „nedostupan".
 5. EkoSkor je ponderirani prosjek prikazanih ocjena slojeva, preračunat na dostupne slojeve.
 

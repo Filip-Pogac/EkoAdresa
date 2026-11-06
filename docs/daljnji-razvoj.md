@@ -58,7 +58,7 @@ Kad podatak za neki sloj ne postoji, sloj je „nedostupan", a EkoSkor se račun
 
 ## 7. API za druge usluge
 
-- **Portali nekretnina i oglasi za najam:** EkoSkor i pet slojeva uz svaki oglas, s izvorom za svaki podatak; EkoAdresa ostaje izvor podatka, a ne procjena cijene.
+- **Portali nekretnina i oglasi za najam:** EkoSkor i šest slojeva uz svaki oglas, s izvorom za svaki podatak; EkoAdresa ostaje izvor podatka, a ne procjena cijene.
 - **Javna tijela:** mreža EkoSkora i pojedinih slojeva kao otvoreni skup (GeoJSON) za planiranje, npr. gdje nedostaju reciklažna dvorišta ili stajališta.
 - **Škole, vrtići, zdravstvo:** profil okoliša za lokaciju ustanove.
 

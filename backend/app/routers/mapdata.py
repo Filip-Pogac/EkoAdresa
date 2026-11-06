@@ -73,7 +73,7 @@ async def get_tile(
     summary="EkoSkor za cijeli Grad Zagreb (mreža 250 × 250 m)",
     description=(
         "GeoJSON FeatureCollection (EPSG:4326): po jedna ćelija 250 × 250 m s EkoSkorom i "
-        "ocjenama pet slojeva u središtu ćelije. Izračunato skriptom `scripts/build_heatmap.py`; "
+        "ocjenama šest slojeva u središtu ćelije. Izračunato skriptom `scripts/build_heatmap.py`; "
         "metodologija u docs/ekoskor.md."
     ),
     responses={200: {"content": {"application/geo+json": {}}}},

@@ -25,10 +25,7 @@ export function LayerRow({ name, layers }: { name: LayerName; layers: Layers }) 
       {stale && <p className="text-sm font-semibold text-ink">{stale}</p>}
       <SourceBadge sourceId={layer.source_id} />
       {name === 'mobility' && layers.mobility.status !== 'unavailable' && (
-        <>
-          <SourceBadge sourceId={layers.mobility.nearest_bike_path.source_id} />
-          <SourceBadge sourceId={layers.mobility.nearest_green.source_id} />
-        </>
+        <SourceBadge sourceId={layers.mobility.nearest_bike_path.source_id} />
       )}
       {name === 'air' && layers.air.status !== 'unavailable' && layers.air.dhmz?.values.length ? (
         <DhmzToday reading={layers.air.dhmz} />

@@ -4,6 +4,7 @@ Used by the air, waste and mobility layers and by scripts/build_heatmap.py, so a
 nearest station / yard / stop is the same on the address card and in the heatmap.
 """
 
+import json
 from functools import cache
 
 import numpy as np
@@ -52,6 +53,14 @@ def project_geometries(features: list[dict]) -> list[shapely.Geometry]:
     return [
         shapely.transform(shapely.geometry.shape(f["geometry"]), _lonlat_to_xy) for f in features
     ]
+
+
+@cache
+def lines_or_areas(file: str) -> tuple[list[dict], list[shapely.Geometry], shapely.STRtree]:
+    """Features of a line/area snapshot in data/, their EPSG:3765 geometries and an index."""
+    features = json.loads((DATA_DIR / file).read_text(encoding="utf-8"))["features"]
+    geoms = project_geometries(features)
+    return features, geoms, shapely.STRtree(geoms)
 
 
 def nearest_geometry(

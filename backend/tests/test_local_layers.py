@@ -6,19 +6,25 @@ Mobility counts are the Phase 0 table in docs/data-sources.md (bus + tram platfo
 import pytest
 
 from app.services.ekoskor import waste_score
+from app.services.green import green_at
 from app.services.mobility import mobility_at
 from app.services.waste import waste_at
 from tests.reference_points import POINTS
 
 EXPECTED_MOBILITY = {  # (≤300 m, ≤500 m, nearest type, nearest distance m, score, status)
-    "savica": (2, 7, "bus", 57, 75, "green"),
+    "savica": (2, 7, "bus", 57, 67, "green"),  # 2/3 * 50 + 1/3 * 100 = 66.7
     "jelacic": (6, 16, "tram", 27, 100, "green"),
-    "sljeme": (1, 3, "bus", 145, 50, "yellow"),
+    "sljeme": (1, 3, "bus", 145, 33, "red"),
 }
-EXPECTED_BIKE_GREEN = {  # (bike path m, park/forest name, park m, transit, bike, green parts)
-    "savica": (186, "Park Marije Ružičke Strozzi", 153, 50, 100, 100),
-    "jelacic": (191, "Zrinjevac", 196, 100, 100, 100),
-    "sljeme": (8272, "Park prirode Medvednica", 0, 50, 0, 100),  # inside the nature park
+EXPECTED_BIKE = {  # (bike path m, transit part, bike part)
+    "savica": (186, 50, 100),
+    "jelacic": (191, 100, 100),
+    "sljeme": (8272, 50, 0),
+}
+EXPECTED_GREEN = {  # (park/forest name, distance m, score, status)
+    "savica": ("Park Marije Ružičke Strozzi", 153, 100, "green"),
+    "jelacic": ("Zrinjevac", 196, 100, "green"),
+    "sljeme": ("Park prirode Medvednica", 0, 100, "green"),  # inside the nature park
 }
 EXPECTED_WASTE = {  # (nearest fixed yard, yard m, nearest mobile yard, island m), ±10 m
     "savica": ("RD KAJZERICA", 2636, "MRD TRNJE", 521),
@@ -42,18 +48,25 @@ def test_mobility(point: str) -> None:
     assert got == EXPECTED_MOBILITY[point]
     assert layer.source_id == stop.source_id == "zg-zet"
     assert stop.lines and stop.name
-    bike, green = layer.nearest_bike_path, layer.nearest_green
-    assert (
-        bike.distance_m,
-        green.name,
-        green.distance_m,
-        layer.transit_score,
-        layer.bike_score,
-        layer.green_score,
-    ) == EXPECTED_BIKE_GREEN[point]
+    bike = layer.nearest_bike_path
+    assert (bike.distance_m, layer.transit_score, layer.bike_score) == EXPECTED_BIKE[point]
     assert bike.source_id == "zg-biciklisticke-staze"
-    assert green.source_id == "osm-parkovi"
-    assert green.area_m2 >= 5000
+
+
+@pytest.mark.parametrize("point", POINTS)
+def test_green(point: str) -> None:
+    layer = green_at(*POINTS[point])
+    g = layer.nearest
+    assert (g.name, g.distance_m, layer.score, layer.status) == EXPECTED_GREEN[point]
+    assert layer.source_id == g.source_id == "osm-parkovi"
+    assert g.area_m2 >= 5000
+
+
+def test_middle_of_maksimir_is_green_space_not_mobility() -> None:
+    # 2026-11-06: a point inside Park-šuma Maksimir, 713 m from the nearest ZET stop
+    lat, lon = 45.8305, 16.0217
+    assert green_at(lat, lon).status == "green"
+    assert mobility_at(lat, lon).status == "red"
 
 
 @pytest.mark.parametrize("point", POINTS)
