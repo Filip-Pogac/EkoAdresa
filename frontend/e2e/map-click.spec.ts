@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 const JELACIC = '/adresa?lat=45.813406&lon=15.977322&a=Trg+bana+Josipa+Jela%C4%8Di%C4%87a+6';
 
-test('clicking the map opens the profile of that point', async ({ page }) => {
+test('clicking the map opens the profile of that point', async ({ page, request }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -20,7 +20,19 @@ test('clicking the map opens the profile of that point', async ({ page }) => {
 
   await expect(page).toHaveURL(/\/adresa\?lat=45\.81\d+&lon=15\.97\d+$/);
   await expect(page).not.toHaveURL(/lat=45\.813406/);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Odabrana točka na karti');
+  // Title: the nearest address to the clicked point (central Zagreb: always one within 150 m)
+  const url = new URL(page.url());
+  const api = process.env.E2E_API_URL ?? 'https://ekoadresa-api.vercel.app';
+  const reverse = (await (
+    await request.get(`${api}/api/reverse`, {
+      params: { lat: url.searchParams.get('lat') ?? '', lon: url.searchParams.get('lon') ?? '' },
+    })
+  ).json()) as { result: { label: string } | null };
+  expect(reverse.result).not.toBeNull();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(reverse.result?.label ?? '');
+  await expect(
+    page.getByText(/Najbliža adresa točki odabranoj na karti|na samoj adresi/),
+  ).toBeVisible();
   await expect(page.getByRole('img', { name: /^EkoSkor \d+ od 100$/ })).toBeVisible();
   expect(errors).toEqual([]);
 });

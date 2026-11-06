@@ -263,6 +263,10 @@ export const hr = {
     retry: 'Pokušaj ponovno',
     newSearch: 'Nova pretraga',
     pinnedPoint: 'Odabrana točka na karti',
+    nearestNote: (m: number) =>
+      m === 0
+        ? 'Točka odabrana na karti, na samoj adresi.'
+        : `Najbliža adresa točki odabranoj na karti (${formatDistance(m)} zračnom linijom). Podaci se odnose na odabranu točku.`,
   },
   ekoskor: {
     name: 'EkoSkor',

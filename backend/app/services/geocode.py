@@ -9,6 +9,9 @@ Matching: accent-insensitive ("jelacica" finds "Jelačića"); every typed word m
 start of a word in the name, in any order ("trg bana jel" finds "Trg bana Josipa
 Jelačića"). If the last typed word starts with a digit and follows a word, it is a house
 number ("ilica 1" lists Ilica 1, 1A, 10, 11…).
+
+Reverse: `nearest` gives the closest address to a point picked on the map, if one is within
+REVERSE_MAX_M (straight line, EPSG:3765). The point itself is not stored or logged.
 """
 
 import re
@@ -19,12 +22,14 @@ from functools import cache
 import numpy as np
 import pandas as pd
 
-from app.models import GeocodeResult
+from app.models import GeocodeResult, NearestAddress
 from app.paths import DATA_DIR
+from app.services.geo import distances_m, project
 
 SOURCE_ID = "osm-adrese"
 DATA_FILE = "addresses.parquet"
 _NOT_WORD = re.compile(r"[^0-9a-z/]+")
+REVERSE_MAX_M = 150  # farther than this, the map point keeps its generic title
 
 
 def normalise(text: str) -> str:
@@ -50,6 +55,9 @@ class _Entry:
 class _Index:
     entries: list[_Entry]
     houses: dict[int, list[tuple[str, str, float, float]]]  # street_id -> (number, key, lat, lon)
+    labels: list[str]  # every address as "Street 12, 10000 Zagreb", aligned with xy
+    lonlat: np.ndarray  # (n, 2) EPSG:4326
+    xy: np.ndarray  # (n, 2) EPSG:3765 metres
 
 
 def _natural_key(number: str) -> tuple[int, str]:
@@ -92,6 +100,17 @@ def _index() -> _Index:
             key=lambda item: _natural_key(item[1]),
         )
 
+    addresses = df[df["kind"] == "address"]
+    labels = [
+        f"{name} {number}, {town}" if (town := _town(pc, city)) else f"{name} {number}"
+        for name, number, pc, city in zip(
+            addresses["name"], addresses["housenumber"], addresses["postcode"],
+            addresses["city"], strict=True,
+        )
+    ]  # fmt: skip
+    lonlat = addresses[["lon", "lat"]].to_numpy(dtype=float)
+    xy = project(lonlat[:, 0], lonlat[:, 1])
+
     places = df[df["kind"] == "place"]
     for name, postcode, city, lat, lon in zip(
         places["name"], places["postcode"], places["city"], places["lat"], places["lon"],
@@ -109,7 +128,7 @@ def _index() -> _Index:
                 street_id=-1,
             )
         )
-    return _Index(entries, houses)
+    return _Index(entries, houses, labels, lonlat, xy)
 
 
 def warm_up() -> None:
@@ -158,3 +177,16 @@ def search(query: str, limit: int) -> list[GeocodeResult]:
             return results
         # No such house number in the data: offer the street itself (below)
     return [_result(e.kind, e.name, e, e.lat, e.lon) for e in found[:limit]]
+
+
+def nearest(lat: float, lon: float) -> NearestAddress | None:
+    """Closest address to (lat, lon), or None if none is within REVERSE_MAX_M."""
+    index = _index()
+    d = distances_m(index.xy, lat, lon)
+    i = int(np.argmin(d))
+    if d[i] > REVERSE_MAX_M:
+        return None
+    a_lon, a_lat = index.lonlat[i]
+    return NearestAddress(
+        label=index.labels[i], lat=float(a_lat), lon=float(a_lon), distance_m=round(float(d[i]))
+    )

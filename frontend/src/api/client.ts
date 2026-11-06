@@ -1,4 +1,4 @@
-import type { Comparison, GeocodeResponse, Profile, Source } from './types';
+import type { Comparison, GeocodeResponse, Profile, ReverseResponse, Source } from './types';
 
 export const API_URL =
   (import.meta.env.VITE_API_URL as string | undefined) ?? 'http://localhost:8000';
@@ -63,6 +63,8 @@ async function get<T>(
 export const api = {
   geocode: (q: string, signal?: AbortSignal) =>
     get<GeocodeResponse>('/api/geocode', { q, limit: 6 }, signal),
+  reverse: (lat: number, lon: number, signal?: AbortSignal) =>
+    get<ReverseResponse>('/api/reverse', { lat, lon }, signal),
   profile: (lat: number, lon: number, signal?: AbortSignal) =>
     get<Profile>('/api/profile', { lat, lon }, signal),
   sources: (signal?: AbortSignal) => get<Source[]>('/api/sources', {}, signal),

@@ -82,3 +82,33 @@ def test_limit() -> None:
 @pytest.mark.parametrize("q", ["Il", "x" * 101])
 def test_query_length_validated(q: str) -> None:
     assert api.get("/api/geocode", params={"q": q}).status_code == 422
+
+
+def reverse(lat: float, lon: float) -> dict:
+    resp = api.get("/api/reverse", params={"lat": lat, "lon": lon})
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["source_id"] == "osm-adrese"
+    return body["result"]
+
+
+def test_reverse_nearest_address() -> None:
+    # A click 35 m from Trg bana Josipa Jelačića 6 (example address)
+    result = reverse(45.8131, 15.9772)
+    assert result["label"] == "Trg bana Josipa Jelačića 6, 10000 Zagreb"
+    assert result["distance_m"] == 35
+
+
+def test_reverse_exact_point_is_0_m() -> None:
+    result = reverse(45.790284, 15.994318)
+    assert result["label"] == "Ulica Vladimira Ruždjaka 20, 10000 Zagreb"
+    assert result["distance_m"] == 0
+
+
+def test_reverse_nothing_within_150_m() -> None:
+    assert reverse(45.8305, 16.0217) is None  # middle of Park-šuma Maksimir
+    assert reverse(45.7850, 15.9900) is None  # the Sava
+
+
+def test_reverse_validates_coordinates() -> None:
+    assert api.get("/api/reverse", params={"lat": 91, "lon": 16}).status_code == 422

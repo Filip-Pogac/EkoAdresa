@@ -15,6 +15,12 @@ export interface GeocodeResponse {
   source_id: string;
 }
 
+/** Nearest address to a map point (/api/reverse); null if none within 150 m. */
+export interface ReverseResponse {
+  result: { label: string; lat: number; lon: number; distance_m: number } | null;
+  source_id: string;
+}
+
 interface LayerBase {
   status: Exclude<Status, 'unavailable'>;
   score: number; // EkoSkor sub-score 0-100

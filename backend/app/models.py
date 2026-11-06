@@ -22,6 +22,20 @@ class GeocodeResponse(BaseModel):
     source_id: str
 
 
+class NearestAddress(BaseModel):
+    label: str  # e.g. "Ilica 25, 10000 Zagreb"
+    lat: float  # EPSG:4326, the address point
+    lon: float
+    distance_m: int  # straight line from the requested point
+
+
+class ReverseResponse(BaseModel):
+    """Nearest address to a point, or None if none is within geocode.REVERSE_MAX_M."""
+
+    result: NearestAddress | None
+    source_id: str
+
+
 Status = Literal["green", "yellow", "red", "unavailable"]
 NoiseSource = Literal["road", "tram", "rail", "industry"]
 

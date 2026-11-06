@@ -5,6 +5,7 @@ import { ErrorState } from '../components/common/ErrorState';
 import { CompareView, CompareViewSkeleton } from '../components/compare/CompareView';
 import { AddressSearch } from '../components/search/AddressSearch';
 import { useCompare } from '../hooks/useCompare';
+import { usePlaceTitle } from '../hooks/usePlaceTitle';
 import { hr } from '../i18n/hr';
 import { comparePath, parseCompareParams, type Place } from '../routes';
 
@@ -17,13 +18,23 @@ interface SlotPickerProps {
   onClear: () => void;
 }
 
+function PlaceName({ place }: { place: Place }) {
+  const { title, note } = usePlaceTitle(place);
+  return (
+    <>
+      <p className="font-semibold">{title}</p>
+      {note && <p className="text-sm text-ink-muted">{note}</p>}
+    </>
+  );
+}
+
 function SlotPicker({ slot, place, onPick, onClear }: SlotPickerProps) {
   if (!place) return <AddressSearch label={hr.compare.searchLabel[slot]} onSelect={onPick} />;
   return (
     <div className="flex min-h-14 items-center justify-between gap-3 self-end rounded-lg border border-border bg-surface px-4 py-2">
       <div>
         <p className="text-sm text-ink-muted">{hr.compare.slot[slot]}</p>
-        <p className="font-semibold">{place.label ?? hr.card.pinnedPoint}</p>
+        <PlaceName place={place} />
       </div>
       <button
         type="button"

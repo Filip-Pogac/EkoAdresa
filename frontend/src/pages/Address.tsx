@@ -5,6 +5,7 @@ import { AddressCard, AddressCardSkeleton } from '../components/card/AddressCard
 import { ErrorState } from '../components/common/ErrorState';
 import { Skeleton } from '../components/common/Skeleton';
 import { AddressSearch } from '../components/search/AddressSearch';
+import { usePlaceTitle } from '../hooks/usePlaceTitle';
 import { useProfile } from '../hooks/useProfile';
 import { hr } from '../i18n/hr';
 import { addressPath, comparePath, parseAddressParams } from '../routes';
@@ -52,6 +53,8 @@ export function Address() {
   const [params] = useSearchParams();
   const place = parseAddressParams(params);
   const navigate = useNavigate();
+  const fallback = { lat: 0, lon: 0, label: '' }; // hooks run before the early return
+  const { title, note } = usePlaceTitle(place ?? fallback);
   if (!place)
     return (
       <main className="mx-auto w-full max-w-2xl px-4 py-10">
@@ -64,7 +67,10 @@ export function Address() {
     <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-4 px-4 py-4">
       <AddressSearch />
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-        <h1 className="text-2xl font-bold">{place.label ?? hr.card.pinnedPoint}</h1>
+        <div>
+          <h1 className="text-2xl font-bold">{title}</h1>
+          {note && <p className="text-sm text-ink-muted">{note}</p>}
+        </div>
         <Link
           to={comparePath(place, null)}
           className="inline-flex min-h-12 items-center rounded-lg bg-primary px-5 font-semibold text-primary-ink"

@@ -90,6 +90,7 @@ Sve krajnje točke su `GET`, odgovori su JSON (osim pločica), koordinate su EPS
 |---|---|---|
 | `/api/health` | — | stanje servisa |
 | `/api/geocode` | `q` (≥ 3 znaka), `limit` | prijedlozi adresa, ulica i naselja u Zagrebu |
+| `/api/reverse` | `lat`, `lon` | najbliža adresa točki na karti (do 150 m) ili `null`; točka se ne sprema |
 | `/api/profile` | `lat`, `lon`, `address` (neobavezno, ne sprema se) | `Profile`: lokacija, EkoSkor, 6 slojeva, vrijeme izrade |
 | `/api/compare` | `a_lat`, `a_lon`, `b_lat`, `b_lon` | dva profila, razlika EkoSkora, bolja strana po sloju |
 | `/api/sources` | — | registar izvora |
