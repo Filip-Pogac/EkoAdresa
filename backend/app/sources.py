@@ -118,7 +118,7 @@ SOURCES: dict[str, Source] = {
             urls=[_DATA_ZAGREB + "geoportal-biciklisticke-staze"],
             licence="Otvorena dozvola (OD)",
             data_as_of="2022-06-23",
-            used_for="Najbliža biciklistička staza (1/3 ocjene zelene mobilnosti)",
+            used_for="Najbliža biciklistička staza (1/5 ocjene zelene mobilnosti)",
         ),
         Source(
             id="osm-parkovi",

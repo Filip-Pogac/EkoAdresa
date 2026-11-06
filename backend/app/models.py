@@ -170,7 +170,7 @@ class GreenArea(Place):
 
 
 class MobilityLayer(LayerBase):
-    """Score = 2/3 transit + 1/3 bike (services/ekoskor.py)."""
+    """Score = 4/5 transit + 1/5 bike (services/ekoskor.py)."""
 
     stops_300m: int  # ZET platforms (one per stop and direction)
     stops_500m: int

@@ -41,12 +41,12 @@ ISLAND_FAR_M = 1500
 STOPS_NEAR_M = 300
 STOPS_WALK_M = 500
 STOPS_GOOD_COUNT = 3
-# Green mobility = 2/3 public transport + 1/3 cycling (decision 2026-11-06). Cycling:
+# Green mobility = 4/5 public transport + 1/5 cycling (decision 2026-11-06). Cycling:
 # nearest City bike path, 100 at ≤ 200 m -> 0 at ≥ 1 km.
 # Green space (own layer): nearest park, forest, public garden or nature reserve of at
 # least 0.5 ha, 100 at ≤ 300 m or inside (WHO Europe 2017: green space of 0.5-1 ha within
 # 300 m) -> 0 at ≥ 1 km.
-MOBILITY_PARTS = {"transit": 2 / 3, "bike": 1 / 3}
+MOBILITY_PARTS = {"transit": 0.8, "bike": 0.2}
 BIKE_NEAR_M = 200
 BIKE_FAR_M = 1000
 GREEN_NEAR_M = 300
@@ -110,7 +110,7 @@ def green_score(green_m: float) -> float:
 
 
 def mobility_score(stops_300m: int, stops_500m: int, bike_path_m: float) -> float:
-    """2/3 public transport + 1/3 cycling."""
+    """4/5 public transport + 1/5 cycling."""
     return MOBILITY_PARTS["transit"] * transit_score(stops_300m, stops_500m) + MOBILITY_PARTS[
         "bike"
     ] * bike_score(bike_path_m)

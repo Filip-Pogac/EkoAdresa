@@ -12,9 +12,9 @@ from app.services.waste import waste_at
 from tests.reference_points import POINTS
 
 EXPECTED_MOBILITY = {  # (≤300 m, ≤500 m, nearest type, nearest distance m, score, status)
-    "savica": (2, 7, "bus", 57, 67, "green"),  # 2/3 * 50 + 1/3 * 100 = 66.7
+    "savica": (2, 7, "bus", 57, 60, "yellow"),  # 0.8 * 50 + 0.2 * 100
     "jelacic": (6, 16, "tram", 27, 100, "green"),
-    "sljeme": (1, 3, "bus", 145, 33, "red"),
+    "sljeme": (1, 3, "bus", 145, 40, "yellow"),
 }
 EXPECTED_BIKE = {  # (bike path m, transit part, bike part)
     "savica": (186, 50, 100),

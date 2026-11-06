@@ -123,10 +123,11 @@ def test_green(distance_m: float, expected: float) -> None:
     [
         (3, 3, 100, 100),
         (0, 0, 5000, 0),
-        (3, 3, 5000, 200 / 3),  # transit alone is two thirds of the layer
-        (0, 0, 0, 100 / 3),  # bike path only, no stop within 500 m
-        (0, 1, 600, 50),  # 2/3 * 50 + 1/3 * 50
-        (0, 0, 920, 10 / 3),  # middle of Maksimir: no stop within 500 m, bike path 920 m
+        (3, 3, 5000, 80),  # transit alone is four fifths of the layer
+        (0, 0, 0, 20),  # bike path only, no stop within 500 m
+        (0, 1, 600, 50),  # 0.8 * 50 + 0.2 * 50
+        (0, 1, 5000, 40),  # a stop within 500 m, no bike path: Umjereno, not Loše
+        (0, 0, 920, 2),  # middle of Maksimir: no stop within 500 m, bike path 920 m
     ],
 )
 def test_mobility(n300: int, n500: int, bike_m: float, expected: float) -> None:

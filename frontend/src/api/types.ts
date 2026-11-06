@@ -137,7 +137,7 @@ export interface GreenArea extends Place {
   area_m2: number;
 }
 
-/** Score = 2/3 transit + 1/3 bike (docs/ekoskor.md). */
+/** Score = 4/5 transit + 1/5 bike (docs/ekoskor.md). */
 export interface MobilityLayer extends LayerBase {
   stops_300m: number;
   stops_500m: number;

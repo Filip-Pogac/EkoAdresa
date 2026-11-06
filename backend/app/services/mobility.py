@@ -5,7 +5,7 @@
 - nearest City bike path (data/bike_paths.geojson, zg-biciklisticke-staze)
 
 From scripts/fetch_transit.py and scripts/fetch_green_mobility.py.
-Scoring: ekoskor.mobility_score (docs/ekoskor.md), 2/3 transit + 1/3 bike (decision
+Scoring: ekoskor.mobility_score (docs/ekoskor.md), 4/5 transit + 1/5 bike (decision
 2026-11-06). Parks and forests are their own layer (services/green.py).
 """
 

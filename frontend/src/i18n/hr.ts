@@ -115,14 +115,14 @@ export const hr = {
         worst: 'dvorište 5 km ili dalje i otok 1,5 km ili dalje',
       },
       {
-        layer: 'Zelena mobilnost: javni prijevoz (2/3 sloja), perona ZET-a',
+        layer: 'Zelena mobilnost: javni prijevoz (4/5 sloja), perona ZET-a',
         weight: '15 %',
         best: '3 ili više do 300 m',
         mid: 'barem jedan do 500 m',
         worst: 'nijedan do 500 m',
       },
       {
-        layer: 'Zelena mobilnost: bicikl (1/3 sloja), najbliža biciklistička staza',
+        layer: 'Zelena mobilnost: bicikl (1/5 sloja), najbliža biciklistička staza',
         weight: '',
         best: 'do 200 m',
         mid: '600 m (linearno)',
@@ -376,7 +376,7 @@ export const hr = {
         return `Biciklistička staza ${formatDistance(b.distance_m)}${b.name ? ` (${b.name})` : ''}.`;
       },
       parts: (l: MobilityLayer) =>
-        `Ocjena: javni prijevoz ${l.transit_score} (2/3), bicikl ${l.bike_score} (1/3). Udaljenosti zračnom linijom.`,
+        `Ocjena: javni prijevoz ${l.transit_score} (4/5), bicikl ${l.bike_score} (1/5). Udaljenosti zračnom linijom.`,
     },
     green: {
       title: 'Zelenilo',
