@@ -8,6 +8,7 @@ import httpx2 as httpx
 import pytest
 
 from app.cache import Cache
+from app.models import DhmzValue
 from app.services import dhmz
 from app.sources import SOURCES
 from tests.reference_points import POINTS
@@ -69,6 +70,52 @@ async def test_nearest_station_and_values(cache: Cache) -> None:
     pm10 = by_pollutant["pm10"]
     assert (pm10.hours, pm10.latest_ug_m3, pm10.latest_at_local) == (24, 28.5, "2026-11-05T23:00")
     assert 0 < pm10.mean_24h_ug_m3 < 100
+    # recorded day: PM2.5 mean 27 µg/m³ is above the WHO interim target of 25
+    assert by_pollutant["pm2_5"].mean_24h_ug_m3 > 25
+    assert reading.status == "red"
+
+
+def value(pollutant: str, mean: float, hours: int = 24) -> DhmzValue:
+    return DhmzValue(
+        pollutant=pollutant,  # type: ignore[arg-type]
+        mean_24h_ug_m3=mean,
+        latest_ug_m3=mean,
+        latest_at_local="2026-11-05T23:00",
+        hours=hours,
+    )
+
+
+@pytest.mark.parametrize(
+    ("pollutant", "mean", "status"),
+    [
+        ("pm10", 45, "green"),  # WHO 24 h guideline, inclusive
+        ("pm10", 45.1, "yellow"),
+        ("pm10", 50, "yellow"),  # WHO interim target 4, inclusive
+        ("pm10", 50.1, "red"),
+        ("pm2_5", 15, "green"),
+        ("pm2_5", 15.1, "yellow"),
+        ("pm2_5", 25, "yellow"),
+        ("pm2_5", 25.1, "red"),
+        ("no2", 25, "green"),
+        ("no2", 25.1, "yellow"),
+        ("no2", 50, "yellow"),  # WHO interim target 2
+        ("no2", 50.1, "red"),
+    ],
+)
+def test_day_status_thresholds(pollutant: str, mean: float, status: str) -> None:
+    assert dhmz.day_status([value(pollutant, mean)]) == status
+
+
+def test_day_status_worst_pollutant_wins() -> None:
+    assert dhmz.day_status([value("pm10", 20), value("pm2_5", 20)]) == "yellow"
+    assert dhmz.day_status([value("pm10", 60), value("pm2_5", 5)]) == "red"
+
+
+def test_day_status_needs_18_hours() -> None:
+    # 17 h is not a 24-hour mean: ignored; nothing else left -> unavailable
+    assert dhmz.day_status([value("pm10", 80, hours=17)]) == "unavailable"
+    assert dhmz.day_status([value("pm10", 80, hours=17), value("pm2_5", 10)]) == "green"
+    assert dhmz.day_status([value("pm10", 80, hours=18)]) == "red"
 
 
 @pytest.mark.anyio

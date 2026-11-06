@@ -57,7 +57,7 @@ Python 3.11+, FastAPI, pydantic, httpx2, Shapely, pyproj, NumPy, pandas, PyArrow
 | `services/flood.py` | Zona opasnosti od poplava: boja piksela s WMS karte prema legendi |
 | `services/noise.py` | L<sub>den</sub> / L<sub>night</sub> najglasnijeg izvora; pravilo pročelja za točke unutar zgrada |
 | `services/air.py` | Najbliža gradska postaja, prosjek PM10, posljednje vrijednosti, 30 dana povijesti; državni indeks uživo |
-| `services/dhmz.py` | Posljednja 24 sata PM10, PM2,5 i NO₂ na najbližoj državnoj postaji DHMZ-a (nevalidirano, ne ulazi u ocjenu) |
+| `services/dhmz.py` | Posljednja 24 sata PM10, PM2,5 i NO₂ na najbližoj državnoj postaji DHMZ-a (nevalidirano) s vlastitim stanjem prema dnevnim smjernicama SZO-a; ne ulazi u ocjenu |
 | `services/waste.py`, `services/mobility.py` | Najbliža dvorišta i zeleni otoci, broj perona ZET-a (udaljenosti u EPSG:3765) |
 | `services/ekoskor.py` | Ocjene slojeva i EkoSkor prema [ekoskor.md](ekoskor.md) |
 | `services/profile.py` | Svih pet slojeva usporedno, 4 s po sloju, EkoSkor |

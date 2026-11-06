@@ -30,6 +30,18 @@ EkoSkor je broj od 0 do 100. Svaki od pet slojeva dobiva ocjenu od 0 do 100, zao
 
 Svaki redak sloja na kartici adrese prikazuje stanje prema ocjeni, u jednakim trećinama: **Dobro** (zeleno) 67–100, **Umjereno** (žuto) 34–66, **Loše** (crveno) 0–33. Za poplave, buku i mobilnost, koje imaju samo ocjene 100, 50 ili 0, to je jednostavno 100 → zeleno, 50 → žuto, 0 → crveno. Uz boju je uvijek tekst i ikona, nikad samo boja.
 
+## Zrak zadnja 24 sata (ne ulazi u EkoSkor)
+
+Redak zraka ima i okvir *Zadnja 24 sata*: prosjek satnih vrijednosti s najbliže državne postaje DHMZ-a (Zagreb 1–4), nevalidirano. Okvir ima **vlastito stanje**, odvojeno od stanja sloja i od EkoSkora (odluka 6. 11. 2026.). EkoSkor ocjenjuje mjesto za život, pa koristi višemjesečni prosjek; jedan dan ovisi o vremenu (inverzija, vjetar, sezona grijanja) i ocjenu bi mijenjao iz sata u sat.
+
+| Tvar | Dobro (do smjernice SZO-a za 24 h) | Umjereno (do privremenog cilja SZO-a) | Loše |
+|---|---|---|---|
+| PM10 | ≤ 45 µg/m³ | ≤ 50 µg/m³ (IT-4) | > 50 µg/m³ |
+| PM2,5 | ≤ 15 µg/m³ | ≤ 25 µg/m³ (IT-4) | > 25 µg/m³ |
+| NO₂ | ≤ 25 µg/m³ | ≤ 50 µg/m³ (IT-2) | > 50 µg/m³ |
+
+Vrijednosti su iz smjernica SZO-a za kvalitetu zraka iz 2021. Stanje okvira određuje **najlošija tvar**. Tvar ulazi u stanje samo ako ima barem 18 satnih vrijednosti (75 %, kao za dnevni prosjek u Direktivi 2008/50/EZ, Prilog VII.); inače okvir piše „Nedostupno". Kod: `DAY_LIMITS` i `day_status` u `backend/app/services/dhmz.py`, testovi u `backend/tests/test_dhmz.py`.
+
 ## Nedostupni podaci
 
 Ako sloj nije dostupan (servis ne radi ili nema podataka), izostavlja se, a ponderi ostalih slojeva preračunavaju se na 100 %. Uz manje od 3 dostupna sloja EkoSkor se ne računa.

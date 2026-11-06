@@ -106,6 +106,7 @@ class DhmzReading(BaseModel):
 
     station: DhmzStation
     values: list[DhmzValue]
+    status: Status  # own status vs WHO 24 h guidelines (services/dhmz.py); not the layer's
     validated: bool  # always False: DHMZ marks these values as raw
     source_id: str  # dhmz-kvaliteta-zraka
 

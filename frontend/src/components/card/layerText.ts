@@ -22,11 +22,7 @@ export function layerSentences(name: LayerName, layers: Layers): string[] {
       const l = layers.air;
       return l.status === 'unavailable'
         ? [hr.layers.unavailable(l)]
-        : [
-            hr.layers.air.sentence(l),
-            hr.layers.air.period(l),
-            ...(l.dhmz && l.dhmz.values.length ? [hr.layers.air.dhmz(l.dhmz)] : []),
-          ];
+        : [hr.layers.air.sentence(l), hr.layers.air.period(l)];
     }
     case 'waste': {
       const l = layers.waste;

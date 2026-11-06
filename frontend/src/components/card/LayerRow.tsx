@@ -1,6 +1,7 @@
 import type { Layers, LayerName } from '../../api/types';
 import { hr } from '../../i18n/hr';
 import { AirHistory } from './AirHistory';
+import { DhmzToday } from './DhmzToday';
 import { layerSentences } from './layerText';
 import { SourceBadge } from './SourceBadge';
 import { StatusBadge } from './StatusBadge';
@@ -23,6 +24,9 @@ export function LayerRow({ name, layers }: { name: LayerName; layers: Layers }) 
       ))}
       {stale && <p className="text-sm font-semibold text-ink">{stale}</p>}
       <SourceBadge sourceId={layer.source_id} />
+      {name === 'air' && layers.air.status !== 'unavailable' && layers.air.dhmz?.values.length ? (
+        <DhmzToday reading={layers.air.dhmz} />
+      ) : null}
       {name === 'air' && layers.air.status !== 'unavailable' && (
         <AirHistory history={layers.air.history} />
       )}

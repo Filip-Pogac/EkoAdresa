@@ -295,7 +295,11 @@ export const hr = {
         `Postaja ${l.station.name} (${formatDistance(l.station.distance_m)}): prosjek PM10 ${formatNumber(l.pm10_mean_ug_m3)} µg/m³ (SZO: do 15).`,
       period: (l: AirLayer) =>
         `Prosjek dnevnih mjerenja od ${formatDate(l.period_from)} do ${formatDate(l.period_to)}`,
-      /** One line for the last 24 h at the nearest DHMZ station (credit required by DHMZ). */
+      /** Last 24 h at the nearest DHMZ station, with its own status (credit required by DHMZ). */
+      dhmzTitle: 'Zadnja 24 sata',
+      dhmzNote:
+        'Ocjena prema dnevnim smjernicama SZO-a (2021.) za najlošiju tvar; ne ulazi u EkoSkor, koji koristi višemjesečni prosjek.',
+      dhmzTooFewHours: 'Premalo satnih mjerenja za dnevni prosjek.',
       dhmz: (r: DhmzReading) => {
         const name = { pm10: 'PM10', pm2_5: 'PM2,5', no2: 'NO₂', o3: 'O₃' } as const;
         const who = { pm10: 45, pm2_5: 15, no2: 25, o3: null } as const; // WHO 2021, 24 h
@@ -309,7 +313,7 @@ export const hr = {
         const when = d
           ? ` Zadnje mjerenje ${Number(day)}. ${Number(m)}. u ${Number((t ?? '0').slice(0, 2))} h.`
           : '';
-        return `Zadnja 24 sata, državna postaja ${r.station.name} (${formatDistance(r.station.distance_m)}), prosjek: ${parts.join(', ')}.${when} Nevalidirani podaci (Izvor: DHMZ).`;
+        return `Državna postaja ${r.station.name} (${formatDistance(r.station.distance_m)}), prosjek: ${parts.join(', ')}.${when} Nevalidirani podaci (Izvor: DHMZ).`;
       },
       history: {
         show: 'Prikaži mjerenja po danima',

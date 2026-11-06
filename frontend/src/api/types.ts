@@ -80,6 +80,7 @@ export interface DhmzValue {
 export interface DhmzReading {
   station: { name: string; lat: number; lon: number; distance_m: number };
   values: DhmzValue[];
+  status: Status; // own status vs WHO 24 h guidelines, not the layer's; never scored
   validated: boolean;
   source_id: string;
 }

@@ -11,7 +11,9 @@ Prototip pokriva Grad Zagreb i pet tema iz izazova B (zrak, otpad, zelena mobiln
 
 ## 2. Novi podaci za postojeće teme
 
-- **Kvaliteta zraka u ocjeni:** kartica već prikazuje posljednja 24 sata s najbliže državne postaje DHMZ-a, ali kao nevalidirane podatke koji ne ulaze u EkoSkor. Za ocjenu iz aktualnih podataka potrebna je validirana povijest (npr. godišnji prosjek) iz državne baze kvalitete zraka (portal iszz.azo.hr), koja danas nema dokumentirani API (`TODO(verify)`), te objavljena ljestvica indeksa kvalitete zraka.
+- **Kvaliteta zraka u ocjeni:** kartica već prikazuje posljednja 24 sata s najbliže državne postaje DHMZ-a, s vlastitim stanjem prema dnevnim smjernicama SZO-a, ali kao nevalidirane podatke koji ne ulaze u EkoSkor. Najnoviji objavljeni otvoreni podaci gradskih postaja su iz 2023. (provjereno na data.zagreb.hr i data.gov.hr 6. 11. 2026.). Dva puta do ocjene iz aktualnih podataka:
+  - **Vlastita povijest:** svaki dan spremiti 24-satni prosjek DHMZ-a po postaji i tvari, a nakon dovoljno dana (npr. 12 mjeseci, da su obuhvaćene sve sezone) ocjenu zraka računati iz tog godišnjeg prosjeka uz iste godišnje pragove. Ograničenje: podaci ostaju nevalidirani, a DHMZ ih objavljuje samo kao web-stranice.
+  - **Validirana povijest** (npr. godišnji prosjek) iz državne baze kvalitete zraka (portal iszz.azo.hr), koja danas nema dokumentirani API (`TODO(verify)`).
 - **Službeni adresni registar** Državne geodetske uprave umjesto OpenStreetMapa, za sve kućne brojeve (dostupnost kao otvoreni podatak `TODO(verify)`).
 
 ## 3. Nove teme iz izazova B
