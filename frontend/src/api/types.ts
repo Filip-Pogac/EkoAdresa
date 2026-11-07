@@ -145,6 +145,12 @@ export interface BikePath extends Place {
   category: string | null; // kategorija_id as published
 }
 
+/** Public bike station (Grad Zagreb). */
+export interface BikeStation extends Place {
+  location: string | null;
+  racks: number | null;
+}
+
 /** Park, forest, public garden or nature reserve ≥ 0.5 ha; distance 0 = address inside it. */
 export interface GreenArea extends Place {
   kind: 'park' | 'forest';
@@ -157,6 +163,7 @@ export interface MobilityLayer extends LayerBase {
   stops_500m: number;
   nearest_stop: Stop;
   nearest_bike_path: BikePath;
+  nearest_bike_station: BikeStation; // the nearer of the two counts for the bike part
   transit_score: number;
   bike_score: number;
 }

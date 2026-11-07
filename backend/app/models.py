@@ -181,6 +181,13 @@ class BikePath(Place):
     category: str | None  # kategorija_id as published, TODO(verify): codes not documented
 
 
+class BikeStation(Place):
+    """Nearest public bike station (sustav javnih bicikala, Grad Zagreb)."""
+
+    location: str | None  # address as published
+    racks: int | None  # number of bike racks
+
+
 class GreenArea(Place):
     """Nearest park, forest, public garden or nature reserve of at least 0.5 ha; lat/lon is
     the nearest point of its outline, distance 0 if the address is inside it."""
@@ -190,12 +197,14 @@ class GreenArea(Place):
 
 
 class MobilityLayer(LayerBase):
-    """Score = 4/5 transit + 1/5 bike (services/ekoskor.py)."""
+    """Score = 4/5 transit + 1/5 bike, bike = the nearer of bike path and bike station
+    (services/ekoskor.py)."""
 
     stops_300m: int  # ZET platforms (one per stop and direction)
     stops_500m: int
     nearest_stop: Stop
     nearest_bike_path: BikePath
+    nearest_bike_station: BikeStation  # extra for the bike part: the nearer of the two counts
     transit_score: int  # parts of the score, 0-100 each
     bike_score: int
 

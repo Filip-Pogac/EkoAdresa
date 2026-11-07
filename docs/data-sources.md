@@ -20,6 +20,8 @@ Licencija je navedena **točno onako kako ju je naveo izdavač**; „nije navede
 | `zg-zeleni-otoci` | Lokacije zelenih otoka | Grad Zagreb | data.zagreb.hr, paket `lokacije-zelenih-otoka`, CSV <https://data.zagreb.hr/dataset/0b532fd6-fa24-4f90-8c5e-698b5cbe94b7/resource/5d15eae4-6aa7-426c-b02c-a8fdb3d61a74/download/zeleniotoci.csv> | Službeni popis kao referenca; nema koordinata, pa se udaljenost računa iz `osm-reciklaza` | Otvorena dozvola (OD) | 2016. |
 | `osm-reciklaza` | Spremnici za reciklažu (zeleni otoci), Grad Zagreb | OpenStreetMap contributors | Overpass API `https://overpass-api.de/api/interpreter`, upit u `scripts/fetch_waste.py` | Snimka: najbliži zeleni otok (papir, plastika ili staklo) | ODbL 1.0, „© OpenStreetMap contributors" | stanje OSM-a 4. 11. 2026. |
 | `zg-zet` | Geoportal Autobusna stajališta ZET i Geoportal Tramvajska stajališta ZET | Grad Zagreb | <https://data.zagreb.hr/dataset/autobusna-stajalista-zet>, <https://data.zagreb.hr/dataset/geoportal-tramvajska-stajalista-zet> | Snimka: broj perona do 300 m i 500 m, najbliže stajalište | Otvorena dozvola (OD) | autobusi 30. 10. 2026. (osvježava se svakih 90 dana), tramvaji 8. 12. 2022. |
+| `zg-javni-bicikli` | Geoportal Geolokacije sustava javnih bicikala | Grad Zagreb | <https://data.zagreb.hr/dataset/geoportal-sustav-javnih-bicikala> | Snimka: 32 stanice; najbliža stanica (dio ocjene mobilnosti, bliža od staze se računa) i sloj na karti | Otvorena dozvola (OD) | resurs ažuriran 8. 12. 2022. |
+| `zg-parkiralista-bicikli` | Geoportal Javna parkirališta za bicikle | Grad Zagreb | <https://data.zagreb.hr/dataset/geoportal-javna-parkiralista-za-bicikle> | Snimka: 318 mjesta za bicikle; sloj na karti (ne ulazi u ocjenu) | Otvorena dozvola (OD) | resurs ažuriran 10. 1. 2023. |
 | `zg-biciklisticke-staze` | Geoportal Biciklističke staze | Grad Zagreb | <https://data.zagreb.hr/dataset/geoportal-biciklisticke-staze> | Snimka: najbliža biciklistička staza (1/5 ocjene zelene mobilnosti), sloj na karti | Otvorena dozvola (OD) | resurs ažuriran 23. 6. 2022. |
 | `osm-parkovi` | Parkovi, šume, javni vrtovi i zaštićena područja, Grad Zagreb | OpenStreetMap contributors | Overpass API `https://overpass-api.de/api/interpreter`, upit u `scripts/fetch_green_mobility.py` | Snimka: najbliži park ili šuma od barem 0,5 ha (sloj Zelenilo), sloj na karti | ODbL 1.0, „© OpenStreetMap contributors" | stanje OSM-a 6. 11. 2026. |
 | `osm-adrese` | Adrese i naselja u Gradu Zagrebu | OpenStreetMap contributors | Overpass API, upit u `scripts/fetch_addresses.py` | Snimka: pretraga adresa | ODbL 1.0, „© OpenStreetMap contributors" | stanje OSM-a 5. 11. 2026. |
@@ -60,6 +62,10 @@ DHMZ upravlja državnim postajama Zagreb 1–4 i na svojim stranicama objavljuje
 ### Otpad: `zg-reciklaza`, `zg-zeleni-otoci`, `osm-reciklaza`
 
 Gradski skup ima 20 reciklažnih dvorišta: 10 fiksnih i 10 mobilnih (mobilna rade samo određenim danima i ne ulaze u ocjenu). Gradski popis zelenih otoka iz 2016. nema koordinata, samo opis lokacije, pa se udaljenost računa iz OpenStreetMapa: 628 spremnika za papir, plastiku ili staklo. Gradski popis ostaje službena referenca. Pokrivenost OSM-a izvan središta grada je rjeđa.
+
+### Javni bicikli i parkirališta: `zg-javni-bicikli`, `zg-parkiralista-bicikli`
+
+Stanice sustava javnih bicikala (32, s 208 stalaka) i javna parkirališta za bicikle (318 mjesta, 1 678 stalaka) iz gradskih geoportal skupova. Skup stanica nigdje ne navodi operatera; prema OpenStreetMapu stanice su sustava Bajs, pa se u aplikaciji naziv „Bajs“ ne koristi dok se ne provjeri (`TODO(verify)`). Stanice ulaze u ocjenu zelene mobilnosti kao alternativa biciklističkoj stazi (vidi `ekoskor.md`); parkirališta su samo na karti.
 
 ### Zelena mobilnost i zelenilo: `zg-zet`, `zg-biciklisticke-staze`, `osm-parkovi`
 

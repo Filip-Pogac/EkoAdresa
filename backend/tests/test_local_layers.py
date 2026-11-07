@@ -92,3 +92,12 @@ def test_mobile_yard_does_not_count_for_the_score() -> None:
 def test_sljeme_scores_zero_for_waste() -> None:
     layer = waste_at(*POINTS["sljeme"])
     assert (layer.score, layer.status) == (0, "red")
+
+
+def test_bike_station_counts_when_nearer_than_a_lane() -> None:
+    # 2026-11-07: station 23 m away (Eurospin Branimirova), nearest bike lane 422 m away.
+    # A lane alone would give 72; the nearer station sets the bike part to 100.
+    layer = mobility_at(45.818249, 16.043836)
+    assert layer.nearest_bike_station.distance_m == 23
+    assert layer.nearest_bike_path.distance_m == 422
+    assert layer.bike_score == 100

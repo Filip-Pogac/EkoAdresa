@@ -32,13 +32,22 @@ const OVERLAY_SOURCE_IDS = new Set<string>([
   'noise',
   'parks',
   'bike_paths',
+  'bike_stations',
+  'bike_parking',
   'air_stations',
   'recycling_yards',
   'green_islands',
   'stops',
 ]);
 
-const POINT_LAYER_IDS: OverlayId[] = ['air_stations', 'recycling_yards', 'green_islands', 'stops'];
+const POINT_LAYER_IDS: OverlayId[] = [
+  'air_stations',
+  'recycling_yards',
+  'green_islands',
+  'stops',
+  'bike_stations',
+  'bike_parking',
+];
 
 /** MapLibre turns array properties into JSON strings. */
 function stringList(value: unknown): string[] {
@@ -61,6 +70,10 @@ function popupText(id: OverlayId, p: Record<string, unknown>): string {
       return hr.map.popup.yard(str(p.name) ?? '', p.kind === 'mobile', str(p.opening_hours));
     case 'stops':
       return hr.map.popup.stop(str(p.name), stringList(p.lines));
+    case 'bike_stations':
+      return hr.map.popup.bikeStation(str(p.name), p.racks, str(p.location));
+    case 'bike_parking':
+      return hr.map.popup.bikeParking(str(p.name), p.racks, str(p.location));
     default:
       return hr.map.popup.island;
   }

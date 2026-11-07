@@ -124,7 +124,7 @@ export const hr = {
         worst: 'nijedan do 500 m',
       },
       {
-        layer: 'Zelena mobilnost: bicikl (1/5 sloja), najbliža biciklistička staza',
+        layer: 'Zelena mobilnost: bicikl (1/5 sloja), najbliža staza ili stanica javnih bicikala',
         weight: '',
         best: 'do 200 m',
         mid: '600 m (linearno)',
@@ -202,6 +202,8 @@ export const hr = {
       noise: 'Buka',
       parks: 'Parkovi i šume',
       bike_paths: 'Biciklističke staze',
+      bike_stations: 'Stanice javnih bicikala',
+      bike_parking: 'Parkirališta za bicikle',
       air_stations: 'Mjerne postaje zraka',
       recycling_yards: 'Reciklažna dvorišta',
       green_islands: 'Zeleni otoci',
@@ -212,6 +214,8 @@ export const hr = {
       noise: 'Grad Zagreb',
       parks: '© OpenStreetMap contributors',
       bike_paths: 'Grad Zagreb',
+      bike_stations: 'Grad Zagreb',
+      bike_parking: 'Grad Zagreb',
       air_stations: 'Grad Zagreb',
       recycling_yards: 'Grad Zagreb',
       green_islands: '© OpenStreetMap contributors',
@@ -230,6 +234,22 @@ export const hr = {
       yard: (name: string, mobile: boolean, hours: string | null) =>
         [name, mobile ? 'mobilno dvorište' : null, hours].filter(Boolean).join(' · '),
       island: 'Zeleni otok',
+      bikeStation: (name: string | null, racks: unknown, location: string | null) =>
+        [
+          name ?? 'Stanica javnih bicikala',
+          typeof racks === 'number' ? `${racks} stalaka` : null,
+          location,
+        ]
+          .filter(Boolean)
+          .join(' · '),
+      bikeParking: (name: string | null, racks: unknown, location: string | null) =>
+        [
+          name ?? 'Parkiralište za bicikle',
+          typeof racks === 'number' ? `${racks} mjesta` : null,
+          location,
+        ]
+          .filter(Boolean)
+          .join(' · '),
       stop: (name: string | null, lines: string[]) =>
         `${name ?? 'Stajalište'}${lines.length ? ` · ${lines.length === 1 ? 'linija' : 'linije'} ${lines.join(', ')}` : ''}`,
     },
@@ -381,10 +401,14 @@ export const hr = {
       },
       bike: (l: MobilityLayer) => {
         const b = l.nearest_bike_path;
-        return `Biciklistička staza ${formatDistance(b.distance_m)}${b.name ? ` (${b.name})` : ''}.`;
+        const s = l.nearest_bike_station;
+        const stationName = s.name
+          ? ` (${s.name}${s.racks === null ? '' : `, ${s.racks} stalaka`})`
+          : '';
+        return `Biciklistička staza ${formatDistance(b.distance_m)}${b.name ? ` (${b.name})` : ''}. Stanica javnih bicikala ${formatDistance(s.distance_m)}${stationName}.`;
       },
       parts: (l: MobilityLayer) =>
-        `Ocjena: javni prijevoz ${l.transit_score} (4/5), bicikl ${l.bike_score} (1/5). Udaljenosti zračnom linijom.`,
+        `Ocjena: javni prijevoz ${l.transit_score} (4/5), bicikl ${l.bike_score} (1/5, računa se bliža od staze i stanice). Udaljenosti zračnom linijom.`,
     },
     green: {
       title: 'Zelenilo',

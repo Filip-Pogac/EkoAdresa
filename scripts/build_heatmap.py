@@ -287,7 +287,18 @@ def local_layers(grid: pd.DataFrame) -> pd.DataFrame:
             "island_m": nearest_m(cells, project(islands)),
             "stops_300m": count_within(cells, stop_xy, ekoskor.STOPS_NEAR_M),
             "stops_500m": count_within(cells, stop_xy, ekoskor.STOPS_WALK_M),
-            "bike_m": nearest_line_or_area_m(cells, mobility.BIKE_FILE),
+            # the nearer of bike path and public bike station, as in services/mobility.py
+            "bike_m": np.minimum(
+                nearest_line_or_area_m(cells, mobility.BIKE_FILE),
+                nearest_m(
+                    cells,
+                    project(
+                        json.loads((DATA / "bike_stations.geojson").read_text(encoding="utf-8"))[
+                            "features"
+                        ]
+                    ),
+                ),
+            ),
             "green_m": nearest_line_or_area_m(cells, green.DATA_FILE),
             "air_station": [station_ids[i] for i in nearest_station],
             "pm10": [pm10[station_ids[i]] for i in nearest_station],

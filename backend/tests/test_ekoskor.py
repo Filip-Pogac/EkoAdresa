@@ -128,6 +128,7 @@ def test_green(distance_m: float, expected: float) -> None:
         (0, 1, 600, 50),  # 0.8 * 50 + 0.2 * 50
         (0, 1, 5000, 40),  # a stop within 500 m, no bike path: Umjereno, not Loše
         (0, 0, 920, 2),  # middle of Maksimir: no stop within 500 m, bike path 920 m
+        (0, 0, 150, 20),  # bike score from the nearer of path or station (see mobility_at)
     ],
 )
 def test_mobility(n300: int, n500: int, bike_m: float, expected: float) -> None:

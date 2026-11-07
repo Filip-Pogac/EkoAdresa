@@ -32,9 +32,9 @@ EkoSkor je broj od 0 do 100. Svaki od šest slojeva dobiva ocjenu od 0 do 100, z
   | Dio | Udio u sloju | 100 | 0 | Između |
   |---|---|---|---|---|
   | **Javni prijevoz:** perona ZET-a (jedna objavljena točka po stajalištu i smjeru, odluka 5. 11. 2026.) | 4/5 | ≥ 3 perona do 300 m | nijedan do 500 m | 50 ako do 300 m nema 3 perona, a do 500 m ima barem jedan |
-  | **Bicikl:** najbliža gradska biciklistička staza | 1/5 | ≤ 200 m | ≥ 1 km | linearno |
+  | **Bicikl:** najbliža gradska biciklistička staza ili stanica javnih bicikala (bliža se računa) | 1/5 | ≤ 200 m | ≥ 1 km | linearno |
 
-  - Prag od 200 m za biciklističku stazu naša je odluka (nema usporedive objavljene smjernice). Udaljenost je do najbliže točke staze.
+  - Prag od 200 m za biciklističku stazu i stanicu naša je odluka (nema usporedive objavljene smjernice). Udaljenost je do najbliže točke staze ili do stanice. Stanica javnih bicikala ulazi u ocjenu od 7. 11. 2026. (odluka): ako je bliža od staze, ona određuje dio za bicikl. Parkirališta za bicikle samo su na karti.
   - Kartica prikazuje oba dijela i njihove ocjene, pa se ocjena sloja može provjeriti.
   - Primjer: jedan peron do 500 m i nijedna staza do 1 km daje 0,8 × 50 = 40, dakle Umjereno. (Udio bicikla smanjen je s 1/3 na 1/5 istog dana, jer je uz 1/3 takva adresa dobivala 33, Loše, pa je 73 % Grada imalo lošu mobilnost.)
 - **Zelenilo.** Zračna udaljenost do najbližeg parka, šume, javnog vrta ili zaštićenog područja od barem 0,5 ha (OpenStreetMap), do ruba površine; unutar nje udaljenost je 0. Ocjena 100 uz ≤ 300 m, 0 uz ≥ 1 km, linearno između. Prag od 300 m i najmanja površina od 0,5 ha preporuka su Regionalnog ureda SZO-a za Europu (*Urban green spaces: a brief for action*, 2017.): zelena površina od barem 0,5–1 ha na najviše 300 m zračne udaljenosti od stana. Pješačke staze se ne boduju zasebno: u gradu postoje gotovo uz svaku adresu, pa ne bi razlikovale adrese.

@@ -8,6 +8,8 @@ export type OverlayId =
   | 'noise'
   | 'parks'
   | 'bike_paths'
+  | 'bike_stations'
+  | 'bike_parking'
   | 'air_stations'
   | 'recycling_yards'
   | 'green_islands'
@@ -18,6 +20,8 @@ export const OVERLAY_IDS: OverlayId[] = [
   'noise',
   'parks',
   'bike_paths',
+  'bike_stations',
+  'bike_parking',
   'air_stations',
   'recycling_yards',
   'green_islands',
@@ -57,6 +61,8 @@ export const POINT_STYLE: Record<
   recycling_yards: { colour: '#1F7A4D', radius: 7 },
   green_islands: { colour: '#7B5EA7', radius: 4 },
   stops: { colour: '#14211A', radius: 4 },
+  bike_stations: { colour: '#2B5FA8', radius: 6 }, // same blue as the bike paths
+  bike_parking: { colour: '#7F9CC9', radius: 4 },
 };
 
 const RASTER_OPACITY = 0.6;
