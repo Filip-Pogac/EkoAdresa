@@ -76,6 +76,7 @@ Python 3.11+, FastAPI, pydantic, httpx2, Shapely, pyproj, NumPy, pandas, PyArrow
 | `fetch_waste.py` | data.zagreb.hr, OpenStreetMap (Overpass) | `data/waste.geojson` |
 | `fetch_transit.py` | data.zagreb.hr | `data/transit.geojson` |
 | `fetch_green_mobility.py` | data.zagreb.hr, OpenStreetMap (Overpass) | `data/bike_paths.geojson`, `data/parks.geojson` |
+| `fetch_bike_points.py` | data.zagreb.hr | `data/bike_stations.geojson`, `data/bike_parking.geojson` |
 | `fetch_addresses.py` | OpenStreetMap (Overpass) | `data/addresses.parquet` |
 | `build_heatmap.py` | sve gore + WMS poplava i buke | `data/heatmap.geojson`, `data/zagreb_boundary.geojson` |
 | `warm_cache.py` | backend servisi | `data/cache_seed.json` (unaprijed popunjena predmemorija za demo adrese) |
