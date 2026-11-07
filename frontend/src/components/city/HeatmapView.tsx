@@ -8,8 +8,12 @@ import { Skeleton } from '../common/Skeleton';
 import { maplibregl, STYLE_URL, ZAGREB_CENTER } from '../map/maplibre';
 import { FILL_COLOUR } from './heatmapClasses';
 
+/** Popup text is set explicitly: the popup is white, and the page's light text was unreadable. */
+const POPUP_TEXT = '#1f7a4d';
+
 function popupContent(cell: HeatmapCell, onOpen: () => void): HTMLElement {
   const root = document.createElement('div');
+  root.style.color = POPUP_TEXT;
   const score = document.createElement('p');
   score.style.fontWeight = '700';
   score.textContent = hr.city.popup(cell.ekoskor);
@@ -18,6 +22,7 @@ function popupContent(cell: HeatmapCell, onOpen: () => void): HTMLElement {
   const button = document.createElement('button');
   button.type = 'button';
   button.textContent = hr.city.openProfile;
+  button.style.color = POPUP_TEXT;
   button.style.textDecoration = 'underline';
   button.style.fontWeight = '600';
   button.style.minHeight = '48px';

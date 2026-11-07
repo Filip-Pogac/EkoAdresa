@@ -1,13 +1,14 @@
 import type { maplibregl } from '../map/maplibre';
 
-/** EkoSkor classes for the city map: sequential ColorBrewer YlGn (colour-blind safe). Not the
- * traffic-light colours, which are reserved for layer status on the address card. */
+/** EkoSkor classes for the city map, worst to best: red, orange, yellow, light green, dark
+ * green (ColorBrewer RdYlGn, 5 classes). Only for the city map; the traffic-light colours on
+ * the address card are for layer status. */
 export const HEATMAP_CLASSES = [
-  { from: 0, to: 20, colour: '#ffffcc' },
-  { from: 21, to: 40, colour: '#c2e699' },
-  { from: 41, to: 60, colour: '#78c679' },
-  { from: 61, to: 80, colour: '#31a354' },
-  { from: 81, to: 100, colour: '#006837' },
+  { from: 0, to: 20, colour: '#d73027' },
+  { from: 21, to: 40, colour: '#fc8d59' },
+  { from: 41, to: 60, colour: '#fee08b' },
+  { from: 61, to: 80, colour: '#91cf60' },
+  { from: 81, to: 100, colour: '#1a9850' },
 ];
 
 const [lowest, ...higher] = HEATMAP_CLASSES;
