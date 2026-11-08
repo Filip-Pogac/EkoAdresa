@@ -1,6 +1,6 @@
 # EkoAdresa
 
-**Kako je živjeti na ovoj adresi?** EkoAdresa za bilo koju adresu u Zagrebu na jednom mjestu prikazuje opasnost od poplava, razinu buke, kvalitetu zraka, blizinu reciklaže te javnog prijevoza, biciklističkih staza i parkova, uz jednu ocjenu: **EkoSkor 0–100**. Svaki podatak dolazi iz javno objavljenih otvorenih podataka i uz njega piše izvor.
+**Kako je živjeti na ovoj adresi?** EkoAdresa za bilo koju adresu u Zagrebu na jednom mjestu prikazuje opasnost od poplava, razinu buke, kvalitetu zraka, blizinu reciklaže te javnog prijevoza, biciklističkih staza i parkova, uz jednu ocjenu: **EkoSkor 0–100**. Svaki podatak dolazi iz javno objavljenih otvorenih podataka; svi izvori s izdavačima i licencijama navedeni su na stranici **Izvori**.
 
 Rješenje za **Datathon Portala otvorenih podataka 2026**, izazov B: *Okoliš i održivi prostor*.
 
@@ -22,7 +22,7 @@ Podaci o okolišu već postoje u javnim servisima: karte opasnosti od poplava Hr
 
 | | |
 |---|---|
-| **Početna stranica:** pretraga adrese s dovršavanjem upisa (i tipkovnicom), tri primjera ili klik na kartu Zagreba | **Kartica adrese:** EkoSkor i pet slojeva (poplave, buka, zrak, zelena mobilnost, zelenilo), svaki sa semaforom, tekstom i ikonom (ne samo bojom), jednom rečenicom na hrvatskom, izvorom i datumom podataka |
+| **Početna stranica:** pretraga adrese s dovršavanjem upisa (i tipkovnicom), tri primjera ili klik na kartu Zagreba | **Kartica adrese:** EkoSkor i pet slojeva (poplave, buka, zrak, zelena mobilnost, zelenilo), svaki sa semaforom, tekstom i ikonom (ne samo bojom), jednom rečenicom na hrvatskom i datumom podataka (izvori na stranici Izvori) |
 | **Karta** s krugom od 500 m i slojevima koji se uključuju: poplave, buka, parkovi i šume, biciklističke staze, stanice javnih bicikala, parkirališta za bicikle, mjerne postaje, reciklažna dvorišta, zeleni otoci, stajališta ZET-a; **klik na kartu** daje EkoSkor bilo koje točke | **Graf mjerenja zraka** po danima uz smjernice SZO-a |
 | **Usporedba dviju adresa** s oznakom „Bolje" po sloju | **Za grad:** EkoSkor na mreži 250 × 250 m za cijeli Zagreb |
 | **Kako računamo?** cijela formula i pragovi, javno | **Izvori:** svi skupovi s izdavačima, licencijama i poveznicama |

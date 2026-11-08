@@ -11,7 +11,7 @@
 The user types an address and instantly sees **what it is like to live there** environmentally. Data that already exists in public GIS services (flood maps, noise maps, air quality stations) is buried where an ordinary person never looks. EkoAdresa turns it into one clear answer: *"Is this a good place to live, and why?"* Typical moment: choosing a flat to rent or buy, a kindergarten or a school.
 
 1. **Search** — address autocomplete (local index of OpenStreetMap addresses, City of Zagreb) plus 3 example addresses for a quick demo.
-2. **Address card** — **EkoSkor 0–100** and a traffic-light row per layer, each with one plain Croatian sentence and its data source:
+2. **Address card** — **EkoSkor 0–100** and a traffic-light row per layer, each with one plain Croatian sentence (sources listed on the separate Izvori page, decision 2026-11-08; the API still returns a `source_id` per layer):
    - **Poplave** — inside a high / medium (100-year) / low probability flood zone, or outside all zones (Hrvatske vode).
    - **Buka** — L<sub>den</sub> and L<sub>night</sub> in dB compared with WHO guidance (strategic noise maps).
    - **Zrak** — nearest monitoring station, distance, latest index, 30-day history chart.
@@ -127,7 +127,7 @@ We deliberately do **not** use: PostGIS server, microservices, Kubernetes, a vec
         ├── pages/                # Home, Address, Compare, City, Sources
         ├── components/
         │   ├── search/           # AddressSearch, ExampleAddresses
-        │   ├── card/             # EkoSkorRing, LayerRow, LayerDetail, SourceBadge
+        │   ├── card/             # EkoSkorRing, LayerRow, LayerDetail
         │   ├── map/              # AddressMap, LayerToggle, Legend
         │   ├── chat/             # AssistantPanel, MessageBubble, SuggestedQuestions
         │   ├── compare/          # CompareView, DiffRow, AiSummary

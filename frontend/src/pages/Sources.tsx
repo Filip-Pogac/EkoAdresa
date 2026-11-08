@@ -7,7 +7,6 @@ import { hr } from '../i18n/hr';
 const t = hr.sources;
 
 export function Sources() {
-  // same cache entry as useSources (which only adds a by-id `select`): one request
   const { data, error, isPending, refetch } = useQuery({
     queryKey: ['sources'],
     queryFn: ({ signal }) => api.sources(signal),

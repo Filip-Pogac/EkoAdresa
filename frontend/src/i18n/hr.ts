@@ -298,7 +298,6 @@ export const hr = {
     unavailable: 'Nedostupno',
   } satisfies Record<Status, string>,
   source: {
-    prefix: 'Izvor:',
     stale: (iso: string) =>
       `Servis ne odgovara; prikazan zadnji spremljeni podatak od ${formatDate(iso)}.`,
   },

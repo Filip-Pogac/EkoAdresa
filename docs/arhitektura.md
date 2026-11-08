@@ -39,7 +39,7 @@ React 18, TypeScript (strogi način), Vite, Tailwind CSS, MapLibre GL JS, Rechar
 | Stranica | Put | Sadržaj |
 |---|---|---|
 | Početna | `/` | Pretraga adresa (dovršavanje upisa, tipkovnica) i 3 primjera |
-| Adresa | `/adresa?lat=&lon=&a=` | Karta sa slojevima (klik na kartu otvara profil te točke), EkoSkor, 5 redaka slojeva sa semaforom, rečenicom i izvorom, graf mjerenja zraka |
+| Adresa | `/adresa?lat=&lon=&a=` | Karta sa slojevima (klik na kartu otvara profil te točke), EkoSkor, 5 redaka slojeva sa semaforom i rečenicom, graf mjerenja zraka (izvori su na stranici Izvori; API vraća `source_id` uz svaki sloj) |
 | Usporedba | `/usporedba?a_lat=…&b_lat=…` | Dvije adrese usporedno, bolja strana označena tekstom „Bolje" i okvirom |
 | Za grad | `/grad` | EkoSkor na mreži 250 × 250 m za cijeli Zagreb |
 | Izvori | `/izvori` | Svi skupovi podataka s izdavačima, licencijama i poveznicama |
