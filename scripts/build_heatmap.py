@@ -7,6 +7,7 @@ cell centre:
 - noise:    zg-buka GetFeatureInfo per cell, exactly as the point lookup, through the
             SQLite cache (resumable), 2 requests at a time
 - air:      mean PM10 Jan-Aug 2023 of the nearest City station (data/air_history.parquet)
+- waste:    data/waste.geojson (fixed yards only, OSM green islands)
 - mobility: data/transit.geojson (platforms), data/bike_paths.geojson
 - green:    data/parks.geojson
 
@@ -260,6 +261,13 @@ def nearest_line_or_area_m(cells: np.ndarray, file: str) -> np.ndarray:
 def local_layers(grid: pd.DataFrame) -> pd.DataFrame:
     cells = grid[["x", "y"]].to_numpy()
 
+    waste = json.loads((DATA / "waste.geojson").read_text(encoding="utf-8"))["features"]
+    yards = [
+        f
+        for f in waste
+        if f["properties"]["type"] == "recycling_yard" and f["properties"]["kind"] == "fixed"
+    ]
+    islands = [f for f in waste if f["properties"]["type"] == "green_island"]
     stops = json.loads((DATA / "transit.geojson").read_text(encoding="utf-8"))["features"]
 
     stations = json.loads((DATA / "air_stations.geojson").read_text(encoding="utf-8"))["features"]
@@ -275,6 +283,8 @@ def local_layers(grid: pd.DataFrame) -> pd.DataFrame:
     stop_xy = project(stops)
     return pd.DataFrame(
         {
+            "yard_m": nearest_m(cells, project(yards)),
+            "island_m": nearest_m(cells, project(islands)),
             "stops_300m": count_within(cells, stop_xy, ekoskor.STOPS_NEAR_M),
             "stops_500m": count_within(cells, stop_xy, ekoskor.STOPS_WALK_M),
             # the nearer of bike path and public bike station, as in services/mobility.py
@@ -333,6 +343,7 @@ async def main() -> None:
             "flood": ekoskor.flood_score(zones[i]),  # type: ignore[arg-type]
             "noise": None if lden == "unavailable" else ekoskor.noise_score(lden),  # type: ignore[arg-type]
             "air": ekoskor.air_score(loc["pm10"]),
+            "waste": ekoskor.waste_score(loc["yard_m"], loc["island_m"]),
             "mobility": ekoskor.mobility_score(
                 int(loc["stops_300m"]), int(loc["stops_500m"]), round(loc["bike_m"])
             ),
@@ -360,6 +371,8 @@ async def main() -> None:
                 "zg-buka",
                 "zg-zrak-mjerenja",
                 "zg-zrak-postaje",
+                "zg-reciklaza",
+                "osm-reciklaza",
                 "zg-zet",
                 "zg-biciklisticke-staze",
                 "osm-parkovi",

@@ -6,7 +6,7 @@ export const API_URL =
 /** Version of the data snapshots in data/ (map layers, city heatmap). Bump it whenever those
  * files change: the URLs change with it, so browsers fetch the new data at once instead of
  * a cached copy. */
-export const DATA_VERSION = '2026-11-08.2';
+export const DATA_VERSION = '2026-11-08.3';
 
 export interface LatLon {
   lat: number;
@@ -19,6 +19,7 @@ export interface HeatmapCell {
   flood: number;
   noise: number;
   air: number;
+  waste: number;
   mobility: number;
   green: number;
 }

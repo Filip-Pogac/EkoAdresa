@@ -98,7 +98,7 @@ SOURCES: dict[str, Source] = {
             urls=[_DATA_ZAGREB + "reciklazna-dvorista-grada-zagreba1"],
             licence="Otvorena dozvola (OD)",
             data_as_of="2022-12-01",
-            used_for="Reciklažna dvorišta na karti (ne ulazi u EkoSkor)",
+            used_for="Najbliže fiksno i mobilno reciklažno dvorište",
         ),
         Source(
             id="osm-reciklaza",
@@ -108,7 +108,7 @@ SOURCES: dict[str, Source] = {
             urls=[_OVERPASS],
             licence="ODbL 1.0, © OpenStreetMap contributors",
             data_as_of="2026-11-04",
-            used_for="Zeleni otoci na karti (ne ulazi u EkoSkor)",
+            used_for="Najbliži zeleni otok (papir, plastika ili staklo)",
         ),
         Source(
             id="zg-biciklisticke-staze",

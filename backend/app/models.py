@@ -152,6 +152,23 @@ class Place(BaseModel):
     source_id: str
 
 
+class RecyclingYard(Place):
+    address: str | None
+    opening_hours: str | None  # as published (2022 data)
+
+
+class GreenIsland(Place):
+    accepts: list[str]  # e.g. ["glass", "paper", "plastic"]
+
+
+class WasteLayer(LayerBase):
+    yard: RecyclingYard  # nearest fixed yard (scored)
+    mobile_yard: RecyclingYard  # nearest mobile yard: extra information, not scored
+    island: GreenIsland
+    yard_distance_m: int
+    island_distance_m: int
+
+
 class Stop(Place):
     type: Literal["bus", "tram"]
     direction: str | None
@@ -210,6 +227,7 @@ class Layers(BaseModel):
     flood: FloodLayer | UnavailableLayer
     noise: NoiseLayer | UnavailableLayer
     air: AirLayer | UnavailableLayer
+    waste: WasteLayer | UnavailableLayer
     mobility: MobilityLayer | UnavailableLayer
     green: GreenLayer | UnavailableLayer
 
@@ -227,7 +245,7 @@ class Profile(BaseModel):
     generated_at: datetime
 
 
-LayerName = Literal["flood", "noise", "air", "mobility", "green"]
+LayerName = Literal["flood", "noise", "air", "waste", "mobility", "green"]
 
 
 class LayerDiff(BaseModel):

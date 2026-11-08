@@ -13,6 +13,7 @@ from app.services.ekoskor import (
     noise_score,
     status,
     transit_score,
+    waste_score,
 )
 
 
@@ -20,13 +21,14 @@ def test_weights_sum_to_one() -> None:
     assert sum(WEIGHTS.values()) == pytest.approx(1.0)
 
 
-def test_five_layer_weights() -> None:  # decision 2026-11-08: waste removed, 20 % each
+def test_six_layer_weights() -> None:  # decision 2026-11-08
     assert WEIGHTS == {
-        "flood": 0.20,
         "noise": 0.20,
-        "air": 0.20,
         "mobility": 0.20,
+        "air": 0.20,
         "green": 0.20,
+        "flood": 0.10,
+        "waste": 0.10,
     }
 
 
@@ -65,6 +67,24 @@ def test_noise(lden_db: float | None, expected: float) -> None:
 )
 def test_air(pm10: float, expected: float) -> None:
     assert air_score(pm10) == pytest.approx(expected)
+
+
+@pytest.mark.parametrize(
+    ("yard_m", "island_m", "expected"),
+    [
+        (1000, 300, 100),  # both "near" edges inclusive
+        (200, 50, 100),
+        (5000, 1500, 0),  # both "far" edges
+        (9000, 4000, 0),
+        (5000, 300, 50),  # island perfect, yard at far edge
+        (1000, 1500, 50),  # yard perfect, island at far edge
+        (3000, 900, 50),  # both halfway: 50 and 50
+        (2000, 300, 87.5),  # yard 75, island 100
+        (1000, 600, 87.5),  # yard 100, island 75
+    ],
+)
+def test_waste(yard_m: float, island_m: float, expected: float) -> None:
+    assert waste_score(yard_m, island_m) == pytest.approx(expected)
 
 
 @pytest.mark.parametrize(
@@ -116,9 +136,10 @@ def test_mobility(n300: int, n500: int, bike_m: float, expected: float) -> None:
 
 
 def test_all_layers_weighted_mean() -> None:
-    scores = {"flood": 100.0, "noise": 0.0, "air": 50.0, "mobility": 75.0, "green": 100.0}
-    # 20 + 0 + 10 + 15 + 20 = 65
-    assert ekoskor(scores) == 65  # type: ignore[arg-type]
+    scores = {"flood": 100.0, "noise": 0.0, "air": 50.0, "waste": 100.0, "mobility": 50.0,
+              "green": 100.0}  # fmt: skip
+    # flood 10 + noise 0 + air 10 + waste 10 + mobility 10 + green 20 = 60
+    assert ekoskor(scores) == 60  # type: ignore[arg-type]
 
 
 def test_extremes() -> None:
@@ -127,22 +148,27 @@ def test_extremes() -> None:
 
 
 def test_missing_layer_renormalises() -> None:
-    # air unavailable: (20*100 + 20*0 + 20*100 + 20*50) / 0.80 = 5000 / 80 = 62.5 -> 63
-    scores = {"flood": 100.0, "noise": 0.0, "air": None, "mobility": 100.0, "green": 50.0}
+    # air unavailable: (10*100 + 20*0 + 10*100 + 20*100 + 20*50) / 0.80 = 5000 / 80 = 62.5 -> 63
+    scores = {"flood": 100.0, "noise": 0.0, "air": None, "waste": 100.0, "mobility": 100.0,
+              "green": 50.0}  # fmt: skip
     assert ekoskor(scores) == 63  # type: ignore[arg-type]
 
 
 def test_rounds_half_up() -> None:
-    # 0 + 20 + 10 + 7.5 + 5 = 42.5 -> 43 (Python's round() would give 42)
-    scores = {"flood": 0.0, "noise": 100.0, "air": 50.0, "mobility": 37.5, "green": 25.0}
+    # flood 0 + noise 20 + air 10 + waste 5 + mobility 0 + green 7.5 = 42.5 -> 43
+    # (Python's round() would give 42)
+    scores = {"flood": 0.0, "noise": 100.0, "air": 50.0, "waste": 50.0, "mobility": 0.0,
+              "green": 37.5}  # fmt: skip
     assert ekoskor(scores) == 43  # type: ignore[arg-type]
 
 
 def test_three_layers_is_enough_two_is_not() -> None:
-    three = {"flood": 100.0, "noise": 100.0, "air": None, "mobility": 0.0, "green": None}
-    # (2000 + 2000 + 0) / 60 = 66.7 -> 67
-    assert ekoskor(three) == 67  # type: ignore[arg-type]
-    two = {"flood": 100.0, "noise": 100.0, "air": None, "mobility": None, "green": None}
+    three = {"flood": 100.0, "noise": 100.0, "air": None, "waste": 0.0, "mobility": None,
+             "green": None}  # fmt: skip
+    # flood, noise, waste: (10*100 + 20*100 + 10*0) / 0.40 = 3000 / 40 = 75
+    assert ekoskor(three) == 75  # type: ignore[arg-type]
+    two = {"flood": 100.0, "noise": 100.0, "air": None, "waste": None, "mobility": None,
+           "green": None}  # fmt: skip
     assert ekoskor(two) is None  # type: ignore[arg-type]
 
 
@@ -180,3 +206,12 @@ def test_mobility_status_depends_only_on_transit(bike_m: float) -> None:
     assert status(mobility_score(3, 3, bike_m)) == "green"
     assert status(mobility_score(2, 5, bike_m)) == "yellow"
     assert status(mobility_score(0, 0, bike_m)) == "red"
+
+
+@pytest.mark.parametrize(
+    ("yard_m", "island_m", "expected"),
+    [(1000, 1000, "green"), (3000, 900, "yellow"), (5000, 1200, "red")],
+)
+def test_waste_status_examples_as_published(yard_m: float, island_m: float, expected: str) -> None:
+    # examples in the "Semafor po sloju" table (hr.ts lightsRows, docs/ekoskor.md)
+    assert status(waste_score(yard_m, island_m)) == expected

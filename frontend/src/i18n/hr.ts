@@ -10,6 +10,7 @@ import type {
   Pollutant,
   Status,
   UnavailableLayer,
+  WasteLayer,
 } from '../api/types';
 import { formatDate, formatDistance, formatNumber } from '../format';
 
@@ -77,7 +78,7 @@ export const hr = {
     title: 'Kako računamo EkoSkor?',
     close: 'Zatvori',
     intro:
-      'EkoSkor je broj od 0 do 100. Svaki od pet slojeva dobiva ocjenu od 0 do 100, a EkoSkor je njihov ponderirani prosjek, zaokružen na cijeli broj. Ocjene slojeva prikazane su na kartici, pa EkoSkor svatko može sam izračunati.',
+      'EkoSkor je broj od 0 do 100. Svaki od šest slojeva dobiva ocjenu od 0 do 100, a EkoSkor je njihov ponderirani prosjek, zaokružen na cijeli broj. Ocjene slojeva prikazane su na kartici, pa EkoSkor svatko može sam izračunati.',
     tableCaption: 'Ponder i pragovi po slojevima',
     columns: {
       layer: 'Sloj',
@@ -88,25 +89,11 @@ export const hr = {
     },
     rows: [
       {
-        layer: 'Poplave',
-        weight: '20 %',
-        best: 'izvan svih zona opasnosti',
-        mid: 'zona male vjerojatnosti',
-        worst: 'zona srednje ili velike vjerojatnosti',
-      },
-      {
         layer: 'Buka (Lden, najglasniji izvor)',
         weight: '20 %',
         best: 'do 53 dB (smjernica SZO)',
         mid: '54–64 dB',
         worst: '65 dB ili više',
-      },
-      {
-        layer: 'Zrak (PM10, najbliža gradska postaja, sij.–kol. 2023.)',
-        weight: '20 %',
-        best: 'do 15 µg/m³ (smjernica SZO)',
-        mid: '27,5 µg/m³ (linearno)',
-        worst: '40 µg/m³ ili više (granica EU)',
       },
       {
         layer: 'Zelena mobilnost: javni prijevoz (4/5 sloja), perona ZET-a',
@@ -123,11 +110,32 @@ export const hr = {
         worst: '1 km ili dalje',
       },
       {
+        layer: 'Zrak (PM10, najbliža gradska postaja, sij.–kol. 2023.)',
+        weight: '20 %',
+        best: 'do 15 µg/m³ (smjernica SZO)',
+        mid: '27,5 µg/m³ (linearno)',
+        worst: '40 µg/m³ ili više (granica EU)',
+      },
+      {
         layer: 'Zelenilo: najbliži park ili šuma od barem 0,5 ha',
         weight: '20 %',
         best: 'do 300 m (preporuka SZO-a za Europu) ili unutar njega',
         mid: '650 m (linearno)',
         worst: '1 km ili dalje',
+      },
+      {
+        layer: 'Poplave',
+        weight: '10 %',
+        best: 'izvan svih zona opasnosti',
+        mid: 'zona male vjerojatnosti',
+        worst: 'zona srednje ili velike vjerojatnosti',
+      },
+      {
+        layer: 'Otpad',
+        weight: '10 %',
+        best: 'reciklažno dvorište do 1 km i zeleni otok do 300 m',
+        mid: 'prosjek dvaju dijelova, linearno: dvorište 1–5 km, otok 300 m – 1,5 km',
+        worst: 'dvorište 5 km ili dalje i otok 1,5 km ili dalje',
       },
     ],
     lightsTitle: 'Semafor po sloju',
@@ -140,19 +148,7 @@ export const hr = {
       bad: 'Loše (0–33)',
     },
     lightsRows: [
-      {
-        layer: 'Poplave',
-        good: 'izvan svih zona opasnosti',
-        mid: 'zona male vjerojatnosti',
-        bad: 'zona srednje ili velike vjerojatnosti',
-      },
       { layer: 'Buka (Lden)', good: 'do 53 dB', mid: '54–64 dB', bad: '65 dB ili više' },
-      {
-        layer: 'Zrak (PM10)',
-        good: 'do 23,3 µg/m³',
-        mid: '23,4–31,6 µg/m³',
-        bad: '31,7 µg/m³ ili više',
-      },
       {
         layer: 'Zelena mobilnost',
         good: '3 ili više perona ZET-a do 300 m',
@@ -160,14 +156,32 @@ export const hr = {
         bad: 'nijedan peron do 500 m',
       },
       {
+        layer: 'Zrak (PM10)',
+        good: 'do 23,3 µg/m³',
+        mid: '23,4–31,6 µg/m³',
+        bad: '31,7 µg/m³ ili više',
+      },
+      {
         layer: 'Zelenilo',
         good: 'park ili šuma do 534 m (ili unutar)',
         mid: '535–765 m',
         bad: '766 m ili više',
       },
+      {
+        layer: 'Poplave',
+        good: 'izvan svih zona opasnosti',
+        mid: 'zona male vjerojatnosti',
+        bad: 'zona srednje ili velike vjerojatnosti',
+      },
+      {
+        layer: 'Otpad',
+        good: 'npr. dvorište do 1 km i zeleni otok do 1 km',
+        mid: 'npr. dvorište 3 km i otok 900 m',
+        bad: 'npr. dvorište 5 km ili dalje i otok 1,2 km ili dalje',
+      },
     ],
     lightsNote:
-      'Kod zelene mobilnosti stanje ovisi samo o javnom prijevozu; biciklistička staza ili Bajs stanica mijenja bodove unutar istog stanja.',
+      'Kod zelene mobilnosti stanje ovisi samo o javnom prijevozu; biciklistička staza ili Bajs stanica mijenja bodove unutar istog stanja. Kod otpada stanje ovisi o prosjeku dviju udaljenosti (dvorište i zeleni otok), pa su navedeni primjeri.',
     rulesTitle: 'Pravila',
     rules: [
       'Buka: ako je točka unutar zgrade, gdje karta buke nema vrijednosti, uzima se najglasnija vrijednost do 15 m oko točke (ili do 30 m), kao pročelje zgrade najizloženije buci (Direktiva 2002/49/EZ).',
@@ -178,7 +192,7 @@ export const hr = {
     limits: [
       'Karte buke i poplava strateške su karte na razini grada; pojedina zgrada može odstupati.',
       'Zrak opisuje najbližu od 6 gradskih postaja, ne zrak točno na adresi, i podaci su iz 2023.',
-      'Parkovi i šume su iz OpenStreetMapa i popis možda nije potpun. Biciklističke staze su gradski podaci iz 2022.',
+      'Zeleni otoci, parkovi i šume su iz OpenStreetMapa i popis možda nije potpun. Biciklističke staze su gradski podaci iz 2022.',
       'EkoSkor je orijentacija, a ne stručna procjena ni pravni, osiguravateljni ili savjet o nekretninama.',
     ],
     sourcesLink: 'Svi izvori podataka',
@@ -213,8 +227,8 @@ export const hr = {
       'Napomena: karta grada za buku još ne primjenjuje pravilo pročelja zgrade, pa ćelije sa središtem unutar zgrade mogu izgledati tiše. Kartica adrese ga primjenjuje.',
     noPopulation: 'Podaci o broju stanovnika po ćeliji nisu dostupni, pa ih ne prikazujemo.',
     popup: (score: number) => `EkoSkor ${score}`,
-    popupLayers: (s: Record<'flood' | 'noise' | 'air' | 'mobility' | 'green', number>) =>
-      `Poplave ${s.flood} · Buka ${s.noise} · Zrak ${s.air} · Mobilnost ${s.mobility} · Zelenilo ${s.green}`,
+    popupLayers: (s: Record<'flood' | 'noise' | 'air' | 'waste' | 'mobility' | 'green', number>) =>
+      `Buka ${s.noise} · Mobilnost ${s.mobility} · Zrak ${s.air} · Zelenilo ${s.green} · Poplave ${s.flood} · Otpad ${s.waste}`,
     openProfile: 'Otvori profil ove točke',
   },
   map: {
@@ -309,8 +323,8 @@ export const hr = {
     name: 'EkoSkor',
     outOf: 'od 100',
     aria: (score: number) => `EkoSkor ${score} od 100`,
-    missing: 'Premalo dostupnih slojeva za EkoSkor (potrebna su barem 3 od 5).',
-    explain: 'Ponderirani prosjek pet slojeva ispod.',
+    missing: 'Premalo dostupnih slojeva za EkoSkor (potrebna su barem 3 od 6).',
+    explain: 'Ponderirani prosjek šest slojeva ispod.',
   },
   status: {
     green: 'Dobro',
@@ -399,6 +413,12 @@ export const hr = {
         value: 'Vrijednost (µg/m³)',
         noValue: 'nema mjerenja',
       },
+    },
+    waste: {
+      title: 'Otpad',
+      sentence: (l: WasteLayer) =>
+        `Reciklažno dvorište ${formatDistance(l.yard_distance_m)}, zeleni otok ${formatDistance(l.island_distance_m)} (zračnom linijom).`,
+      period: () => 'Reciklažna dvorišta: podaci iz 2022. Zeleni otoci: OpenStreetMap.',
     },
     mobility: {
       title: 'Zelena mobilnost',

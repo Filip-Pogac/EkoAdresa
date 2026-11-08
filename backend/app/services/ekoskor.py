@@ -1,4 +1,4 @@
-"""EkoSkor v1: 0-100 score of an address from five layer sub-scores.
+"""EkoSkor v1: 0-100 score of an address from six layer sub-scores.
 
 Formula and thresholds: CLAUDE.md §2.4 and docs/ekoskor.md. Changing a threshold or weight
 requires updating tests/test_ekoskor.py and docs/ekoskor.md in the same commit.
@@ -11,16 +11,17 @@ import math
 from typing import Literal
 
 FloodZone = Literal["high", "medium", "low", "none"]
-Layer = Literal["flood", "noise", "air", "mobility", "green"]
+Layer = Literal["flood", "noise", "air", "waste", "mobility", "green"]
 
-# Five layers, 20 % each (decision 2026-11-08): the waste layer was removed from the score;
-# recycling yards and green islands stay on the map as information.
+# Six layers (decision 2026-11-08): waste restored at 10 %, flood lowered to 10 %, the other
+# four 20 % each. Order as on the address card.
 WEIGHTS: dict[Layer, float] = {
-    "flood": 0.20,
     "noise": 0.20,
-    "air": 0.20,
     "mobility": 0.20,
+    "air": 0.20,
     "green": 0.20,
+    "flood": 0.10,
+    "waste": 0.10,
 }
 MIN_LAYERS = 3
 
@@ -31,7 +32,13 @@ NOISE_POOR_MIN_DB = 65
 # limit value (40, Directive 2008/50/EC), linear in between.
 PM10_GOOD_UG_M3 = 15.0
 PM10_POOR_UG_M3 = 40.0
-# Mobility distances in metres.
+# Waste and mobility distances in metres.
+# Waste: each distance scores 100 at "near" and 0 at "far", linear in between (decision
+# 2026-11-05, replaces the 1 km / 300 m on-off rule, which scored 0 almost everywhere).
+YARD_NEAR_M = 1000
+YARD_FAR_M = 5000
+ISLAND_NEAR_M = 300
+ISLAND_FAR_M = 1500
 STOPS_NEAR_M = 300
 STOPS_WALK_M = 500
 STOPS_GOOD_COUNT = 3
@@ -74,6 +81,14 @@ def noise_score(lden_db: float | None) -> float:
 def air_score(pm10_ug_m3: float) -> float:
     """100 at ≤ 15 µg/m3, 0 at ≥ 40 µg/m3, linear in between."""
     return _linear_down(pm10_ug_m3, PM10_GOOD_UG_M3, PM10_POOR_UG_M3)
+
+
+def waste_score(yard_distance_m: float, island_distance_m: float) -> float:
+    """Mean of: fixed recycling yard 100 at ≤ 1 km -> 0 at ≥ 5 km, and green island
+    100 at ≤ 300 m -> 0 at ≥ 1.5 km."""
+    yard = _linear_down(yard_distance_m, YARD_NEAR_M, YARD_FAR_M)
+    island = _linear_down(island_distance_m, ISLAND_NEAR_M, ISLAND_FAR_M)
+    return (yard + island) / 2
 
 
 def transit_score(stops_300m: int, stops_500m: int) -> float:

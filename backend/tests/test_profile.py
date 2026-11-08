@@ -37,11 +37,11 @@ def get_profile(point: str, **params: object) -> dict:
 
 
 EXPECTED = {  # status per layer at the reference points
-    "savica": {"flood": "yellow", "noise": "red", "air": "yellow",
+    "savica": {"flood": "yellow", "noise": "red", "air": "yellow", "waste": "green",
                "mobility": "yellow", "green": "green"},
-    "jelacic": {"flood": "green", "noise": "red", "air": "green",
+    "jelacic": {"flood": "green", "noise": "red", "air": "green", "waste": "green",
                 "mobility": "green", "green": "green"},
-    "sljeme": {"flood": "green", "noise": "green", "air": "green",
+    "sljeme": {"flood": "green", "noise": "green", "air": "green", "waste": "red",
                "mobility": "yellow", "green": "green"},
 }  # fmt: skip
 
@@ -102,7 +102,7 @@ def test_all_remote_services_down_still_scores_three_local_layers(
     use(lambda request: httpx.Response(502))  # flood, noise down; air without live index
     body = get_profile("jelacic")
     assert body["layers"]["flood"]["status"] == body["layers"]["noise"]["status"] == "unavailable"
-    # air (2023 data), mobility and green are local: 3 layers, so there is still a score.
+    # air (2023 data), waste and mobility are local: 3 layers, so there is still a score.
     # Fewer than 3 cannot happen through the API; covered in test_ekoskor.py.
     assert body["ekoskor"] is not None
     assert body["layers"]["air"]["live_index"] is None
