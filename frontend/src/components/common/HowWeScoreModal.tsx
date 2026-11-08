@@ -73,9 +73,36 @@ export function HowWeScoreButton({ variant = 'link' }: { variant?: keyof typeof 
               </tbody>
             </table>
           </div>
-          <section className="flex flex-col gap-1">
+          <section className="flex flex-col gap-2">
             <h3 className="font-semibold">{t.lightsTitle}</h3>
             <p>{t.lights}</p>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[36rem] border-collapse text-left text-sm">
+                <caption className="sr-only">{t.lightsTitle}</caption>
+                <thead>
+                  <tr className="border-b-2 border-border">
+                    {Object.values(t.lightsColumns).map((c) => (
+                      <th key={c} scope="col" className="py-2 pr-3">
+                        {c}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {t.lightsRows.map((r) => (
+                    <tr key={r.layer} className="border-b border-border align-top">
+                      <th scope="row" className="py-2 pr-3 font-semibold">
+                        {r.layer}
+                      </th>
+                      <td className="py-2 pr-3">{r.good}</td>
+                      <td className="py-2 pr-3">{r.mid}</td>
+                      <td className="py-2">{r.bad}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-sm text-ink-muted">{t.lightsNote}</p>
           </section>
           <section className="flex flex-col gap-1">
             <h3 className="font-semibold">{t.rulesTitle}</h3>

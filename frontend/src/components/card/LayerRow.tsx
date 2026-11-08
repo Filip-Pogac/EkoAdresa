@@ -2,6 +2,7 @@ import type { Layers, LayerName } from '../../api/types';
 import { hr } from '../../i18n/hr';
 import { AirHistory } from './AirHistory';
 import { DhmzToday } from './DhmzToday';
+import { LayerPoints } from './LayerPoints';
 import { layerSentences } from './layerText';
 import { StatusBadge } from './StatusBadge';
 
@@ -13,7 +14,10 @@ export function LayerRow({ name, layers }: { name: LayerName; layers: Layers }) 
     <li className="flex flex-col gap-1 border-t border-border py-4 first:border-t-0">
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
         <h3 className="text-lg font-semibold">{hr.layers[name].title}</h3>
-        <StatusBadge status={layer.status} />
+        <div className="flex items-center gap-2">
+          <StatusBadge status={layer.status} />
+          {'score' in layer && <LayerPoints score={layer.score} />}
+        </div>
       </div>
       <p>{main}</p>
       {notes.map((note) => (

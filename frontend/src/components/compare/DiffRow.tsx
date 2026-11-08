@@ -1,6 +1,7 @@
 import type { Comparison, LayerName } from '../../api/types';
 import { hr } from '../../i18n/hr';
 import { layerSentences } from '../card/layerText';
+import { LayerPoints } from '../card/LayerPoints';
 import { StatusBadge } from '../card/StatusBadge';
 
 interface DiffRowProps {
@@ -56,7 +57,12 @@ export function DiffRow({ name, comparison, labels }: DiffRowProps) {
                 <span className="text-sm font-semibold text-ink-muted">{label}</span>
                 {better && <BetterBadge />}
               </div>
-              <StatusBadge status={profile.layers[name].status} />
+              <div className="flex items-center gap-2">
+                <StatusBadge status={profile.layers[name].status} />
+                {'score' in profile.layers[name] && (
+                  <LayerPoints score={profile.layers[name].score} />
+                )}
+              </div>
               <p>{main}</p>
             </div>
           );

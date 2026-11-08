@@ -131,7 +131,43 @@ export const hr = {
       },
     ],
     lightsTitle: 'Semafor po sloju',
-    lights: 'Dobro: ocjena 67–100. Umjereno: 34–66. Loše: 0–33. Uz boju je uvijek i tekst i ikona.',
+    lights:
+      'Stanje sloja određuju njegovi bodovi, prikazani uz stanje na kartici (npr. „Dobro · 76/100”): Dobro 67–100, Umjereno 34–66, Loše 0–33. Tablica gore pokazuje gdje sloj ima 100, 50 i 0 bodova; ova tablica pokazuje što to znači za stanje. Uz boju je uvijek i tekst i ikona.',
+    lightsColumns: {
+      layer: 'Sloj',
+      good: 'Dobro (67–100 bodova)',
+      mid: 'Umjereno (34–66)',
+      bad: 'Loše (0–33)',
+    },
+    lightsRows: [
+      {
+        layer: 'Poplave',
+        good: 'izvan svih zona opasnosti',
+        mid: 'zona male vjerojatnosti',
+        bad: 'zona srednje ili velike vjerojatnosti',
+      },
+      { layer: 'Buka (Lden)', good: 'do 53 dB', mid: '54–64 dB', bad: '65 dB ili više' },
+      {
+        layer: 'Zrak (PM10)',
+        good: 'do 23,3 µg/m³',
+        mid: '23,4–31,6 µg/m³',
+        bad: '31,7 µg/m³ ili više',
+      },
+      {
+        layer: 'Zelena mobilnost',
+        good: '3 ili više perona ZET-a do 300 m',
+        mid: 'manje od 3 do 300 m, a barem jedan do 500 m',
+        bad: 'nijedan peron do 500 m',
+      },
+      {
+        layer: 'Zelenilo',
+        good: 'park ili šuma do 534 m (ili unutar)',
+        mid: '535–765 m',
+        bad: '766 m ili više',
+      },
+    ],
+    lightsNote:
+      'Kod zelene mobilnosti stanje ovisi samo o javnom prijevozu; biciklistička staza ili stanica javnih bicikala mijenja bodove unutar istog stanja.',
     rulesTitle: 'Pravila',
     rules: [
       'Buka: ako je točka unutar zgrade, gdje karta buke nema vrijednosti, uzima se najglasnija vrijednost do 15 m oko točke (ili do 30 m), kao pročelje zgrade najizloženije buci (Direktiva 2002/49/EZ).',
@@ -302,6 +338,8 @@ export const hr = {
       `Servis ne odgovara; prikazan zadnji spremljeni podatak od ${formatDate(iso)}.`,
   },
   layers: {
+    points: (score: number) => `${score}/100`,
+    pointsLabel: (score: number) => `${score} od 100 bodova`,
     flood: {
       title: 'Poplave',
       sentence: (l: FloodLayer) => {

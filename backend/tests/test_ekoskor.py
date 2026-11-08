@@ -154,3 +154,29 @@ def test_three_layers_is_enough_two_is_not() -> None:
 def test_status_in_thirds(score: float, expected: str) -> None:
     # status follows the rounded sub-score the card shows: 66.7 is shown as 67 -> green
     assert status(score) == expected
+
+
+# The "Semafor po sloju" table in "Kako računamo?" (frontend/src/i18n/hr.ts, lightsRows) and
+# docs/ekoskor.md state these edges; this keeps the published text in line with the code.
+@pytest.mark.parametrize(
+    ("pm10", "expected"),
+    [(23.3, "green"), (23.4, "yellow"), (31.6, "yellow"), (31.7, "red")],
+)
+def test_air_status_edges_as_published(pm10: float, expected: str) -> None:
+    assert status(air_score(pm10)) == expected
+
+
+@pytest.mark.parametrize(
+    ("distance_m", "expected"),
+    [(0, "green"), (534, "green"), (535, "yellow"), (765, "yellow"), (766, "red")],
+)
+def test_green_status_edges_as_published(distance_m: float, expected: str) -> None:
+    assert status(green_score(distance_m)) == expected
+
+
+@pytest.mark.parametrize("bike_m", [0, 600, 5000])
+def test_mobility_status_depends_only_on_transit(bike_m: float) -> None:
+    # bike changes the points, never the status (published in lightsNote)
+    assert status(mobility_score(3, 3, bike_m)) == "green"
+    assert status(mobility_score(2, 5, bike_m)) == "yellow"
+    assert status(mobility_score(0, 0, bike_m)) == "red"

@@ -41,6 +41,18 @@ Pet slojeva, svaki 20 %, od 8. 11. 2026. (odluka): sloj Otpad uklonjen je iz Eko
 
 Svaki redak sloja na kartici adrese prikazuje stanje prema ocjeni, kako je prikazana (zaokružena na cijeli broj), u jednakim trećinama: **Dobro** (zeleno) 67–100, **Umjereno** (žuto) 34–66, **Loše** (crveno) 0–33. Za poplave i buku, koje imaju samo ocjene 100, 50 ili 0, to je jednostavno 100 → zeleno, 50 → žuto, 0 → crveno. Uz boju je uvijek tekst i ikona, nikad samo boja.
 
+Kartica uz stanje prikazuje i bodove sloja (npr. „Dobro · 76/100”), jer „Dobro” ne znači 100 bodova: zrak s prosjekom PM10 od 20,9 µg/m³ ima 76 bodova, dakle Dobro, ali ne i punu ocjenu. Što stanje znači u jedinicama pojedinog sloja (rubovi su provjereni testom `test_*_status_edges_as_published` u `test_ekoskor.py`):
+
+| Sloj | Dobro (67–100) | Umjereno (34–66) | Loše (0–33) |
+|---|---|---|---|
+| Poplave | izvan svih zona opasnosti | zona male vjerojatnosti | zona srednje ili velike vjerojatnosti |
+| Buka, L<sub>den</sub> | do 53 dB | 54–64 dB | 65 dB ili više |
+| Zrak, PM10 | do 23,3 µg/m³ | 23,4–31,6 µg/m³ | 31,7 µg/m³ ili više |
+| Zelena mobilnost | ≥ 3 perona ZET-a do 300 m | manje od 3 do 300 m, a barem jedan do 500 m | nijedan peron do 500 m |
+| Zelenilo | park ili šuma do 534 m (ili unutar) | 535–765 m | 766 m ili više |
+
+Kod zelene mobilnosti stanje ovisi samo o javnom prijevozu: biciklistička staza ili stanica javnih bicikala (1/5 sloja) mijenja bodove unutar istog stanja.
+
 ## Zrak zadnja 24 sata (ne ulazi u EkoSkor)
 
 Redak zraka ima i okvir *Zadnja 24 sata*: prosjek satnih vrijednosti s najbliže državne postaje DHMZ-a (Zagreb 1–4), nevalidirano. Okvir ima **vlastito stanje**, odvojeno od stanja sloja i od EkoSkora (odluka 6. 11. 2026.). EkoSkor ocjenjuje mjesto za život, pa koristi višemjesečni prosjek; jedan dan ovisi o vremenu (inverzija, vjetar, sezona grijanja) i ocjenu bi mijenjao iz sata u sat.
