@@ -220,7 +220,7 @@ export function AddressMap({ point, onPick, layers = true }: AddressMapProps) {
 
   return (
     <div className="flex w-full flex-1 flex-col gap-3">
-      <div className="relative h-80 w-full overflow-hidden rounded-lg border border-border lg:h-[60dvh]">
+      <div className="relative h-80 w-full overflow-hidden rounded-lg border-2 border-ink-muted shadow-sm lg:h-[60dvh]">
         {/* Outer div sizes the map: MapLibre's CSS forces `position: relative` on its own
             container. Its canvas is focusable and pans/zooms with arrow keys and +/-. */}
         <div

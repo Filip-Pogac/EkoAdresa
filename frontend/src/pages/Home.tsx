@@ -19,7 +19,7 @@ const mapLoading = <Skeleton label={hr.map.loading} className="h-80 w-full lg:h-
 /** Before the map loads: same size, a button to load it now (keyboard and screen readers). */
 function MapPlaceholder({ load }: { load: () => void }) {
   return (
-    <div className="flex h-80 w-full items-center justify-center rounded-lg border border-border bg-surface lg:h-[60dvh]">
+    <div className="flex h-80 w-full items-center justify-center rounded-lg border-2 border-ink-muted bg-surface shadow-sm lg:h-[60dvh]">
       <button
         type="button"
         onClick={load}
