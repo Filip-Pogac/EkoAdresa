@@ -33,7 +33,7 @@ Pet slojeva, svaki 20 %, od 8. 11. 2026. (odluka): sloj Otpad uklonjen je iz Eko
   | **Bicikl:** najbliža gradska biciklistička staza ili Bajs stanica (bliža se računa) | 1/5 | ≤ 200 m | ≥ 1 km | linearno |
 
   - Prag od 200 m za biciklističku stazu i stanicu naša je odluka (nema usporedive objavljene smjernice). Udaljenost je do najbliže točke staze ili do stanice. Stanica javnih bicikala ulazi u ocjenu od 7. 11. 2026. (odluka): ako je bliža od staze, ona određuje dio za bicikl. Od 8. 11. 2026. to su Bajs stanice iz OpenStreetMapa (200), umjesto zastarjelog gradskog popisa (32).
-  - Kartica prikazuje oba dijela i njihove ocjene, pa se ocjena sloja može provjeriti.
+  - Kartica prikazuje udaljenosti (stajališta, staza, Bajs stanica) i ukupne bodove sloja; bodovi pojedinih dijelova dostupni su u API-ju (`transit_score`, `bike_score`).
   - Primjer: jedan peron do 500 m i nijedna staza do 1 km daje 0,8 × 50 = 40, dakle Umjereno. (Udio bicikla smanjen je s 1/3 na 1/5 istog dana, jer je uz 1/3 takva adresa dobivala 33, Loše, pa je 73 % Grada imalo lošu mobilnost.)
 - **Zelenilo.** Zračna udaljenost do najbližeg parka, šume, javnog vrta ili zaštićenog područja od barem 0,5 ha (OpenStreetMap), do ruba površine; unutar nje udaljenost je 0. Ocjena 100 uz ≤ 300 m, 0 uz ≥ 1 km, linearno između. Prag od 300 m i najmanja površina od 0,5 ha preporuka su Regionalnog ureda SZO-a za Europu (*Urban green spaces: a brief for action*, 2017.): zelena površina od barem 0,5–1 ha na najviše 300 m zračne udaljenosti od stana. Pješačke staze se ne boduju zasebno: u gradu postoje gotovo uz svaku adresu, pa ne bi razlikovale adrese.
 

@@ -413,8 +413,6 @@ export const hr = {
         const stationName = s.name ? ` (${s.name})` : '';
         return `Biciklistička staza ${formatDistance(b.distance_m)}${b.name ? ` (${b.name})` : ''}. Bajs stanica ${formatDistance(s.distance_m)}${stationName}.`;
       },
-      parts: (l: MobilityLayer) =>
-        `Ocjena: javni prijevoz ${l.transit_score} (4/5), bicikl ${l.bike_score} (1/5, računa se bliža od staze i Bajs stanice). Udaljenosti zračnom linijom.`,
     },
     green: {
       title: 'Zelenilo',
