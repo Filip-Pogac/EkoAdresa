@@ -165,10 +165,10 @@ class BikePath(Place):
 
 
 class BikeStation(Place):
-    """Nearest public bike station (sustav javnih bicikala, Grad Zagreb)."""
+    """Nearest Bajs public bike station (OpenStreetMap, network "Bajs Zagreb")."""
 
-    location: str | None  # address as published
-    racks: int | None  # number of bike racks
+    ref: str | None  # station number as tagged in OSM
+    position_unchecked: bool  # OSM fixme "Popravi poziciju stanice": position to be checked
 
 
 class GreenArea(Place):

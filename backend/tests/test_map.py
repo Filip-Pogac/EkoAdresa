@@ -47,8 +47,7 @@ def quadrant_png() -> bytes:
         ("stops", 2148),
         ("bike_paths", 2889),
         ("parks", 1136),
-        ("bike_stations", 32),
-        ("bike_parking", 318),
+        ("bike_stations", 200),
     ],
 )
 def test_map_layers(name: str, count: int) -> None:

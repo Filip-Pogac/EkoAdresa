@@ -3,10 +3,10 @@
 - ZET bus and tram platforms (data/transit.geojson); counts are platforms, one published
   point per stop and direction (decision 2026-11-05)
 - bike: the nearer of the City bike path (data/bike_paths.geojson, zg-biciklisticke-staze)
-  and the public bike station (data/bike_stations.geojson, zg-javni-bicikli), decision
-  2026-11-07. Both use the same distance rule, so the nearer one decides the bike part.
+  and the Bajs station (data/bike_stations.geojson, osm-bajs; decision 2026-11-07, OSM
+  since 2026-11-08). Both use the same distance rule, so the nearer one decides the bike part.
 
-From scripts/fetch_transit.py, scripts/fetch_green_mobility.py and scripts/fetch_bike_points.py.
+From scripts/fetch_transit.py, scripts/fetch_green_mobility.py and scripts/fetch_bajs.py.
 Scoring: ekoskor.mobility_score (docs/ekoskor.md), 4/5 transit + 1/5 bike (decision
 2026-11-06). Parks and forests are their own layer (services/green.py).
 """
@@ -71,8 +71,8 @@ def _nearest_station(lat: float, lon: float) -> BikeStation:
     st_lon, st_lat = features[i]["geometry"]["coordinates"]
     return BikeStation(
         name=p["name"],
-        location=p["location"],
-        racks=p["racks"],
+        ref=p["ref"],
+        position_unchecked=p["position_unchecked"],
         lat=st_lat,
         lon=st_lon,
         distance_m=round(float(d[i])),

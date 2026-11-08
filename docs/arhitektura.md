@@ -58,7 +58,7 @@ Python 3.11+, FastAPI, pydantic, httpx2, Shapely, pyproj, NumPy, pandas, PyArrow
 | `services/noise.py` | L<sub>den</sub> / L<sub>night</sub> najglasnijeg izvora; pravilo pročelja za točke unutar zgrada |
 | `services/air.py` | Najbliža gradska postaja, prosjek PM10, posljednje vrijednosti, 30 dana povijesti; državni indeks uživo |
 | `services/dhmz.py` | Posljednja 24 sata PM10, PM2,5 i NO₂ na najbližoj državnoj postaji DHMZ-a (nevalidirano) s vlastitim stanjem prema dnevnim smjernicama SZO-a; ne ulazi u ocjenu |
-| `services/mobility.py`, `services/green.py` | Broj perona ZET-a, najbliža biciklistička staza ili stanica javnih bicikala, najbliži park ili šuma (udaljenosti u EPSG:3765) |
+| `services/mobility.py`, `services/green.py` | Broj perona ZET-a, najbliža biciklistička staza ili Bajs stanica, najbliži park ili šuma (udaljenosti u EPSG:3765) |
 | `services/ekoskor.py` | Ocjene slojeva i EkoSkor prema [ekoskor.md](ekoskor.md) |
 | `services/profile.py` | Svih pet slojeva usporedno, 4 s po sloju, EkoSkor |
 | `services/wms.py` | OGC WMS klijent (GetMap, GetFeatureInfo), ponavljanje neuspjelih upita |
@@ -76,7 +76,7 @@ Python 3.11+, FastAPI, pydantic, httpx2, Shapely, pyproj, NumPy, pandas, PyArrow
 | `fetch_waste.py` | data.zagreb.hr, OpenStreetMap (Overpass) | `data/waste.geojson` (samo slojevi na karti) |
 | `fetch_transit.py` | data.zagreb.hr | `data/transit.geojson` |
 | `fetch_green_mobility.py` | data.zagreb.hr, OpenStreetMap (Overpass) | `data/bike_paths.geojson`, `data/parks.geojson` |
-| `fetch_bike_points.py` | data.zagreb.hr | `data/bike_stations.geojson`, `data/bike_parking.geojson` |
+| `fetch_bajs.py` | OpenStreetMap (Overpass) | `data/bike_stations.geojson` |
 | `fetch_addresses.py` | OpenStreetMap (Overpass) | `data/addresses.parquet` |
 | `build_heatmap.py` | sve gore + WMS poplava i buke | `data/heatmap.geojson`, `data/zagreb_boundary.geojson` |
 | `warm_cache.py` | backend servisi | `data/cache_seed.json` (unaprijed popunjena predmemorija za demo adrese) |

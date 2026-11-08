@@ -195,7 +195,7 @@ Several of these datasets have **no licence stated** in their metadata. Note tha
 | Flood | 20 % | outside all zones | low-probability zone | medium- or high-probability zone |
 | Noise L<sub>den</sub>, loudest source | 20 % | ≤ 53 dB (WHO road traffic); no mapped band = below 50 dB | 54–64 dB | ≥ 65 dB |
 | Air, PM10 mean Jan–Aug 2023, nearest City station | 20 % | ≤ 15 µg/m³ (WHO 2021) | 27,5 µg/m³ (linear) | ≥ 40 µg/m³ (EU limit) |
-| Mobility = 4/5 transit + 1/5 bike (decision 2026-11-06) | 20 % | transit: ≥ 3 ZET platforms within 300 m; bike: City bike path or public bike station ≤ 200 m (the nearer) | transit: any platform within 500 m; bike linear | transit: none within 500 m; bike ≥ 1 km |
+| Mobility = 4/5 transit + 1/5 bike (decision 2026-11-06) | 20 % | transit: ≥ 3 ZET platforms within 300 m; bike: City bike path or Bajs station (OSM) ≤ 200 m (the nearer) | transit: any platform within 500 m; bike linear | transit: none within 500 m; bike ≥ 1 km |
 | Green space (Zelenilo), nearest park/forest ≥ 0.5 ha (decision 2026-11-06) | 20 % | ≤ 300 m or inside (WHO Europe 2017) | 650 m (linear) | ≥ 1 km |
 
 Traffic light per layer from its sub-score as shown (rounded): ≥ 67 green, 34–66 yellow, ≤ 33 red.

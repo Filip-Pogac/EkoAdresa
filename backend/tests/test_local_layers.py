@@ -63,9 +63,11 @@ def test_middle_of_maksimir_is_green_space_not_mobility() -> None:
 
 
 def test_bike_station_counts_when_nearer_than_a_lane() -> None:
-    # 2026-11-07: station 23 m away (Eurospin Branimirova), nearest bike lane 422 m away.
-    # A lane alone would give 72; the nearer station sets the bike part to 100.
-    layer = mobility_at(45.818249, 16.043836)
-    assert layer.nearest_bike_station.distance_m == 23
-    assert layer.nearest_bike_path.distance_m == 422
+    # 2026-11-08: Bajs station (OSM, position checked) 23 m away at the Sljeme cable car,
+    # nearest bike lane 3.7 km away. A lane alone would give 0; the station gives 100.
+    layer = mobility_at(45.860897, 15.983172)
+    station = layer.nearest_bike_station
+    assert (station.name, station.distance_m) == ("Bajs Žičara Sljeme", 23)
+    assert station.source_id == "osm-bajs"
+    assert layer.nearest_bike_path.distance_m > 3000
     assert layer.bike_score == 100

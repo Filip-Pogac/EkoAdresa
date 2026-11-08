@@ -1,5 +1,5 @@
 """Layers for the map: points (stations, recycling yards, green islands, ZET stops) and
-lines/areas (bike paths, parks and forests). Bike stations and bike parking are points.
+lines/areas (bike paths, parks and forests). Bajs stations are points.
 
 Served from the committed snapshots in data/. Points are trimmed to the properties the map
 shows, so the browser loads less than half of the raw files; the line/area files are
@@ -13,9 +13,7 @@ from typing import Literal
 
 from app.paths import DATA_DIR
 
-PointLayer = Literal[
-    "air_stations", "recycling_yards", "green_islands", "stops", "bike_stations", "bike_parking"
-]
+PointLayer = Literal["air_stations", "recycling_yards", "green_islands", "stops", "bike_stations"]
 ShapeLayer = Literal["bike_paths", "parks"]
 MapLayer = PointLayer | ShapeLayer
 SHAPE_FILES: dict[str, str] = {"bike_paths": "bike_paths.geojson", "parks": "parks.geojson"}
@@ -30,8 +28,11 @@ _LAYERS: dict[str, tuple[str, Callable[[dict], bool], list[str]]] = {
     ),
     "green_islands": ("waste.geojson", lambda p: p["type"] == "green_island", ["accepts"]),
     "stops": ("transit.geojson", lambda p: True, ["name", "type", "lines"]),
-    "bike_stations": ("bike_stations.geojson", lambda p: True, ["name", "location", "racks"]),
-    "bike_parking": ("bike_parking.geojson", lambda p: True, ["name", "location", "kind", "racks"]),
+    "bike_stations": (
+        "bike_stations.geojson",
+        lambda p: True,
+        ["name", "ref", "position_unchecked"],
+    ),
 }
 
 

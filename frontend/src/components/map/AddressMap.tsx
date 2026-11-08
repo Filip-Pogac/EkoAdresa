@@ -33,7 +33,6 @@ const OVERLAY_SOURCE_IDS = new Set<string>([
   'parks',
   'bike_paths',
   'bike_stations',
-  'bike_parking',
   'air_stations',
   'recycling_yards',
   'green_islands',
@@ -46,7 +45,6 @@ const POINT_LAYER_IDS: OverlayId[] = [
   'green_islands',
   'stops',
   'bike_stations',
-  'bike_parking',
 ];
 
 /** MapLibre turns array properties into JSON strings. */
@@ -71,9 +69,11 @@ function popupText(id: OverlayId, p: Record<string, unknown>): string {
     case 'stops':
       return hr.map.popup.stop(str(p.name), stringList(p.lines));
     case 'bike_stations':
-      return hr.map.popup.bikeStation(str(p.name), p.racks, str(p.location));
-    case 'bike_parking':
-      return hr.map.popup.bikeParking(str(p.name), p.racks, str(p.location));
+      // MapLibre may turn booleans into strings
+      return hr.map.popup.bikeStation(
+        str(p.name),
+        p.position_unchecked === true || p.position_unchecked === 'true',
+      );
     default:
       return hr.map.popup.island;
   }

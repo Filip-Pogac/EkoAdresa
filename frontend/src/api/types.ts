@@ -128,10 +128,10 @@ export interface BikePath extends Place {
   category: string | null; // kategorija_id as published
 }
 
-/** Public bike station (Grad Zagreb). */
+/** Bajs public bike station (OpenStreetMap, network "Bajs Zagreb"). */
 export interface BikeStation extends Place {
-  location: string | null;
-  racks: number | null;
+  ref: string | null; // station number
+  position_unchecked: boolean; // OSM marks the position as to be checked
 }
 
 /** Park, forest, public garden or nature reserve ≥ 0.5 ha; distance 0 = address inside it. */
