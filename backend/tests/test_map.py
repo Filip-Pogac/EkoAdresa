@@ -46,7 +46,7 @@ def quadrant_png() -> bytes:
         ("green_islands", 628),
         ("stops", 2148),
         ("bike_paths", 2889),
-        ("parks", 1136),
+        ("parks", 3466),  # all sizes on the map; the score uses 1 136 of them
         ("bike_stations", 200),
     ],
 )

@@ -16,7 +16,8 @@ from app.paths import DATA_DIR
 PointLayer = Literal["air_stations", "recycling_yards", "green_islands", "stops", "bike_stations"]
 ShapeLayer = Literal["bike_paths", "parks"]
 MapLayer = PointLayer | ShapeLayer
-SHAPE_FILES: dict[str, str] = {"bike_paths": "bike_paths.geojson", "parks": "parks.geojson"}
+# parks: every mapped area for the map; the Zelenilo score uses parks.geojson (>= 0.5 ha)
+SHAPE_FILES: dict[str, str] = {"bike_paths": "bike_paths.geojson", "parks": "parks_all.geojson"}
 
 # layer -> (data file, feature filter, properties kept besides source_id)
 _LAYERS: dict[str, tuple[str, Callable[[dict], bool], list[str]]] = {

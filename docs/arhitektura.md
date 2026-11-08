@@ -75,7 +75,7 @@ Python 3.11+, FastAPI, pydantic, httpx2, Shapely, pyproj, NumPy, pandas, PyArrow
 | `fetch_air.py` | data.zagreb.hr (CKAN API, 48 XLSX datoteka) | `data/air_stations.geojson`, `data/air_history.parquet` |
 | `fetch_waste.py` | data.zagreb.hr, OpenStreetMap (Overpass) | `data/waste.geojson` (samo slojevi na karti) |
 | `fetch_transit.py` | data.zagreb.hr | `data/transit.geojson` |
-| `fetch_green_mobility.py` | data.zagreb.hr, OpenStreetMap (Overpass) | `data/bike_paths.geojson`, `data/parks.geojson` |
+| `fetch_green_mobility.py` | data.zagreb.hr, OpenStreetMap (Overpass) | `data/bike_paths.geojson`, `data/parks.geojson` (ocjena), `data/parks_all.geojson` (karta) |
 | `fetch_bajs.py` | OpenStreetMap (Overpass) | `data/bike_stations.geojson` |
 | `fetch_addresses.py` | OpenStreetMap (Overpass) | `data/addresses.parquet` |
 | `build_heatmap.py` | sve gore + WMS poplava i buke | `data/heatmap.geojson`, `data/zagreb_boundary.geojson` |

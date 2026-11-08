@@ -251,7 +251,8 @@ export const hr = {
       flood: 'Poplave, scenarij male vjerojatnosti (najveći obuhvat). Boja je dubina vode:',
       noise:
         'Buka Lden, svi izvori. Gdje se izvori preklapaju, karta crta jedan od njih; kartica adrese uzima najglasniji.',
-      parks: 'Parkovi, šume, javni vrtovi i zaštićena područja od barem 0,5 ha',
+      parks:
+        'Parkovi, šume, javni vrtovi i zaštićena područja, svih veličina (OpenStreetMap). U EkoSkor (Zelenilo) ulaze samo oni od barem 0,5 ha.',
     },
     overlayError: (name: string) => `${name}: dio sloja trenutno se ne može učitati.`,
     popup: {
