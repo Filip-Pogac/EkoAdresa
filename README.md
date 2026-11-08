@@ -126,7 +126,7 @@ cd frontend && vercel deploy --prod
 - Filip Pogač
 - Matej Šimek
 
-Mentor: Vinko Lešić
+Mentor: izv. prof. dr. sc. Vinko Lešić
 
 ## Licencija
 
