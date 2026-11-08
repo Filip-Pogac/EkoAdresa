@@ -95,7 +95,7 @@ cd frontend && npx playwright install chromium && pnpm e2e
 E2E_BASE_URL=http://localhost:5173 pnpm e2e
 ```
 
-Ponovna izrada podataka (iz korijena repozitorija): `uv run --project backend python scripts/<skripta>.py`; popis skripti u [docs/arhitektura.md](docs/arhitektura.md). Snimke zaslona: `cd frontend && node scripts/screenshots.mjs`.
+Ponovna izrada podataka (iz korijena repozitorija): `uv run --project backend python scripts/<skripta>.py`; popis skripti u [docs/arhitektura.md](docs/arhitektura.md). Nakon promjene datoteka u `data/` povećajte `DATA_VERSION` u `frontend/src/api/client.ts`, da preglednici odmah preuzmu nove podatke. Snimke zaslona: `cd frontend && node scripts/screenshots.mjs`.
 
 ### Objava (Vercel)
 

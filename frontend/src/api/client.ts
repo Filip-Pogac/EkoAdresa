@@ -3,6 +3,11 @@ import type { Comparison, GeocodeResponse, Profile, ReverseResponse, Source } fr
 export const API_URL =
   (import.meta.env.VITE_API_URL as string | undefined) ?? 'http://localhost:8000';
 
+/** Version of the data snapshots in data/ (map layers, city heatmap). Bump it whenever those
+ * files change: the URLs change with it, so browsers fetch the new data at once instead of
+ * a cached copy. */
+export const DATA_VERSION = '2026-11-08';
+
 export interface LatLon {
   lat: number;
   lon: number;
@@ -73,5 +78,6 @@ export const api = {
       { a_lat: a.lat, a_lon: a.lon, b_lat: b.lat, b_lon: b.lon },
       signal,
     ),
-  heatmap: (signal?: AbortSignal) => get<HeatmapCollection>('/api/heatmap', {}, signal),
+  heatmap: (signal?: AbortSignal) =>
+    get<HeatmapCollection>('/api/heatmap', { v: DATA_VERSION }, signal),
 };

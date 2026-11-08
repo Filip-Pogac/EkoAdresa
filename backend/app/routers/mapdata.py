@@ -30,7 +30,8 @@ router = APIRouter(prefix="/api", tags=["map"])
     response_class=Response,
 )
 def get_map_layer(name: MapLayer) -> Response:
-    headers = {"Cache-Control": "public, max-age=86400"}
+    # 1 h: snapshots change when data/ is refreshed; the frontend also adds ?v=DATA_VERSION
+    headers = {"Cache-Control": "public, max-age=3600"}
     if name in SHAPE_FILES:
         return Response(shape_layer_bytes(name), media_type="application/json", headers=headers)  # type: ignore[arg-type]
     return Response(  # point layers: small, built once per process
@@ -83,5 +84,5 @@ def get_heatmap() -> Response:
     return Response(
         heatmap_bytes(),
         media_type="application/geo+json",
-        headers={"Cache-Control": "public, max-age=86400"},
+        headers={"Cache-Control": "public, max-age=3600"},  # rebuilt with data/ changes
     )

@@ -1,7 +1,7 @@
 /** Map overlays: sources, styles and legend data. Colours of the WMS layers are the
  * publishers' own legends (GetLegendGraphic JSON, fetched 2026-11-05). */
 import type { maplibregl } from './maplibre';
-import { API_URL } from '../../api/client';
+import { API_URL, DATA_VERSION } from '../../api/client';
 
 export type OverlayId =
   | 'flood'
@@ -87,7 +87,11 @@ export function addOverlay(map: maplibregl.Map, id: OverlayId, attribution: stri
     return;
   }
   if (id === 'parks' || id === 'bike_paths') {
-    map.addSource(id, { type: 'geojson', data: `${API_URL}/api/layers/${id}`, attribution });
+    map.addSource(id, {
+      type: 'geojson',
+      data: `${API_URL}/api/layers/${id}?v=${DATA_VERSION}`,
+      attribution,
+    });
     // below the radius circle and the points, like the raster layers
     if (id === 'parks')
       map.addLayer(
@@ -118,7 +122,11 @@ export function addOverlay(map: maplibregl.Map, id: OverlayId, attribution: stri
     return;
   }
   const style = POINT_STYLE[id];
-  map.addSource(id, { type: 'geojson', data: `${API_URL}/api/layers/${id}`, attribution });
+  map.addSource(id, {
+    type: 'geojson',
+    data: `${API_URL}/api/layers/${id}?v=${DATA_VERSION}`,
+    attribution,
+  });
   map.addLayer({
     id,
     type: 'circle',
