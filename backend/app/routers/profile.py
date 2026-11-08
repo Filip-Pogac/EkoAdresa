@@ -17,7 +17,7 @@ router = APIRouter(prefix="/api", tags=["profile"])
     response_model=Profile,
     summary="Okolišni profil lokacije",
     description=(
-        "Poplave, buka, zrak, otpad i zelena mobilnost za točku u Gradu Zagrebu, te EkoSkor "
+        "Poplave, buka, zrak, zelena mobilnost i zelenilo za točku u Gradu Zagrebu, te EkoSkor "
         f"0–100. Slojevi se računaju paralelno; sloj koji ne odgovori u {LAYER_TIMEOUT_S:g} s "
         "vraća se sa `status: unavailable`, a ostali slojevi i dalje stižu. Koordinate su "
         "EPSG:4326. Metodologija: docs/ekoskor.md."

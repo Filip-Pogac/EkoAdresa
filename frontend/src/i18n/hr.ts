@@ -10,7 +10,6 @@ import type {
   Pollutant,
   Status,
   UnavailableLayer,
-  WasteLayer,
 } from '../api/types';
 import { formatDate, formatDistance, formatNumber } from '../format';
 
@@ -78,7 +77,7 @@ export const hr = {
     title: 'Kako računamo EkoSkor?',
     close: 'Zatvori',
     intro:
-      'EkoSkor je broj od 0 do 100. Svaki od šest slojeva dobiva ocjenu od 0 do 100, a EkoSkor je njihov ponderirani prosjek, zaokružen na cijeli broj. Ocjene slojeva prikazane su na kartici, pa EkoSkor svatko može sam izračunati.',
+      'EkoSkor je broj od 0 do 100. Svaki od pet slojeva dobiva ocjenu od 0 do 100, a EkoSkor je njihov ponderirani prosjek, zaokružen na cijeli broj. Ocjene slojeva prikazane su na kartici, pa EkoSkor svatko može sam izračunati.',
     tableCaption: 'Ponder i pragovi po slojevima',
     columns: {
       layer: 'Sloj',
@@ -110,15 +109,8 @@ export const hr = {
         worst: '40 µg/m³ ili više (granica EU)',
       },
       {
-        layer: 'Otpad',
-        weight: '15 %',
-        best: 'reciklažno dvorište do 1 km i zeleni otok do 300 m',
-        mid: 'prosjek dvaju dijelova, linearno: dvorište 1–5 km, otok 300 m – 1,5 km',
-        worst: 'dvorište 5 km ili dalje i otok 1,5 km ili dalje',
-      },
-      {
         layer: 'Zelena mobilnost: javni prijevoz (4/5 sloja), perona ZET-a',
-        weight: '15 %',
+        weight: '20 %',
         best: '3 ili više do 300 m',
         mid: 'barem jedan do 500 m',
         worst: 'nijedan do 500 m',
@@ -132,7 +124,7 @@ export const hr = {
       },
       {
         layer: 'Zelenilo: najbliži park ili šuma od barem 0,5 ha',
-        weight: '10 %',
+        weight: '20 %',
         best: 'do 300 m (preporuka SZO-a za Europu) ili unutar njega',
         mid: '650 m (linearno)',
         worst: '1 km ili dalje',
@@ -150,7 +142,7 @@ export const hr = {
     limits: [
       'Karte buke i poplava strateške su karte na razini grada; pojedina zgrada može odstupati.',
       'Zrak opisuje najbližu od 6 gradskih postaja, ne zrak točno na adresi, i podaci su iz 2023.',
-      'Zeleni otoci, parkovi i šume su iz OpenStreetMapa i popis možda nije potpun. Biciklističke staze su gradski podaci iz 2022.',
+      'Parkovi i šume su iz OpenStreetMapa i popis možda nije potpun. Biciklističke staze su gradski podaci iz 2022.',
       'EkoSkor je orijentacija, a ne stručna procjena ni pravni, osiguravateljni ili savjet o nekretninama.',
     ],
     sourcesLink: 'Svi izvori podataka',
@@ -185,8 +177,8 @@ export const hr = {
       'Napomena: karta grada za buku još ne primjenjuje pravilo pročelja zgrade, pa ćelije sa središtem unutar zgrade mogu izgledati tiše. Kartica adrese ga primjenjuje.',
     noPopulation: 'Podaci o broju stanovnika po ćeliji nisu dostupni, pa ih ne prikazujemo.',
     popup: (score: number) => `EkoSkor ${score}`,
-    popupLayers: (s: Record<'flood' | 'noise' | 'air' | 'waste' | 'mobility' | 'green', number>) =>
-      `Poplave ${s.flood} · Buka ${s.noise} · Zrak ${s.air} · Otpad ${s.waste} · Mobilnost ${s.mobility} · Zelenilo ${s.green}`,
+    popupLayers: (s: Record<'flood' | 'noise' | 'air' | 'mobility' | 'green', number>) =>
+      `Poplave ${s.flood} · Buka ${s.noise} · Zrak ${s.air} · Mobilnost ${s.mobility} · Zelenilo ${s.green}`,
     openProfile: 'Otvori profil ove točke',
   },
   map: {
@@ -296,8 +288,8 @@ export const hr = {
     name: 'EkoSkor',
     outOf: 'od 100',
     aria: (score: number) => `EkoSkor ${score} od 100`,
-    missing: 'Premalo dostupnih slojeva za EkoSkor (potrebna su barem 3 od 6).',
-    explain: 'Ponderirani prosjek šest slojeva ispod.',
+    missing: 'Premalo dostupnih slojeva za EkoSkor (potrebna su barem 3 od 5).',
+    explain: 'Ponderirani prosjek pet slojeva ispod.',
   },
   status: {
     green: 'Dobro',
@@ -385,12 +377,6 @@ export const hr = {
         value: 'Vrijednost (µg/m³)',
         noValue: 'nema mjerenja',
       },
-    },
-    waste: {
-      title: 'Otpad',
-      sentence: (l: WasteLayer) =>
-        `Reciklažno dvorište ${formatDistance(l.yard_distance_m)}, zeleni otok ${formatDistance(l.island_distance_m)} (zračnom linijom).`,
-      period: () => 'Reciklažna dvorišta: podaci iz 2022. Zeleni otoci: OpenStreetMap.',
     },
     mobility: {
       title: 'Zelena mobilnost',

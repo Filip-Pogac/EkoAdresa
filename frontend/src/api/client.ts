@@ -14,7 +14,6 @@ export interface HeatmapCell {
   flood: number;
   noise: number;
   air: number;
-  waste: number;
   mobility: number;
   green: number;
 }

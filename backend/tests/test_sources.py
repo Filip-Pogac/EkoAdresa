@@ -7,7 +7,7 @@ from fastapi.testclient import TestClient
 
 from app.main import app
 from app.paths import DATA_DIR
-from app.services import air, dhmz, flood, geocode, mobility, noise, waste
+from app.services import air, dhmz, flood, geocode, mobility, noise
 from app.sources import SOURCES
 
 ROOT = DATA_DIR.parent
@@ -15,7 +15,7 @@ ROOT = DATA_DIR.parent
 
 def emitted_source_ids() -> set[str]:
     ids = {flood.SOURCE_ID, noise.SOURCE_ID, air.SOURCE_ID, air.STATIONS_SOURCE_ID,
-           air.LIVE_SOURCE_ID, waste.SOURCE_ID, mobility.SOURCE_ID, geocode.SOURCE_ID,
+           air.LIVE_SOURCE_ID, mobility.SOURCE_ID, geocode.SOURCE_ID,
            dhmz.SOURCE_ID}  # fmt: skip
     for path in DATA_DIR.glob("*.geojson"):
         data = json.loads(path.read_text(encoding="utf-8"))

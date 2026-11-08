@@ -22,7 +22,7 @@ Podaci o okolišu već postoje u javnim servisima: karte opasnosti od poplava Hr
 
 | | |
 |---|---|
-| **Početna stranica:** pretraga adrese s dovršavanjem upisa (i tipkovnicom), tri primjera ili klik na kartu Zagreba | **Kartica adrese:** EkoSkor i šest slojeva (poplave, buka, zrak, otpad, zelena mobilnost, zelenilo), svaki sa semaforom, tekstom i ikonom (ne samo bojom), jednom rečenicom na hrvatskom, izvorom i datumom podataka |
+| **Početna stranica:** pretraga adrese s dovršavanjem upisa (i tipkovnicom), tri primjera ili klik na kartu Zagreba | **Kartica adrese:** EkoSkor i pet slojeva (poplave, buka, zrak, zelena mobilnost, zelenilo), svaki sa semaforom, tekstom i ikonom (ne samo bojom), jednom rečenicom na hrvatskom, izvorom i datumom podataka |
 | **Karta** s krugom od 500 m i slojevima koji se uključuju: poplave, buka, parkovi i šume, biciklističke staze, stanice javnih bicikala, parkirališta za bicikle, mjerne postaje, reciklažna dvorišta, zeleni otoci, stajališta ZET-a; **klik na kartu** daje EkoSkor bilo koje točke | **Graf mjerenja zraka** po danima uz smjernice SZO-a |
 | **Usporedba dviju adresa** s oznakom „Bolje" po sloju | **Za grad:** EkoSkor na mreži 250 × 250 m za cijeli Zagreb |
 | **Kako računamo?** cijela formula i pragovi, javno | **Izvori:** svi skupovi s izdavačima, licencijama i poveznicama |
@@ -44,7 +44,7 @@ Ostale snimke zaslona: [docs/screenshots/](docs/screenshots/).
 | Poplave | Karte opasnosti od poplava | Hrvatske vode | OGC WMS, uživo |
 | Buka | Strateška karta buke Grada Zagreba | Grad Zagreb | OGC WMS, uživo |
 | Zrak | Mjerne postaje i mjerenja kvalitete zraka 2023.; Indeks kvalitete zraka u RH (INSPIRE); mjerenja državnih postaja, zadnja 24 sata | Grad Zagreb; data.gov.hr; DHMZ | data.zagreb.hr / data.gov.hr; OGC WFS uživo; meteo.hr uživo |
-| Otpad | Reciklažna dvorišta; zeleni otoci | Grad Zagreb; OpenStreetMap | data.zagreb.hr; Overpass API |
+| Otpad (samo na karti, ne ulazi u EkoSkor) | Reciklažna dvorišta; zeleni otoci | Grad Zagreb; OpenStreetMap | data.zagreb.hr; Overpass API |
 | Zelena mobilnost | Autobusna i tramvajska stajališta ZET; biciklističke staze; stanice javnih bicikala | Grad Zagreb | data.zagreb.hr |
 | Zelenilo | Parkovi, šume, javni vrtovi i zaštićena područja | OpenStreetMap | Overpass API |
 | Adrese, granica | Adrese i granica Grada Zagreba | OpenStreetMap | Overpass API |

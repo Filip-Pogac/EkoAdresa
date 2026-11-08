@@ -3,7 +3,7 @@
 > EkoSkor v1. Izračun je u `backend/app/services/ekoskor.py`, testovi u `backend/tests/test_ekoskor.py`.
 > Svaka promjena praga ili pondera mijenja kod, testove i ovaj dokument u istoj izmjeni (commitu).
 
-EkoSkor je broj od 0 do 100. Svaki od šest slojeva dobiva ocjenu od 0 do 100, zaokruženu na cijeli broj kako je prikazana na kartici adrese. EkoSkor je ponderirani prosjek tih prikazanih ocjena, **zaokružen na bliži cijeli broj, s polovinom prema gore** (42,5 → 43), pa ga svatko može sam izračunati s kartice.
+EkoSkor je broj od 0 do 100. Svaki od pet slojeva dobiva ocjenu od 0 do 100, zaokruženu na cijeli broj kako je prikazana na kartici adrese. EkoSkor je ponderirani prosjek tih prikazanih ocjena, **zaokružen na bliži cijeli broj, s polovinom prema gore** (42,5 → 43), pa ga svatko može sam izračunati s kartice.
 
 ## Slojevi, ponderi i pragovi
 
@@ -12,11 +12,10 @@ EkoSkor je broj od 0 do 100. Svaki od šest slojeva dobiva ocjenu od 0 do 100, z
 | Poplave | 20 % | izvan svih zona opasnosti | zona male vjerojatnosti | zona srednje ili velike vjerojatnosti | `hv-poplave` |
 | Buka, L<sub>den</sub> | 20 % | ≤ 53 dB | 54–64 dB | ≥ 65 dB | `zg-buka` |
 | Zrak, PM10 | 20 % | ≤ 15 µg/m³ | 27,5 µg/m³ | ≥ 40 µg/m³ | `zg-zrak-mjerenja` |
-| Otpad | 15 % | fiksno reciklažno dvorište ≤ 1 km **i** zeleni otok ≤ 300 m | npr. dvorište 3 km i otok 900 m | dvorište ≥ 5 km **i** otok ≥ 1,5 km | `zg-reciklaza`, `osm-reciklaza` |
-| Zelena mobilnost | 15 % | ≥ 3 perona ZET-a do 300 m **i** biciklistička staza ≤ 200 m | npr. 1 peron do 500 m i staza 600 m (4/5 javni prijevoz, 1/5 bicikl) | nijedan peron do 500 m **i** staza ≥ 1 km | `zg-zet`, `zg-biciklisticke-staze` |
-| Zelenilo | 10 % | park ili šuma (≥ 0,5 ha) ≤ 300 m ili adresa unutar njega | 650 m | ≥ 1 km | `osm-parkovi` |
+| Zelena mobilnost | 20 % | ≥ 3 perona ZET-a do 300 m **i** biciklistička staza ≤ 200 m | npr. 1 peron do 500 m i staza 600 m (4/5 javni prijevoz, 1/5 bicikl) | nijedan peron do 500 m **i** staza ≥ 1 km | `zg-zet`, `zg-biciklisticke-staze` |
+| Zelenilo | 20 % | park ili šuma (≥ 0,5 ha) ≤ 300 m ili adresa unutar njega | 650 m | ≥ 1 km | `osm-parkovi` |
 
-Šest slojeva od 6. 11. 2026. (odluka): zelenilo je izdvojeno iz zelene mobilnosti u zaseban sloj, a ponderi poplava i buke smanjeni su s 25 % na 20 %. Razlog: točka usred Parka-šume Maksimir dobivala je lošu ocjenu „zelene mobilnosti" jer je daleko od stajališta, iako je u parku. Sada park ocjenjuje sloj Zelenilo, a mobilnost samo kretanje bez automobila.
+Pet slojeva, svaki 20 %, od 8. 11. 2026. (odluka): sloj Otpad uklonjen je iz EkoSkora. Reciklažna dvorišta i zeleni otoci ostaju na karti kao informacija. Ranije, 6. 11. 2026., zelenilo je izdvojeno iz zelene mobilnosti u zaseban sloj. Razlog: točka usred Parka-šume Maksimir dobivala je lošu ocjenu „zelene mobilnosti" jer je daleko od stajališta, iako je u parku. Sada park ocjenjuje sloj Zelenilo, a mobilnost samo kretanje bez automobila.
 
 ### Kako se čita pojedini sloj
 
@@ -26,7 +25,6 @@ EkoSkor je broj od 0 do 100. Svaki od šest slojeva dobiva ocjenu od 0 do 100, z
   - **Bez razreda** na točki i na oba prstena čita se kao tiše od 50 dB → 100. Obuhvat sloja cestovne buke pokriva cijeli Grad, što podupire takvo čitanje; `TODO(verify)` prema izvješću o karti buke.
   - Prag od 53 dB smjernica je Svjetske zdravstvene organizacije (2018.) za buku cestovnog prometa, L<sub>den</sub>.
 - **Zrak.** Prosjek PM10 na **najbližoj gradskoj mjernoj postaji** za razdoblje siječanj – kolovoz 2023. (razdoblje dostupno u objavljenom skupu podataka). Ocjena je 100 uz 15 µg/m³ ili manje (godišnja smjernica SZO-a iz 2021.), 0 uz 40 µg/m³ ili više (godišnja granična vrijednost EU-a, Direktiva 2008/50/EZ), a između raste linearno. Vrijednost se uvijek prikazuje s razdobljem mjerenja. Najbliža postaja gruba je procjena: gradskih postaja ima samo 6.
-- **Otpad.** Zračna udaljenost do najbližeg **fiksnog** reciklažnog dvorišta (10 mobilnih dvorišta radi samo određenim danima i ne ulazi u ocjenu, odluka 5. 11. 2026.) i do najbližeg zelenog otoka (spremnici za papir, plastiku ili staklo iz OpenStreetMapa). Svaka udaljenost daje svoj dio od 0 do 100, linearno između „blizu" i „daleko": dvorište 100 uz ≤ 1 km → 0 uz ≥ 5 km, zeleni otok 100 uz ≤ 300 m → 0 uz ≥ 1,5 km. Ocjena otpada prosjek je ta dva dijela (odluka 5. 11. 2026.; ranije pravilo „dvorište ≤ 1 km i otok ≤ 300 m, inače 0" davalo je 0 za 89 % Grada).
 - **Zelena mobilnost.** Kretanje bez automobila: javni prijevoz i bicikl. Ocjena sloja je ponderirani prosjek dvaju dijelova (odluka 6. 11. 2026.):
 
   | Dio | Udio u sloju | 100 | 0 | Između |
@@ -63,9 +61,8 @@ Ako sloj nije dostupan (servis ne radi ili nema podataka), izostavlja se, a pond
 
 Karta grada koristi istu formulu na mreži ćelija 250 × 250 m (EPSG:3765, HTRS96/TM) unutar granice Grada Zagreba, izračunatu u središtu svake ćelije. Vidi `scripts/build_heatmap.py`.
 
-- **Izračun od 6. 11. 2026. (šest slojeva):** 10 260 ćelija, 641 km². EkoSkor najmanje 17, medijan 65, najviše 96 (10.–90. percentil 46–76); prije uvođenja bicikla i zelenila 12, 65, 96 (42–77). Po ćelijama: zelena mobilnost Loše 48 %, Umjereno 39 %, Dobro 13 %; zelenilo Loše 3 %, Umjereno 5 %, Dobro 93 %. EkoSkor ćelije promijenio se od −13 do +13 bodova. Buka je dostupna u svim ćelijama.
+- **Izračun od 8. 11. 2026. (pet slojeva po 20 %, bez otpada):** 10 260 ćelija, 641 km². EkoSkor najmanje 14, medijan 73, najviše 97 (10.–90. percentil 53–85); sa slojem otpada bilo je 17, 65, 96 (46–76), jer je otpad u većem dijelu Grada imao nisku ocjenu. EkoSkor ćelije promijenio se od −10 do +15 bodova. Ranije, 6. 11. 2026., uz šest slojeva: Po ćelijama: zelena mobilnost Loše 48 %, Umjereno 39 %, Dobro 13 %; zelenilo Loše 3 %, Umjereno 5 %, Dobro 93 %. EkoSkor ćelije promijenio se od −13 do +13 bodova. Buka je dostupna u svim ćelijama.
 - **Ćelija je jedna točka uzorka.** Svaka ćelija prikazuje vrijednost u svom središtu, do ~175 m od bilo koje adrese u njoj. Primjer: središte ćelije s Trgom bana Jelačića 63 m je južno od trga, unutar bloka zgrada bez razreda buke, pa ćelija ima ocjenu buke 100, a sam trg (tramvaj, 70–74 dB) 0. Kartica adrese uvijek se računa točno na adresi, s pravilom pročelja; karta grada pravilo pročelja još ne koristi (ponovni izračun je otvoren).
-- **Pokrivenost otpada.** Uz ranije pravilo „sve ili ništa" 89 % ćelija imalo je ocjenu 0, a nijedna 100, pa je pravilo zamijenjeno linearnim. Sada 51 % ćelija ima ocjenu 0: 72 % ćelija bez stajališta ZET-a do 500 m (rubni dijelovi, šuma) i 32 % ćelija sa stajalištem. Razlozi: samo 10 fiksnih dvorišta za cijeli Grad i rijetka pokrivenost zelenih otoka u OpenStreetMapu izvan središta. Najviše bi pomogao bolji izvor zelenih otoka (npr. geokodiranje gradskog popisa `zg-zeleni-otoci`).
 
 ## Ograničenja
 

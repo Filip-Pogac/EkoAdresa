@@ -170,4 +170,4 @@ def test_heatmap() -> None:
     assert len(body["features"]) == 10_260  # build of 2026-11-05, docs/ekoskor.md
     assert set(body["metadata"]["sources"]) <= SOURCES.keys()
     cell = body["features"][0]["properties"]
-    assert set(cell) == {"ekoskor", "flood", "noise", "air", "waste", "mobility", "green"}
+    assert set(cell) == {"ekoskor", "flood", "noise", "air", "mobility", "green"}

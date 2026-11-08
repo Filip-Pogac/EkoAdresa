@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-const LAYERS = ['Poplave', 'Buka', 'Zrak', 'Otpad', 'Zelena mobilnost', 'Zelenilo'];
+const LAYERS = ['Poplave', 'Buka', 'Zrak', 'Zelena mobilnost', 'Zelenilo'];
 
 /** Console errors collected for the whole test; asserted empty at the end. */
 function collectErrors(page: Page): string[] {
@@ -22,7 +22,7 @@ test('search → address card → compare two addresses', async ({ page }) => {
   await expect(page.getByRole('option').first()).toContainText('Ilica 10');
   await search.press('Enter');
 
-  // Card: EkoSkor ring + six layer rows, none unavailable
+  // Card: EkoSkor ring + five layer rows, none unavailable
   await expect(page).toHaveURL(/\/adresa\?lat=/);
   await expect(page.getByRole('img', { name: /^EkoSkor \d+ od 100$/ })).toBeVisible();
   for (const layer of LAYERS) {

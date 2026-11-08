@@ -1,6 +1,6 @@
 """Straight-line distances in metres via EPSG:3765 (HTRS96/TM, the Croatian projection).
 
-Used by the air, waste and mobility layers and by scripts/build_heatmap.py, so a point's
+Used by the air, mobility and green layers and by scripts/build_heatmap.py, so a point's
 nearest station / yard / stop is the same on the address card and in the heatmap.
 """
 

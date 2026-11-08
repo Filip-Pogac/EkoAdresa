@@ -1,7 +1,7 @@
 /** API response types. Mirror backend/app/models.py; keep both in sync. Coordinates EPSG:4326. */
 
 export type Status = 'green' | 'yellow' | 'red' | 'unavailable';
-export type LayerName = 'flood' | 'noise' | 'air' | 'waste' | 'mobility' | 'green';
+export type LayerName = 'flood' | 'noise' | 'air' | 'mobility' | 'green';
 
 export interface GeocodeResult {
   label: string;
@@ -118,23 +118,6 @@ export interface Place {
   source_id: string;
 }
 
-export interface RecyclingYard extends Place {
-  address: string | null;
-  opening_hours: string | null;
-}
-
-export interface GreenIsland extends Place {
-  accepts: string[];
-}
-
-export interface WasteLayer extends LayerBase {
-  yard: RecyclingYard;
-  mobile_yard: RecyclingYard;
-  island: GreenIsland;
-  yard_distance_m: number;
-  island_distance_m: number;
-}
-
 export interface Stop extends Place {
   type: 'bus' | 'tram';
   direction: string | null;
@@ -183,7 +166,6 @@ export interface Layers {
   flood: FloodLayer | UnavailableLayer;
   noise: NoiseLayer | UnavailableLayer;
   air: AirLayer | UnavailableLayer;
-  waste: WasteLayer | UnavailableLayer;
   mobility: MobilityLayer | UnavailableLayer;
   green: GreenLayer | UnavailableLayer;
 }

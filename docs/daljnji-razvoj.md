@@ -1,6 +1,6 @@
 # Daljnji razvoj
 
-Prototip pokriva Grad Zagreb i pet tema iz izazova B (zrak, otpad, zelena mobilnost, poplave, buka). Ovdje su sljedeći koraci, poredani od najbližih prema najvećima. Izvori podataka koje još nismo provjerili označeni su s `TODO(verify)`: ništa od toga ne tvrdimo dok ne provjerimo izdavača, licenciju i pristup.
+Prototip pokriva Grad Zagreb i teme iz izazova B: zrak, zelena mobilnost, poplave i buka ulaze u EkoSkor uz zelenilo, a otpad (reciklažna dvorišta, zeleni otoci) prikazan je na karti. Ovdje su sljedeći koraci, poredani od najbližih prema najvećima. Izvori podataka koje još nismo provjerili označeni su s `TODO(verify)`: ništa od toga ne tvrdimo dok ne provjerimo izdavača, licenciju i pristup.
 
 ## 1. Kratkoročno (dani do tjedni)
 
@@ -58,7 +58,7 @@ Kad podatak za neki sloj ne postoji, sloj je „nedostupan", a EkoSkor se račun
 
 ## 7. API za druge usluge
 
-- **Portali nekretnina i oglasi za najam:** EkoSkor i šest slojeva uz svaki oglas, s izvorom za svaki podatak; EkoAdresa ostaje izvor podatka, a ne procjena cijene.
+- **Portali nekretnina i oglasi za najam:** EkoSkor i pet slojeva uz svaki oglas, s izvorom za svaki podatak; EkoAdresa ostaje izvor podatka, a ne procjena cijene.
 - **Javna tijela:** mreža EkoSkora i pojedinih slojeva kao otvoreni skup (GeoJSON) za planiranje, npr. gdje nedostaju reciklažna dvorišta ili stajališta.
 - **Škole, vrtići, zdravstvo:** profil okoliša za lokaciju ustanove.
 
