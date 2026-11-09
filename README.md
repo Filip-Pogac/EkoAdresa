@@ -37,7 +37,7 @@ Ostale snimke zaslona: [docs/screenshots/](docs/screenshots/).
 
 ## Podaci
 
-13 izvora od 5 izdavača, povezanih u jedan profil adrese i jednu ocjenu:
+15 izvora od 5 izdavača, povezanih u jedan profil adrese i jednu ocjenu:
 
 | Sloj | Izvor | Izdavač | Pristup |
 |---|---|---|---|

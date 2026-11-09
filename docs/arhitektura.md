@@ -165,7 +165,7 @@ Skraćeni stvarni odgovor `/api/profile` za Trg bana Josipa Jelačića 6 (5. 11.
 
 ## 9. Tehnički doprinosi
 
-- **Spajanje podataka u jednu odluku:** 13 izvora od 5 izdavača (Hrvatske vode, Grad Zagreb, DHMZ, Državna geodetska uprava prema data.gov.hr za indeks zraka, OpenStreetMap) u jednom profilu, s izvorom uz svaki broj.
+- **Spajanje podataka u jednu odluku:** 15 izvora od 5 izdavača (Hrvatske vode, Grad Zagreb, DHMZ, Državna geodetska uprava prema data.gov.hr za indeks zraka, OpenStreetMap) u jednom profilu, s izvorom uz svaki broj.
 - **Upit za točku nad servisom koji ga ne podržava:** WMS poplava odbija `GetFeatureInfo`, pa se zona i dubina čitaju iz boje piksela prema legendi izdavača.
 - **Buka na pročelju:** karta buke nema vrijednosti unutar zgrada, gdje leži većina adresnih točaka. Pravilo najizloženijeg pročelja (Direktiva 2002/49/EZ) ispravlja ocjenu za takve adrese; primjer: Trg bana Jelačića 6, „tiho" → 65–69 dB.
 - **Javni servisi u pregledniku:** servis buke ne dopušta pozive iz preglednika (CORS), a servis poplava ne iscrtava u krupnom mjerilu. Backend ih zato poslužuje kao kartografske pločice s predmemorijom.
