@@ -22,7 +22,12 @@ const PHONE = {
 };
 
 const shots = [
-  { file: '01-pocetna.png', ctx: DESKTOP, path: '/' },
+  {
+    file: '01-pocetna.png',
+    ctx: DESKTOP,
+    path: '/',
+    act: async (page) => page.getByRole('button', { name: 'Prikaži kartu Zagreba' }).click(),
+  },
   { file: '02-adresa.png', ctx: DESKTOP, path: JELACIC, wait: 'Zelena mobilnost' },
   {
     file: '03-sloj-poplave.png',
@@ -67,7 +72,10 @@ for (const shot of shots) {
   await page.goto(BASE + shot.path, { waitUntil: 'networkidle' });
   if (shot.wait)
     await page.getByRole('heading', { name: shot.wait, exact: true }).first().waitFor();
-  if (shot.act) await shot.act(page);
+  if (shot.act) {
+    await shot.act(page);
+    await page.evaluate(() => window.scrollTo(0, 0)); // clicking a layer box scrolls it into view
+  }
   await page.waitForLoadState('networkidle');
   await page.waitForTimeout(1500); // map tiles and the ring animation settle
   await page.screenshot({ path: OUT + shot.file, fullPage: shot.fullPage ?? false });

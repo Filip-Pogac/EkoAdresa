@@ -53,11 +53,15 @@ Potpun popis s poveznicama, licencijama i datumima: **[docs/data-sources.md](doc
 
 ## Kako radi
 
-React frontend (Vercel CDN) poziva FastAPI backend (Vercel, Frankfurt). Backend za svaku adresu istodobno upituje javne WMS/WFS servise i spremljene snimke otvorenih skupova, sprema odgovore servisa i računa EkoSkor prema javnoj formuli. Za 15 nasumičnih adresa odgovor stiže za p95 0,50 s bez predmemorije. Detalji: **[docs/arhitektura.md](docs/arhitektura.md)**.
+Kad upišete adresu, aplikacija u istom trenutku pita javne servise Hrvatskih voda i Grada Zagreba što vrijedi za tu točku, dopuni odgovor spremljenim otvorenim podacima (zrak, otpad, prijevoz, zelenilo) i za manje od sekunde prikaže ocjenu. Ništa se ne procjenjuje „od oka": svaki broj dolazi iz navedenog izvora, a EkoSkor se računa prema objavljenoj formuli.
+
+Tehnički: React frontend (Vercel CDN) poziva FastAPI backend (Vercel, Frankfurt). Backend za svaku adresu istodobno upituje javne WMS/WFS servise i spremljene snimke otvorenih skupova, sprema odgovore servisa i računa EkoSkor prema javnoj formuli. Za 15 nasumičnih adresa odgovor stiže za p95 0,50 s bez predmemorije. Detalji: **[docs/arhitektura.md](docs/arhitektura.md)**.
 
 Aplikacija u radu ne koristi umjetnu inteligenciju: EkoSkor je izračun prema objavljenoj formuli. Za izradu je korišten alat umjetne inteligencije **Claude Code** (Anthropic); popis svih alata i licencija: [docs/alati.md](docs/alati.md).
 
-## Pokretanje
+## Pokretanje (za razvojne programere)
+
+Za korištenje aplikacije ništa ne treba instalirati: dovoljno je otvoriti [demo](https://ekoadresa.vercel.app). Ovaj dio je za one koji je žele pokrenuti na svom računalu ili razvijati dalje.
 
 ### Docker (preporučeno)
 
